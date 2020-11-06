@@ -1,0 +1,1 @@
+[INFO] hInstance = e90000 hPrevInstance = 0 lpCmdLine =  nShowCmd = 5
