@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     int flag_dir = 0;
     int flag_ringbuffer_window = 0;
     unsigned int remain;
-    int debug_level = LOG_USER;
+    char *debug_config;
 
     if (argc < 2) {
         print_usage();
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
                 flag_ringbuffer_window = 1;
                 break;
             case 'd':
-                debug_level = atoi(optarg);
+                debug_config = optarg;
                 break;
             default:
                 log(LOG_WARNING, "Unknown option: %c\n", opt);
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 
     ip = argv[optind];
 
-    log_init(debug_level);
+    log_init(debug_config);
     
     ret = dbg_init(ip, (unsigned short)65528);
     if (0 == ret) {

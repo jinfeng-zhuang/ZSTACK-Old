@@ -9,7 +9,7 @@ const char *usage =
 "\t-d dump <n>      dump es data from channel [x]\n"
 "\t-s show          display while receive from network\n"
 "\t-w window        UI show ring buffer\n"
-"\t-d debug <lvl>   debug level\n"
+"\t-d debug <conf>  debug config: \"default:3,ui:3\"\n"
 "\t-l loop      show mpeg format periodically\n";
 
 void print_usage(void)

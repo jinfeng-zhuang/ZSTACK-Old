@@ -21,8 +21,6 @@ unsigned int __stdcall worker_thread(void *arg)
     char lpCmdLine = NULL;
     int nShowCmd = 10;
 
-    log_init(LOG_USER);
-
     log(LOG_USER, "hInstance = %x hPrevInstance = %x lpCmdLine = %s nShowCmd = %d\n",
         hInstance,
         hPrevInstance,

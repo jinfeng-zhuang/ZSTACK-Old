@@ -7,13 +7,17 @@
 
 extern int RingBufferWindow_Register(HINSTANCE hInstance);
 
+extern void log_init_test(void);
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	MSG msg;
     HWND hwnd;
     HANDLE hThread;
 
-    log_init(LOG_USER);
+    log_init(NULL);
+
+    return 0;
 
     log(LOG_USER, "hInstance = %x hPrevInstance = %x lpCmdLine = %s nShowCmd = %d\n",
         hInstance,
@@ -22,12 +26,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         nShowCmd);
 
     RingBufferWindow_Register(hInstance);
-
-#if 0
-    hThread = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)worker_thread, NULL, 0, NULL);
-    if (NULL == hThread)
-        return -1;
-#endif
 
     hwnd = CreateWindowEx(
         0,

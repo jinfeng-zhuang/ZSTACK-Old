@@ -175,10 +175,6 @@
 				RelativePath="..\..\Application\ringbuffer\print_usage.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\Application\ringbuffer\work_thread.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

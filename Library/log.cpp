@@ -8,39 +8,21 @@
 
 #include <zstack/log.h>
 
-enum {
-    LOG_MODULE_DEFAULT,
-    LOG_MODULE_NET,
-    LOG_MODULE_DBG,
-    LOG_MODULE_AVMIPS,
-    LOG_MODULE_HOST,
-    LOG_MODULE_UI,
-    LOG_MODULE_USER,
-    LOG_MODULE_MAX = 31
-};
+#define LOG_OUTPUT printf
 
 static char *map[LOG_MODULE_MAX] = {
     "default",
-    "net",
-    "debug",
-    "avmips",
-    "host",
+    "app",
     "ui",
-    "user"
+    "misc",
+    "net",
+    "avmips",
+    "algo"
 };
 
-static int log_level = LOG_USER;
 static unsigned int log_mask[LOG_MODULE_MAX] = {0};
-
-char LOG_buffer[1 << 20];
-
-const char *log_level_name[] = {
-    "ERROR",
-    "WARNING",
-    "INFO",
-    "FILE",
-    "FUNC",
-};
+static int log_inited = 0;
+static char LOG_buffer[1 << 20];
 
 static int find_index_by_name(char *name)
 {
@@ -54,39 +36,112 @@ static int find_index_by_name(char *name)
     return -1;
 }
 
-void log_init(int level)
+static int correct_level(int level)
 {
-    int i;
-    char name[32] = {'\0'};
+    if (level > LOG_DEBUG)
+        level = LOG_DEBUG;
+    else if (level < LOG_ERROR)
+        level = LOG_ERROR;
+    else
+        ;
 
-    log_level = level;
-
-    if (log_level >= LOG_FUNC)
-        log_level = LOG_FUNC;
-    if (log_level <= LOG_ERROR)
-        log_level = LOG_ERROR;
-
-    // parse
-    
-
-    fflush(stdout);
+    return level;
 }
 
-int _log(int lvl, char *filename, char *function, int linenum, const char *fmt, ...)
+static int add_to_log_mask(char *config)
 {
-    if ((lvl > log_level) || (lvl < 0) || (NULL == fmt)) {
+    char module_name[32];
+    int level;
+    int index;
+    int ret;
+
+    ret = sscanf(config, "%[^:]:%d", module_name, &level);
+    if (2 != ret) {
+        LOG_OUTPUT("log config '%s' is not '<key>:<value>' format\n", config);
+        return -1;
+    }
+
+    index = find_index_by_name(module_name);
+    if (-1 == index) {
+        LOG_OUTPUT("log config name '%s' not valid\n", config);
+        return -1;
+    }
+
+    log_mask[index] = correct_level(level);
+
+    return 0;
+}
+
+// "default:x, ui:x, net:x"
+void log_init(char *config)
+{
+    int i;
+    int j;
+    int module_start;
+    int module_end;
+    char module_name[32] = {'\0'};
+    int config_len;
+
+    if (config == NULL)
+        config = "default:3";
+
+    // parse
+    config_len = strlen(config);
+
+    for (i = 0, j = 0; i < config_len; i++) {
+        if (config[i] == ',') {
+
+            j = 0;
+
+            if (0 != add_to_log_mask(module_name))
+                goto FAILED;
+
+            memset(module_name, 0, sizeof(module_name));
+        }
+        else if (' ' == config[i]){
+            continue;
+        }
+        else {
+            module_name[j++] = config[i];
+            if (j >= 31) {
+                goto FAILED;
+            }
+        }
+    }
+
+    if (0 != add_to_log_mask(module_name))
+        goto FAILED;
+
+    log_inited = 1;
+
+    return;
+
+FAILED:
+    LOG_OUTPUT("log config not correct, no log in the system\n");
+    log_inited = 0;
+}
+
+int _log(int module, int lvl, char *filename, char *function, int linenum, const char *fmt, ...)
+{
+    if (! log_inited)
+        return -1;
+
+    lvl = correct_level(lvl);
+
+    if (lvl > log_mask[module]) {
         return 0;
     }
 
     LOG_buffer[0] = '\0';
-    if (lvl < LOG_USER) {
-        sprintf(LOG_buffer, "[%s] ", log_level_name[lvl]);
+
+    if (lvl == LOG_ERROR) {
+        sprintf(LOG_buffer, "[ERROR] ");
+    }
+    else if (lvl == LOG_WARNING) {
+        sprintf(LOG_buffer, "[WARNING] ");
     }
     else if (lvl == LOG_USER) {
         ;
-    }
-    else if (lvl == LOG_FILE) {
-        sprintf(LOG_buffer, "  [%s] ", filename);
     }
     else {
         sprintf(LOG_buffer, "    [%s:%d] ", function, linenum);
@@ -103,7 +158,7 @@ int _log(int lvl, char *filename, char *function, int linenum, const char *fmt, 
 
     va_end(args);
 
-    printf("%s", LOG_buffer);
+    LOG_OUTPUT("%s", LOG_buffer);
     fflush(stdout);
 
     if (lvl == LOG_ERROR)
@@ -112,3 +167,7 @@ int _log(int lvl, char *filename, char *function, int linenum, const char *fmt, 
     return 0;
 }
 
+void log_init_test(void)
+{
+    log_init("default:3,ui:2");
+}

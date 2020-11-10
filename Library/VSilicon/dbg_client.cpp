@@ -52,7 +52,7 @@ int dbg_init(const char* ip, const short port)
         return -1;
     }
 
-    log(LOG_FILE, "%s set endian done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s set endian done\n", __FUNCTION__);
 
     return 0;
 }
@@ -86,7 +86,7 @@ int dbg_host_read32(unsigned int addr, unsigned int* buffer, int count)
         return -1;
     }
 
-    log(LOG_FILE, "%s done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -113,7 +113,7 @@ int dbg_avmips_read32(unsigned int addr, unsigned int* buffer, int count)
         return -1;
     }
 
-    log(LOG_FILE, "%s done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -142,7 +142,7 @@ static int dbg_host_read8_4K(unsigned int addr, unsigned char* buffer, int count
         return -1;
     }
 
-    log(LOG_FILE, "%s done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -159,7 +159,7 @@ int dbg_host_read8(unsigned int addr, unsigned char* buffer, int count)
     dst_inc = buffer;
     remain = count;
 
-    log(LOG_FUNC, "dbg_host_read8 %d...\n", count);
+    log(LOG_DEBUG, "dbg_host_read8 %d...\n", count);
 
     memset(buffer, 0, count);
 
@@ -179,7 +179,7 @@ int dbg_host_read8(unsigned int addr, unsigned char* buffer, int count)
         remain = remain - bytes2read;
     }
 
-    log(LOG_FILE, "%s done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
 
     return 0;
 
@@ -214,7 +214,7 @@ static int dbg_host_write8_4K(unsigned int addr, unsigned char* buffer, int coun
         return -1;
     }
 
-    log(LOG_FILE, "%s done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -231,7 +231,7 @@ int dbg_host_write8(unsigned int addr, unsigned char* buffer, int count)
     dst_inc = buffer;
     remain = count;
 
-    log(LOG_FILE, "dbg_host_write8 %d...\n", count);
+    log(LOG_DEBUG, "dbg_host_write8 %d...\n", count);
 
     while (remain > 0) {
 
@@ -249,7 +249,7 @@ int dbg_host_write8(unsigned int addr, unsigned char* buffer, int count)
         remain = remain - bytes2write;
     }
 
-    log(LOG_FILE, "%s done\n", __FUNCTION__);
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
 
     return 0;
 

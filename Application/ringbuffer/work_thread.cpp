@@ -52,8 +52,6 @@ int worker_thread(int argc, char* argv[])
     }
 
     ip = argv[optind];
-
-    log_init(LOG_USER);
     
     ret = dbg_init(ip, (unsigned short)65528);
     if (0 == ret) {

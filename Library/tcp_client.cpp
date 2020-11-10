@@ -138,7 +138,7 @@ int net_transfer(unsigned char* request, void* response)
     response_length = len[0] + ((int)len[1] << 8);
     count = response_length;
 
-    log(LOG_FILE, "response len: %d\n", response_length);
+    log(LOG_DEBUG, "response len: %d\n", response_length);
 
     // receive data
     while (count > 0)
