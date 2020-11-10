@@ -329,4 +329,6 @@ extern void dump_mpegdisp_registers(struct mpegdisp_regs *regs);
 extern int read_mpegdisp_regsiters(unsigned int base, struct mpegdisp_regs *regs);
 extern bool mpegdisp_is_resolution_change(struct mpegdisp_regs *regs);
 
+extern int avmips_get_ves_desc(struct ring *r);
+
 #endif

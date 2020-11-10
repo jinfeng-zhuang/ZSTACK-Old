@@ -1,5 +1,8 @@
 #include <vs/sx.h>
+#include <vs/dbg.h>
+
 #include <zstack/misc.h>
+#include <zstack/log.h>
 
 static const char *chip_name_array[] = {
     "UNKNOWN",
@@ -46,4 +49,18 @@ const char *chip_name(unsigned int value)
     id = chip_id(value);
 
     return chip_name_array[id];
+}
+
+int vs_chip_id_get(void)
+{
+    int ret;
+    unsigned int id;
+    
+    ret = dbg_host_read32(0xF500E000, &id, 1);
+    if (0 == ret) {
+        log(LOG_USER, "Chip(%#x): %s\n", id, chip_name(id));
+        return chip_id(id);
+    }
+    
+    return -1;
 }

@@ -83,7 +83,7 @@ void log_init(char *config)
     int config_len;
 
     if (config == NULL)
-        config = "default:3";
+        config = "default:2";
 
     // parse
     config_len = strlen(config);

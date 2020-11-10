@@ -7,8 +7,6 @@
 
 extern int RingBufferWindow_Register(HINSTANCE hInstance);
 
-extern void log_init_test(void);
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	MSG msg;

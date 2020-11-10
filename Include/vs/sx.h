@@ -56,7 +56,6 @@ enum {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-extern int chip_id(unsigned int value);
-extern const char *chip_name(unsigned int value);
+extern int vs_chip_id_get(void);
 
 #endif

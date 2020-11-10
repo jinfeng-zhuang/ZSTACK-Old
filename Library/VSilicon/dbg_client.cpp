@@ -6,6 +6,8 @@
 #include <zstack/net.h>
 #include <zstack/log.h>
 
+#define VS_DEBUG_PORT (65528)
+
 struct host_request {
     unsigned int head;
     unsigned int type;
@@ -26,10 +28,11 @@ struct endian {
     unsigned int little;
 };
 
-int dbg_init(const char* ip, const short port)
+int dbg_init(const char* ip)
 {
     int ret;
     struct endian request;
+    short port = VS_DEBUG_PORT;
 
     log(LOG_USER, "Connecting...\n");
 
