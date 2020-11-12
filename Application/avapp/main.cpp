@@ -28,7 +28,6 @@ int main(int argc, char* argv[])
     unsigned int id;
     char *ip;
     unsigned int ves_addr;
-    int flag_loop = 0;
     int flag_dump = 0;
     struct HWDemuxVESDesc_t HWDesc;
     struct AVStreamVESDesc_t Desc;
@@ -42,11 +41,8 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    while ((opt = getopt(argc, argv, "swld:")) != -1)  {
+    while ((opt = getopt(argc, argv, "swd:")) != -1)  {
         switch (opt) {
-            case 'l':
-                flag_loop = 1;
-                break;
             case 's':
                 break;
             case 'w':
@@ -77,6 +73,8 @@ int main(int argc, char* argv[])
             goto END;
         }
 
+        vs_pman_enable((enum sx_chip)id, PMAN_SECURITY_GROUP_ARM, 0x10c00000);
+
         if (flag_ringbuffer_window) {
             RingBufferWindow_Init();
         }
@@ -86,10 +84,6 @@ int main(int argc, char* argv[])
             ret = avmips_get_ves_desc(&r);
             if ((ret == 0) && flag_ringbuffer_window) {
                 RingBufferWindow_Set(&r);
-            }
-
-            if (! flag_loop) {
-                break;
             }
 
             Sleep(1000/100);
