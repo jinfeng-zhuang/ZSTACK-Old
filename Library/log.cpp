@@ -135,10 +135,10 @@ int _log(int module, int lvl, char *filename, char *function, int linenum, const
     LOG_buffer[0] = '\0';
 
     if (lvl == LOG_ERROR) {
-        sprintf(LOG_buffer, "[ERROR] ");
+        sprintf(LOG_buffer, "[ERROR] [%s:%d] ", function, linenum);
     }
     else if (lvl == LOG_WARNING) {
-        sprintf(LOG_buffer, "[WARNING] ");
+        sprintf(LOG_buffer, "[WARNING] [%s:%d] ", function, linenum);
     }
     else if (lvl == LOG_USER) {
         ;
