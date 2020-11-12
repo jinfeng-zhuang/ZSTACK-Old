@@ -94,6 +94,35 @@ int dbg_host_read32(unsigned int addr, unsigned int* buffer, int count)
     return 0;
 }
 
+int dbg_host_write32(unsigned int addr, unsigned int* buffer, int count)
+{
+    struct host_write_request request;
+    int ret;
+
+    if ((NULL == buffer) || (0 != (addr % 4)) || (count <= 0)) {
+        log(LOG_WARNING, "%s param not correct\n", __FUNCTION__);
+        return -1;
+    }
+
+    // TODO: host_write_request.data[4K] large
+    request.head = 17 | ((sizeof(struct host_write_request) - 4) << 16);
+    request.type = 4;
+    request.addr = addr;
+    request.count = count;
+    memcpy(request.data, buffer, count * 4);
+
+    ret = net_transfer((unsigned char *)& request, NULL);
+
+    if (-1 == ret) {
+        log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+        return -1;
+    }
+
+    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+
+    return 0;
+}
+
 int dbg_avmips_read32(unsigned int addr, unsigned int* buffer, int count)
 {
     struct host_request request;
