@@ -2,10 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="zstacklib"
-	ProjectGUID="{355352B4-E2FF-4840-98EE-C3E0809B5B75}"
-	RootNamespace="zstacklib"
-	Keyword="Win32Proj"
+	Name="interlace"
+	ProjectGUID="{FD0BD90F-5B72-4793-BF03-91D1B35B0DFC}"
+	RootNamespace="interlace"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -20,8 +19,8 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="1"
+			ConfigurationType="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -41,12 +40,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="F:\Github\ZSTACK\Include"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -60,10 +57,17 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="zstacklib.lib getopt.lib"
+				AdditionalLibraryDirectories="F:\Github\ZSTACK\3rdparty;F:\Github\ZSTACK\Library"
+				GenerateDebugInformation="true"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -75,22 +79,22 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copy library to Library Folder"
-				CommandLine="copy $(TargetPath) ..\..\Library"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="1"
+			ConfigurationType="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -108,11 +112,9 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				AdditionalIncludeDirectories="F:\Github\ZSTACK\Include"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -126,10 +128,19 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="getopt.lib zstacklib.lib"
+				AdditionalLibraryDirectories="F:\Github\ZSTACK\3rdparty;F:\Github\ZSTACK\Library"
+				GenerateDebugInformation="true"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -141,9 +152,10 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copy to Library Folder"
-				CommandLine="copy $(TargetPath) ..\..\Library"
 			/>
 		</Configuration>
 	</Configurations>
@@ -156,81 +168,13 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\Library\file_append.cpp"
+				RelativePath="..\..\..\Application\interlace\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Library\file_save.cpp"
+				RelativePath="..\..\..\Application\interlace\YUVWindow.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\Library\hexdump.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Library\log.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Library\param_parser.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Library\tcp_client.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Library\yuv.cpp"
-				>
-			</File>
-			<Filter
-				Name="WindowClasses"
-				>
-				<File
-					RelativePath="..\..\Library\WindowClasses\CustomWindowClassRegister.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\WindowClasses\RingBufferWindow.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\WindowClasses\YUVWindow.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="VSilicon"
-				>
-				<File
-					RelativePath="..\..\Library\VSilicon\avmips_get_ves_desc.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\VSilicon\chip_id.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\VSilicon\dbg_client.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\VSilicon\dump_display_registers.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\VSilicon\mpegformat.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Library\VSilicon\pman_disable.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="SSIM"
-				>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -244,10 +188,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
