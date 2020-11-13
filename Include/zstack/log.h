@@ -32,6 +32,8 @@ enum log_module_e {
 #define ENTER log(LOG_DEBUG, "\n")
 #define EXIT  log(LOG_DEBUG, "\n")
 
+#define TRACE log(LOG_USER, "%s %d\n", __FUNCTION__, __LINE__)
+
 //=============================================================================
 
 extern void log_init(char *config);
