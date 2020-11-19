@@ -9,13 +9,15 @@
 #include <zstack/log.h>
 #include <zstack/misc.h>
 #include <zstack/yuv.h>
-#include <zstack/platform.h>
 
 #include <3rdparty/getopt.h>
 
+extern void YUVWindow_Init(void);
+extern void YUVWindow_Set(struct YUVWindowStruct *r);
+
 const char *usage = 
-"fieldmerge - build @ %s\n"
-"usage: fieldmerge [options]... <output>\n"
+"interlace - build @ %s\n"
+"usage: interlace [options]... <output>\n"
 "options:\n"
 "\t-d dump <n>                      \n"
 "\t-r resolution <720x288>          Field Resolution\n"
@@ -45,92 +47,49 @@ struct _param {
     unsigned char *bottom_buffer;
     unsigned char *output_buffer;
 
-    int *match_list;
+    HANDLE sem;
 };
 
-struct db {
-    int top;
-    int bottom;
-    int match;
-    unsigned char *merged_buffer;
-};
-
-struct _param param;
-
-static unsigned char *do_merge(int top, int bottom)
+#if 0
+int bgcomm_init(HANLDE *sem)
 {
-    int offset_t, offset_b;
-    int top_field;
-    int field_size = param.width * param.height * 3 / 2;
-    int i;
+    HANDLE tmp;
 
-    fseek(param.top_fd, field_size * top, SEEK_SET);
-    fread(param.top_buffer, 1, field_size, param.top_fd);
-
-    fseek(param.bottom_fd, field_size * bottom, SEEK_SET);
-    fread(param.bottom_buffer, 1, field_size, param.bottom_fd);
-
-    memset(param.output_buffer, 0, field_size * 2);
-
-    if (param.top_field_first) {
-        offset_t = 0;
-        offset_b = param.width;
-    }
-    else {
-        offset_t = param.width;
-        offset_b = 0;
+    tmp = CreateSemaphore(NULL,1,1,NULL);
+    if (tmp) {
+        *sem = tmp;
+        return 0;
     }
 
-    for (i=0; i<param.height * 2; i++) {
-        if (param.top_field_first) {
-            top_field = (i & 1) ? 0 : 1;
-        }
-
-        if (top_field) {
-            memcpy(&param.output_buffer[param.width * i], &param.top_buffer[param.width * (i / 2)], param.width);
-        }
-        else {
-            memcpy(&param.output_buffer[param.width * i], &param.bottom_buffer[param.width * (i / 2)], param.width);
-        }
-    }
-
-    return param.output_buffer;
+    return -1;
 }
 
-static YUVWindowStruct r;
-
-static int event_handler(int evt, void *in, void *out)
+int bgcomm_send(void *data, int len)
 {
-    struct db db;
-
-    memcpy(&db, in, sizeof(struct db));
-
-    if (db.match == 0) {
-        r.buffer = do_merge(db.top, db.bottom);
-        r.width = param.width;
-        r.height = param.height * 2;
-
-        *(unsigned int *)out  = (unsigned int)&r;
-    }
-    else {
-        if (param.match_list) {
-            param.match_list[db.top] = db.bottom;
-        }
-    }
-
-    return 0;
+    ReleaseSemaphore(sem, 1, NULL);
 }
 
-static struct db db;
+int bgcomm_recv(void *data, int len)
+{
+    WaitForSingleObject(sem, 0);
+}
+#endif
 
+// Usage:
+// deinterlace -r "720x288" -b "bottom.yuv:1" -t "top.yuv:2" -v merge.yuv
 int main(int argc, char *argv[])
 {
     int opt;
+    struct _param param;
     unsigned int field_size;
+    int i;
+    int top_field;
+    unsigned int offset_t, offset_b;
     int flag_window = 0;
-    int frame_count;
 
     log_init(NULL);
+
+    TRACE;
 
     //--------------------------------------------------------------------------------------------
 
@@ -161,17 +120,24 @@ int main(int argc, char *argv[])
         }
     }
 
+    TRACE;
+
     if (argv[optind])
         strcpy(param.output_filename, argv[optind]);
 
     if ((param.width == 0)||(param.height==0)||(param.bottom_filename[0]==0)||(param.top_filename[0]==0)||(0 == param.output_filename[0])) {
         print_usage();
-        return 0;
+        TRACE;
+        //return 0;
     }
+
+    TRACE;
 
     //--------------------------------------------------------------------------------------------
 
     log_init(NULL);
+
+    param.sem = CreateSemaphore(NULL, 1, 1, NULL);
 
     param.top_fd = fopen(param.top_filename, "rb");
     param.bottom_fd = fopen(param.bottom_filename, "rb");
@@ -192,32 +158,58 @@ int main(int argc, char *argv[])
         log(LOG_ERROR, "buffer malloc failed\n");
         goto FAILED;
     }
-
-    fseek(param.top_fd, 0, SEEK_END);
-    frame_count = ftell(param.top_fd) / field_size;
-
-    log(LOG_USER, "frame count = %d\n", frame_count);
-
-    param.match_list = (int *)malloc(sizeof(int) * frame_count);
-    if (NULL == param.match_list)
-        goto FAILED;
-
-    //--------------------------------------------------------------------------------------------
-
-    if (flag_window) {
-        Platform_Init("FieldMergeWindow", event_handler);
-    }
-    else {
-        db.top = param.top_index;
-        db.bottom = param.bottom_index;
-        
-        //event_handler(MSG_SET_DATA, &db, NULL);
-
-        //fwrite(...);
-    }
     
+
+
+    // TODO no UV data
+    fwrite(param.output_buffer, 1, param.width * param.height * 2, param.output_fd);
+    fclose(param.output_fd);
+
+    YUVWindowStruct r;
+
+    r.buffer = param.output_buffer;
+    r.width = param.width;
+    r.height = param.height * 2;
+
+    while (1) {
+        Sleep(1000);
+    }
+
     return 0;
 
 FAILED:
     return -1;
+}
+
+int field_merge(int top, int bottom, unsigned char *output)
+{
+    fseek(param.top_fd, field_size * param.top_index, SEEK_SET);
+    fread(param.top_buffer, 1, field_size, param.top_fd);
+
+    fseek(param.bottom_fd, field_size * param.bottom_index, SEEK_SET);
+    fread(param.bottom_buffer, 1, field_size, param.bottom_fd);
+
+    memset(param.output_buffer, 0, field_size * 2);
+
+    if (param.top_field_first) {
+        offset_t = 0;
+        offset_b = param.width;
+    }
+    else {
+        offset_t = param.width;
+        offset_b = 0;
+    }
+
+    for (i=0; i<param.height * 2; i++) {
+        if (param.top_field_first) {
+            top_field = (i & 1) ? 0 : 1;
+        }
+
+        if (top_field) {
+            memcpy(&param.output_buffer[param.width * i], &param.top_buffer[param.width * (i / 2)], param.width);
+        }
+        else {
+            memcpy(&param.output_buffer[param.width * i], &param.bottom_buffer[param.width * (i / 2)], param.width);
+        }
+    }
 }

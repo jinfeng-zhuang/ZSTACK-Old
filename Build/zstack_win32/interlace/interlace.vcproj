@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="interlace"
+	Name="fieldmerge"
 	ProjectGUID="{FD0BD90F-5B72-4793-BF03-91D1B35B0DFC}"
 	RootNamespace="interlace"
 	TargetFrameworkVersion="196613"
@@ -172,7 +172,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Application\interlace\YUVWindow.cpp"
+				RelativePath="..\..\..\Application\interlace\Platform.cpp"
 				>
 			</File>
 		</Filter>

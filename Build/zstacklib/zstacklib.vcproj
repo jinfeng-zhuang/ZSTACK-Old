@@ -184,10 +184,14 @@
 				>
 			</File>
 			<Filter
-				Name="WindowClasses"
+				Name="Platform"
 				>
 				<File
 					RelativePath="..\..\Library\WindowClasses\CustomWindowClassRegister.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Library\WindowClasses\FieldMergeWindow.cpp"
 					>
 				</File>
 				<File
@@ -229,6 +233,14 @@
 			</Filter>
 			<Filter
 				Name="SSIM"
+				>
+			</Filter>
+			<Filter
+				Name="XG9900"
+				>
+			</Filter>
+			<Filter
+				Name="Thread"
 				>
 			</Filter>
 		</Filter>
