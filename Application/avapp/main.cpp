@@ -21,6 +21,9 @@
 extern void RingBufferWindow_Init(void);
 extern void RingBufferWindow_Set(struct ring *r);
 
+#define TYPE_ES  0
+#define TYPE_PTS 1
+
 int main(int argc, char* argv[])
 {
     int ret;
@@ -29,9 +32,7 @@ int main(int argc, char* argv[])
     char *ip;
     unsigned int ves_addr;
     int flag_dump = 0;
-    struct HWDemuxVESDesc_t HWDesc;
-    struct AVStreamVESDesc_t Desc;
-    int flag_dir = 0;
+    int flag_type = -1;
     int flag_ringbuffer_window = 0;
     unsigned int remain;
     char *debug_config = NULL;
@@ -41,9 +42,21 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    while ((opt = getopt(argc, argv, "swd:")) != -1)  {
+    while ((opt = getopt(argc, argv, "t:swd:")) != -1)  {
         switch (opt) {
             case 's':
+                break;
+            case 't':
+                if (0 == strcmp(optarg, "pts")) {
+                    flag_type = TYPE_PTS;
+                }
+                else if (0 == strcmp(optarg, "es")) {
+                    flag_type = TYPE_ES;
+                }
+                else { // TODO
+                    print_usage();
+                    return -1;
+                }
                 break;
             case 'w':
                 flag_ringbuffer_window = 1;
@@ -81,7 +94,12 @@ int main(int argc, char* argv[])
 
         while (1) {
             struct ring r;
-            ret = avmips_get_ves_desc(&r);
+
+            if (flag_type == TYPE_PTS)
+                ret = avmips_get_pts_desc(&r);
+            else
+                ret = avmips_get_ves_desc(&r);
+
             if ((ret == 0) && flag_ringbuffer_window) {
                 RingBufferWindow_Set(&r);
             }

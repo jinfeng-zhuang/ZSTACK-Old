@@ -322,6 +322,16 @@ struct AVStreamVESDesc_t
 	unsigned int rp;
 };
 
+#define VPTS_QUEUE_SIZE 6300
+
+struct VideoPTSQueue_t {
+    unsigned long long input_pts_map[VPTS_QUEUE_SIZE];
+    unsigned int start_wp[VPTS_QUEUE_SIZE][2];
+    unsigned int sz;
+    unsigned int wrIdx;
+    unsigned int rdIdx;
+} ;
+
 ///////////////////////////////////////////////////////////////////////////////
 
 extern const char *mpegformat_framerate_name(int rate);
@@ -330,5 +340,6 @@ extern int read_mpegdisp_regsiters(unsigned int base, struct mpegdisp_regs *regs
 extern bool mpegdisp_is_resolution_change(struct mpegdisp_regs *regs);
 
 extern int avmips_get_ves_desc(struct ring *r);
+extern int avmips_get_pts_desc(struct ring *r);
 
 #endif
