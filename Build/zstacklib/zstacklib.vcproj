@@ -207,6 +207,10 @@
 				Name="VSilicon"
 				>
 				<File
+					RelativePath="..\..\Library\VSilicon\avmips_get_pts_desc.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Library\VSilicon\avmips_get_ves_desc.cpp"
 					>
 				</File>
