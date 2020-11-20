@@ -81,17 +81,9 @@ static unsigned char *do_merge(int top, int bottom)
         offset_b = 0;
     }
 
-    for (i=0; i<param.height * 2; i++) {
-        if (param.top_field_first) {
-            top_field = (i & 1) ? 0 : 1;
-        }
-
-        if (top_field) {
-            memcpy(&param.output_buffer[param.width * i], &param.top_buffer[param.width * (i / 2)], param.width);
-        }
-        else {
-            memcpy(&param.output_buffer[param.width * i], &param.bottom_buffer[param.width * (i / 2)], param.width);
-        }
+    for (i=0; i<param.height; i++) {
+        memcpy(&param.output_buffer[param.width * i * 2 + offset_t], &param.top_buffer[param.width * i], param.width);
+        memcpy(&param.output_buffer[param.width * i * 2 + offset_b], &param.bottom_buffer[param.width * i], param.width);
     }
 
     return param.output_buffer;
