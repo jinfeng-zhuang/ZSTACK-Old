@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <zstack.h>
 
 typedef enum {
     MediaIPSW_DEC_ScaleFactor1_1, /**< 1:1 scaling */
@@ -115,12 +116,21 @@ static void sf_calc_jpegres(const MediaIPSW_DEC_JpegParam_t* const ptJpegParam, 
     printf("JPEG resolution after scaling & rotation hor: %d, ver: %d\n", ptPicRes->usHorRes, ptPicRes->usVerRes);
 }
 
+extern void mem_format_parser_test(void);
+
 int main(int argc, char *argv[])
 {
     MediaIPSW_DEC_JpegParam_t jpeg_param = {MediaIPSW_DEC_RotationAngleMinus90,MediaIPSW_DEC_ScaleFactor1_2,MediaIPSW_DEC_ScaleFactor1_2};
     MediaIPSW_DEC_PictRes_t res = {4000,2000,4000,2000};
+	
 
-    sf_calc_jpegres(&jpeg_param, &res);
+    //sf_calc_jpegres(&jpeg_param, &res);
+
+	log_init(NULL);
+
+	log(LOG_USER, "%s\n", __FUNCTION__);
+
+	mem_format_parser_test();
 
     return 0;
 }
