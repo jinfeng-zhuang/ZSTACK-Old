@@ -19,6 +19,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_window_class", "Applic
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sxmem", "Application\sxmem\sxmem.vcproj", "{66E039CC-F4D6-4410-8BE1-7B08BC920609}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_long_opt", "Application\test_long_opt\test_long_opt.vcproj", "{93031C91-050C-44F5-AF63-7EE65A7E9605}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -26,8 +29,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_long_opt", "Applicatio
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "template", "Application\template\template.vcproj", "{7D3D5914-FB79-40AA-B8AF-AAC0F81BBEE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "h264", "Application\h264\h264.vcproj", "{2A9BCA55-F6F5-4A0E-A9A3-ECB538223918}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -136,8 +136,8 @@ static unsigned char Buffer_10bit(unsigned char* buffer, unsigned int index)
 {
     int bit_index = index * 10 / 8;
     int bit_offset = index * 10 % 8;
-    unsigned char mask1 = ~(1 << bit_offset - 1);
-    unsigned char mask2 = 1 << (10 - 8 + bit_offset) - 1;
+    unsigned char mask1 = ~((1 << bit_offset) - 1);
+    unsigned char mask2 = (1 << (10 - 8 + bit_offset)) - 1;
 
     unsigned char byte1 = (buffer[bit_index] & mask1) >> bit_offset;
     unsigned char byte2 = buffer[bit_index + 1] & mask2;

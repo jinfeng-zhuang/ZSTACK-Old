@@ -77,8 +77,6 @@ void log_init(char *config)
 {
     int i;
     int j;
-    int module_start;
-    int module_end;
     char module_name[32] = {'\0'};
     int config_len;
 

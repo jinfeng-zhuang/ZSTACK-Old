@@ -1,10 +1,10 @@
+#define LOG_MODULE LOG_MODULE_AVMIPS
+
 #include <zstack/ringbuf.h>
 #include <zstack/log.h>
 
 #include <vs/dbg.h>
 #include <vs/avmips.h>
-
-#define LOG_MODULE LOG_MODULE_AVMIPS
 
 #define SX6_HW_DEMUX_REG_BASE 0x15090000
 #define SX6_HW_DEMUX_REG_BASE_MASK 0xFFFF0000

@@ -32,7 +32,7 @@ int dbg_init(const char* ip)
 {
     int ret;
     struct endian request;
-    short port = VS_DEBUG_PORT;
+    short port = (short)VS_DEBUG_PORT;
 
     log(LOG_USER, "Connecting...\n");
 
