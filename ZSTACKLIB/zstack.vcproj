@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(SolutionDir)\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -258,11 +259,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Misc\mem_format_parser.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\param_parser.cpp"
 					>
 				</File>
 				<File
+					RelativePath=".\Misc\split.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\tcp_client.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Misc\trim.cpp"
 					>
 				</File>
 			</Filter>

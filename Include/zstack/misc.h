@@ -36,4 +36,12 @@ extern int param_parser(int argc, char *argv[], struct application *app);
 
 extern unsigned int fsize(FILE *fp);
 
+/*
+ * Attention: str should be in array!!!
+ */
+extern char *trim(char *str);
+extern int trim_test(void);
+
+extern int split(char *dst, int dst_size, char *src, int src_size, char flag, int *offset);
+
 #endif
