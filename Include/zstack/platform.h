@@ -6,4 +6,6 @@
 
 extern int Platform_Init(const char *classname, int (*callback)(int evt, void *in, void *out));
 
+extern int YUVWindow_Register(unsigned int hInstance);
+
 #endif

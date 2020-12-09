@@ -2,6 +2,7 @@
 #define MISC_H
 
 #include <stddef.h>
+#include <stdio.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -17,28 +18,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-enum param_type {
-    PARAM_FLAG,
-    PARAM_STRING,
-    PARAM_INT,
-    PARAM_FLOAT,
-};
-
-struct param {
-    const char key;
-    const int size;
-    int type;
-    void *value;
-};
+struct application;
 
 ///////////////////////////////////////////////////////////////////////////////
 
+extern const char *version;
+extern const char *usage;
+
 extern int hexdump(void* buffer, unsigned int length);
 
+extern unsigned char *file_load(const char* filename, unsigned int *size);
 extern int file_save(const char* filename, unsigned char* buffer, unsigned int length);
 extern int file_append(const char* filename, unsigned char* buffer, unsigned int length);
 
 extern void print_usage(void);
-extern int param_parse(int argc, char *argv[], struct param *arr, int count);
+extern int param_parser(int argc, char *argv[], struct application *app);
+
+extern unsigned int fsize(FILE *fp);
 
 #endif

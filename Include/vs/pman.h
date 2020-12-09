@@ -81,4 +81,6 @@ struct pman_ip_1040 {
     unsigned int module_id;
 };
 
+extern int vs_pman_get_block_info(unsigned int base, struct pman_ip_1040 *info);
+
 #endif
