@@ -84,7 +84,7 @@ int mem_format_parser_simple(const char *input, unsigned char *output)
 		}
 	}
 
-	return 0;
+	return output_offset;
 }
 
 void mem_format_parser_test(void)
