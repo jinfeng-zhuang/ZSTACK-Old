@@ -9,6 +9,7 @@
 #include <zstack/log.h>
 
 #define LOG_OUTPUT printf
+#define DEFAULT_LOG_CONFIG "default:2"
 
 static char *map[LOG_MODULE_MAX] = {
     "default",
@@ -57,7 +58,7 @@ static int add_to_log_mask(char *config)
 
     ret = sscanf(config, "%[^:]:%d", module_name, &level);
     if (2 != ret) {
-        LOG_OUTPUT("log config '%s' is not '<key>:<value>' format\n", config);
+        //LOG_OUTPUT("log config '%s' is not '<key>:<value>' format\n", config);
         return -1;
     }
 
@@ -81,7 +82,7 @@ void log_init(char *config)
     int config_len;
 
     if (config == NULL)
-        config = "default:2";
+        config = DEFAULT_LOG_CONFIG;
 
     // parse
     config_len = strlen(config);
@@ -115,7 +116,7 @@ void log_init(char *config)
     return;
 
 FAILED:
-    LOG_OUTPUT("log config not correct, use default setting\n");
+    LOG_OUTPUT("log config: \"%s\"\n", DEFAULT_LOG_CONFIG);
     log_inited = 0;
 }
 
