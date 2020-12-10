@@ -34,6 +34,4 @@ struct application {
     int *match_list;
 };
 
-extern struct app_db app_db;
-
 #endif
