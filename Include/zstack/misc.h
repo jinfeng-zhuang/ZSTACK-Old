@@ -47,4 +47,6 @@ extern int trim_test(void);
 
 extern int split(char *dst, int dst_size, char *src, int src_size, char flag, int *offset);
 
+extern int mem_format_parser_simple(const char *input, unsigned char *output);
+
 #endif
