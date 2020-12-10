@@ -267,6 +267,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Misc\print_usage.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\split.cpp"
 					>
 				</File>

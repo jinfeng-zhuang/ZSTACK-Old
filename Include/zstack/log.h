@@ -36,6 +36,8 @@ enum log_module_e {
 
 #define TRACE log(LOG_USER, "%s %d\n", __FUNCTION__, __LINE__)
 
+#define LOG_CONFIG_LENGTH   (256)
+
 //=============================================================================
 
 extern void log_init(char *config);

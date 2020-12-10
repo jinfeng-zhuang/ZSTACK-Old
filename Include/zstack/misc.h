@@ -16,6 +16,9 @@
 
 #define BITGET(RegValue, StartBit, Bits) (((RegValue) >> (StartBit)) & ((0x1 << (Bits)) - 1))
 
+#define FILE_PATH_MAX   (256)
+#define IP_LENGTH       (16)
+
 ///////////////////////////////////////////////////////////////////////////////
 
 struct application;

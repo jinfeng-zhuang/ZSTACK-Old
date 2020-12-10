@@ -24,7 +24,6 @@ int param_parser(int argc, char *argv[], struct application *app)
     int c;
 
     if (argc <= 1) {
-        printf(usage);
         return -1;
     }
 
@@ -41,11 +40,15 @@ int param_parser(int argc, char *argv[], struct application *app)
                 log(LOG_USER, "log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
                 return -1;
             }
-            strncpy(app->log_config, optarg, LOG_CONFIG_LENGTH);
+            strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
             break;
         default:
             return -1;
         }
+    }
+
+    if (optind >= argc) {
+        // argv[optind]
     }
 
     return 0;
