@@ -1,86 +1,55 @@
-#define _CRT_SECURE_NO_WARNINGS
-
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <Windows.h>
-
-#include <3rdparty/getopt.h>
-
 #include <zstack.h>
+#include <vs.h>
 
-#include <vs/sx.h>
-#include <vs/dbg.h>
-#include <vs/sx.h>
-#include <vs/avmips.h>
+#include "main.h"
 
-unsigned int pman_umac_addr[3] = {
-    0xF5005000, 0xF5008000, 0xF5036000
-};
+struct application app;
 
-void print_usage(void)
-{
-}
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     int ret;
-    int opt;
-    unsigned int id;
-    char *ip;
-    char *debug_config = NULL;
-    unsigned int address;
-    unsigned int size;
-    unsigned char buffer[1024];
+    unsigned int chip_id;
 
-    if (argc < 2) {
+    if (param_parser(argc, argv, &app) == -1) {
         print_usage();
         return -1;
     }
 
-    while ((opt = getopt(argc, argv, "m:p:wd:")) != -1)  {
-        switch (opt) {
-            case 'm':
-                sscanf(optarg, "%x:%d", &address, &size);
-                break;
-            case 'd':
-                debug_config = optarg;
-                break;
-            default:
-                log(LOG_WARNING, "Unknown option: %c\n", opt);
-                print_usage();
-                return -1;
-        }
-    }
+    log_init(app.param.log_config);
 
-    ip = argv[optind];
+    log(LOG_DEBUG, "sxmem %s --address=0x%x --bytecount=%d --operation=%s --format=%s --data=\"%s\" --datafile=\"%s\"\n",
+        app.param.ip, app.param.address, app.param.bytecount,
+        app.param.operation == OPERATION_WRITE ? "write" : "read",
+        app.param.format == FORMAT_STRUCT ? "struct" : (app.param.format == FORMAT_BINARY ? "binary" : "hexdump"),
+        app.param.data,
+        app.param.datafile);
 
-    if (size > 1024)
+    if (0 != dbg_init(app.param.ip))
         return -1;
 
-    log_init(debug_config);
-    
-    ret = dbg_init(ip);
-    if (0 == ret) {
+    chip_id = vs_chip_id_get();
+    if ((chip_id != CHIP_SX7B) && (chip_id != CHIP_SX7A) && (chip_id != CHIP_SX8B) && (chip_id != CHIP_SX8A)) {
+        log(LOG_WARNING, "CHIP Not supported\n");
+        return -1;
+    }
 
-        // Get Chip ID
-        id = vs_chip_id_get();
-
-        if ((id != CHIP_SX7B) && (id != CHIP_SX7A) && (id != CHIP_SX8B) && (id != CHIP_SX8A)) {
-            log(LOG_WARNING, "CHIP Not supported\n");
-            goto END;
-        }
-
-        ret = dbg_host_read8(address, buffer, size);
+    if ((app.param.operation == OPERATION_READ) && (app.param.format == FORMAT_HEXDUMP)) {
+        // TODO while to read all, per 256 bytes
+        ret = dbg_host_read8(app.param.address, (unsigned char *)app.param.data, app.param.bytecount);
         if (0 == ret) {
-            hexdump(buffer, size);
+            hexdump(app.param.data, app.param.bytecount);
         }
     }
 
-END:
-
-    dbg_deinit();
+    if ((app.param.operation == OPERATION_WRITE) && (app.param.format == FORMAT_STRUCT) && (app.param.data[0] != '\0')) {
+        ret = mem_format_parser_simple(app.param.data, app.buffer);
+        ret = (ret > app.param.bytecount) ? app.param.bytecount : ret;
+        hexdump(app.buffer, ret);
+        ret = dbg_host_write8(app.param.address, app.buffer, ret);
+        if (0 == ret) {
+            log(LOG_USER, "Done!\n");
+        }
+    }
 
     return 0;
 }
