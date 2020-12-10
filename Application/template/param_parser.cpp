@@ -51,5 +51,7 @@ int param_parser(int argc, char *argv[], struct application *app)
         // argv[optind]
     }
 
+    // Do param validation
+
     return 0;
 }
