@@ -1,0 +1,41 @@
+	// Custom Window Class Register
+	CustomWindowClassesInit(hInstance);
+
+	// Custom Window Create
+	hwnd = CreateWindowEx(
+		0, // dwExStyle
+		TEXT("BitmapBoard"),
+		TEXT("Demo"),
+		//WS_OVERLAPPEDWINDOW | WS_VSCROLL| WS_HSCROLL,
+		WS_OVERLAPPEDWINDOW,
+		//300, 200, 1000, 400,
+		0, 0, 250, 250,
+		NULL, // hWndParent
+		NULL, // hMenu
+		hInstance,
+		NULL);
+
+    fp = fopen("demo.html", "r");
+    if (NULL != fp) {
+        fseek(fp, 0, SEEK_END);
+        filesize = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        content = (char*)malloc(filesize + 1);
+        memset(content, 0, filesize + 1);
+
+        fread(content, 1, filesize, fp);
+
+        unicode_content = (wchar_t*)malloc(filesize * 2);
+        memset(unicode_content, 0, filesize * 2);
+
+        MultiByteToWideChar(CP_UTF8, 0, (char *)content, strlen(content), unicode_content, filesize * 2);
+
+        HTMLShow(hwnd, (const wchar_t *)unicode_content);
+    }
+    else {
+        HTMLShow(hwnd, L"<html><body><p>File not found!</p></body></html>");
+    }
+
+	ShowWindow(hwnd, nShowCmd);
+	UpdateWindow(hwnd);

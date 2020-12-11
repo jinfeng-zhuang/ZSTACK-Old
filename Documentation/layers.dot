@@ -1,0 +1,13 @@
+digraph {
+node [shape=egg];
+
+"Background" -> "Simple API" -> "Content";
+"Background" -> "UI Style (Structures)";
+"Content" -> "UI Update" [color="blue"];
+"UI Style (Structures)" -> "UI Update" [color="blue"];
+"UI Update" -> "Windows Handlers";
+"Event" -> "UI Update" [color="red"];
+"UI Update" -> "Background" [color="red"];
+"Windows Handlers" -> "System";
+"UI Layout" -> "UI Update"  [color="blue"];
+}
