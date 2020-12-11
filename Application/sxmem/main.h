@@ -7,11 +7,13 @@
 #define BYTE_COUNT_MAX      (256)
 
 enum {
+    OPERATION_INVALID,
     OPERATION_WRITE,
     OPERATION_READ
 };
 
 enum {
+    FORMAT_INVALID,
     FORMAT_STRUCT,
     FORMAT_BINARY,
     FORMAT_HEXDUMP
@@ -24,11 +26,11 @@ struct application {
         unsigned int address;
         unsigned int bytecount;
         unsigned int operation;
-        unsigned int format;
         char data[BYTE_COUNT_MAX];
         char datafile[FILE_PATH_MAX];
     } param;
 
+    unsigned int format; // FORMAT_STRUCT
     unsigned char buffer[BYTE_COUNT_MAX];
 };
 

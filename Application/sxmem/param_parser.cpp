@@ -15,8 +15,7 @@ enum {
     OPTION_BYTECOUNT,
     OPTION_OPERATION,
     OPTION_FORMAT,
-    OPTION_DATA,
-    OPTION_DATAFILE
+    OPTION_DATA
 };
 
 static struct option opts[] = {
@@ -29,14 +28,12 @@ static struct option opts[] = {
     {"operation", required_argument, 0, OPTION_OPERATION},
     {"format", required_argument, 0, OPTION_FORMAT},
     {"data", required_argument, 0, OPTION_DATA},
-    {"datafile", required_argument, 0, OPTION_DATAFILE},
     {0, 0, 0, 0}
 };
 
 int param_parser(int argc, char *argv[], struct application *app)
 {
     int c;
-    int size;
 
     if (argc <= 1) {
         return -1;
@@ -74,31 +71,11 @@ int param_parser(int argc, char *argv[], struct application *app)
                 return -1;
             }
             break;
-        case OPTION_FORMAT:
-            if (0 == strcmp("struct", optarg)) {
-                app->param.format = FORMAT_STRUCT;
-            }
-            else if (0 == strcmp("binary", optarg)) {
-                app->param.format = FORMAT_BINARY;
-            }
-            else if (0 == strcmp("hexdump", optarg)) {
-                app->param.format = FORMAT_HEXDUMP;
-            }
-            else {
-                return -1;
-            }
-            break;
         case OPTION_DATA:
             // should reserve 1 byte for '\0'
             if (strlen(optarg) >= BYTE_COUNT_MAX)
                 return -1;
             memcpy(app->param.data, optarg, strlen(optarg));
-            break;
-        case OPTION_DATAFILE:
-            // should reserve 1 byte for '\0'
-            if (strlen(optarg) >= FILE_PATH_MAX)
-                return -1;
-            memcpy(app->param.datafile, optarg, strlen(optarg));
             break;
         default:
             return -1;
@@ -112,7 +89,7 @@ int param_parser(int argc, char *argv[], struct application *app)
         return -1;
     memcpy(app->param.ip, argv[optind], strlen(argv[optind]));
 
-    if ((app->param.ip[0] == '\0') || (app->param.address == 0) || (app->param.bytecount == 0))
+    if ((app->param.ip[0] == '\0') || (app->param.address == 0))
         return -1;
 
     return 0;
