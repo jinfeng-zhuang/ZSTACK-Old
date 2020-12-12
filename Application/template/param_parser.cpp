@@ -23,10 +23,6 @@ int param_parser(int argc, char *argv[], struct application *app)
 {
     int c;
 
-    if (argc <= 1) {
-        return -1;
-    }
-
     while((c=getopt_long(argc, argv, "", opts, NULL))!=-1){
         switch (c) {
         case OPTION_VERSION:
