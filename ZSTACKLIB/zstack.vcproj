@@ -154,6 +154,14 @@
 			<Filter
 				Name="Algo"
 				>
+				<File
+					RelativePath=".\Algo\fft.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Algo\wavegen.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Thread"
@@ -289,6 +297,46 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\Include\zstack\algo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\log.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\misc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\net.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\platform.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\ringbuf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\tcp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\ui.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\window_class.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\zstack\yuv.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
