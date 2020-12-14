@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 import math
 
 PI = 3.1415926
-N=4096
-Fs = 6630
-
+N=1024
+Fs = 1024
 x=np.linspace(0,Fs,N)
+'''
+
 y=[]
 
 for i in range(0, N):
@@ -21,9 +22,12 @@ abs_y=np.abs(fft_y)
 
 #plt.plot(x, abs_y)
 #plt.title('python.fft')
-
+'''
 # Use ARM output result
-abs_arm = np.loadtxt('fft_result.txt', delimiter='\r\n')
+N = 1024
+abs_arm = np.loadtxt('fft_result_pc.txt', delimiter='\r\n')
+fft_y = fft(abs_arm)
+abs_y=np.abs(fft_y)
 
 normalization_abs_arm=(abs_arm/N) * 2
 normalization_abs_y=(abs_y/N) * 2
@@ -53,7 +57,9 @@ plt.plot(half_x, normalization_half_y)
 plt.title('arm.dsp.fft.normal.half')
 '''
 
-plt.plot(x, abs_arm)
+plt.plot(x, normalization_abs_y)
+#plt.plot(x, abs_arm)
 plt.title('arm.dsp.fft')
+
 
 plt.show()

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     log_init(app.param.log_config);
 
-	wavegen((float*)app.sample, 1024, 100, 200);
+	wavegen((float*)app.sample, 1024, app.param.freq, app.param.sample_freq);
 
 	for (i = 0; i < 1024; i++) {
 		//printf("%f \n", (float)app.sample[i]);

@@ -7,6 +7,8 @@ This is a template project to generate a new one.\n\
   --version     version info\n\
   --help        this message\n\
   --log         log config\n\
+  --freq [N]	\n\
+  --sample [N]	\n\
 \n\
 Examples:\n\
   xg9900 --log \"app:5\"\n\

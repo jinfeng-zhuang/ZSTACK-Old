@@ -10,18 +10,28 @@ enum {
     OPTION_VERSION = 1,
     OPTION_HELP,
     OPTION_LOG,
+
+	// FOR TEST
+	OPTION_FREQ,
+	OPTION_SAMPLE_FREQ
 };
 
 static struct option opts[] = {
     {"version", no_argument, 0, OPTION_VERSION},
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
+	{"freq", required_argument, 0, OPTION_FREQ},
+	{"sample", required_argument, 0, OPTION_SAMPLE_FREQ},
     {0, 0, 0, 0}
 };
 
 int param_parser(int argc, char *argv[], struct application *app)
 {
     int c;
+
+    if (argc <= 1) {
+        return -1;
+    }
 
     while((c=getopt_long(argc, argv, "", opts, NULL))!=-1){
         switch (c) {
@@ -38,6 +48,12 @@ int param_parser(int argc, char *argv[], struct application *app)
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
             break;
+		case OPTION_FREQ:
+			app->param.freq = atoi(optarg);
+			break;
+		case OPTION_SAMPLE_FREQ:
+			app->param.sample_freq = atoi(optarg);
+			break;
         default:
             return -1;
         }

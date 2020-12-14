@@ -13,7 +13,7 @@ int wavegen(float *output, int length, int freq, int sample_freq)
 		return -1;
 
 	for (i = 0; i < length; i++) {
-		value = sin(PI * i / 180);
+		value = sin(freq * PI * i * 2 / sample_freq);
 
 		printf("%f \n", value);
 

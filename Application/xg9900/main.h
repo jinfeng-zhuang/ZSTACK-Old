@@ -8,6 +8,9 @@
 struct application {
     struct {
         char log_config[LOG_CONFIG_LENGTH];
+		// FOR TEST
+		int freq;
+		int sample_freq;
     } param;
 
 	// ÅäÖÃÎÄ¼ş
