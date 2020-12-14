@@ -1,8 +1,9 @@
 #include <Windows.h>
-#include "common.h"
 #include <math.h>
 #include <gdiplus.h>
 #include <assert.h>
+
+#include <zstack.h>
 
 using namespace Gdiplus;
 

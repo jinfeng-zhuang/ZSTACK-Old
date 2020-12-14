@@ -1,7 +1,10 @@
+#pragma comment(lib, "Msimg32.lib")
+
 #include <Windows.h>
-#include "common.h"
 #include <math.h>
 #include <assert.h>
+
+#include <zstack.h>
 
 static HBITMAP hBitmap;
 static HBITMAP hBitmapArray[10];

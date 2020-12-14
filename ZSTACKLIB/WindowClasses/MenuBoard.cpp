@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include <commctrl.h>
-#include "common.h"
+#include <zstack.h>
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

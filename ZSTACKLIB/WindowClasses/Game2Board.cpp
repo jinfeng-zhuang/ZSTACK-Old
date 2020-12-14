@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 // 数据库定义
 // 数据越多，需要同步的数据也越多，越容易含义不明确

@@ -1,7 +1,9 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 static int offset;
+
+
 
 static void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
@@ -29,7 +31,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     HDC hdc;
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
-    int i;
     static POINT apt[4] = { {0, 0}, {0,100}, {100,0}, {300, 300} };
     POINT arrow[3];
 
@@ -47,7 +48,8 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         break;
     case WM_LBUTTONUP:
-        apt[3] = apt[2] = apt[1] = apt[0] = { 0, 0 };
+        // TODO
+        //apt[3] = apt[2] = apt[1] = apt[0] = { 0, 0 };
         InvalidateRect(hWnd, NULL, TRUE);
         break;
     case WM_MOUSEMOVE:

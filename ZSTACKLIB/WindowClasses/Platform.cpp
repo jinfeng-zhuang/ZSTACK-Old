@@ -56,7 +56,7 @@ static unsigned int __stdcall worker_thread(void *arg)
     return 0;
 }
 
-int Platform_Init(const char *classname, int (*callback)(int evt, void *in, void *out))
+int Platform_Init(const wchar_t *classname, int (*callback)(int evt, void *in, void *out))
 {
     HANDLE hThread;
 	MSG msg;

@@ -4,7 +4,7 @@
 //
 
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 HWND listbox;
 

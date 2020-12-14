@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 #define RBM_UPDATE   (WM_USER + 0)
 

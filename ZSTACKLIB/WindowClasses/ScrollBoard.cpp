@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 HBITMAP hBitmap;
 

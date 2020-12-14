@@ -17,10 +17,11 @@
 // 我更倾向于一次拿到一个完整的 BUFFER ， DUMP 数据的时候也很方便，自己的东西自己管。
 // 属性是固定的，总空间也是固定的，单个数据长度是可变的，但是整体是不变的。
 //
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <Windows.h>
-#include "common.h"
-#include "tinyxml2.h"
+#include <zstack.h>
+#include "3rdparty/tinyxml2.h"
 
 // stored as ANSI, but restored with Unicode, I don't know why
 // there is a c code to copy data from harddisk to ddr, maybe the c code decode this

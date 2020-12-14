@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 static HDC hdc_a, hdc_b, hdc_c;
 static HBITMAP bitmap_a, bitmap_b;

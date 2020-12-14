@@ -1,6 +1,15 @@
 #include <Windows.h>
 #include <math.h>
-#include "common.h"
+#include <zstack.h>
+
+extern int DrawThread_Init(HWND hwnd);
+extern int DrawCmd_Begin(BOOL empty);
+extern void DrawCmd_End(void);
+extern HDC DrawCmd_Get(void); // if empty, return old image
+extern void DrawCmd_Rectangle(RECT rect, COLORREF color, BOOL fill);
+extern void DrawCmd_Line(POINT a, POINT b);
+extern void DrawCmd_Bitmap(HBITMAP bitmap, RECT rect);
+extern void DrawCmd_Text(wchar_t* text, RECT rect);
 
 struct card_db {
     int status; // 0 - prepare, 1 - attack

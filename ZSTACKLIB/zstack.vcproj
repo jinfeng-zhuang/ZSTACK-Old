@@ -124,6 +124,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="getopt.lib libpng.lib zlib.lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\Library"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -158,6 +160,14 @@
 			<Filter
 				Name="Thread"
 				>
+				<File
+					RelativePath=".\Thread\DrawThread.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Thread\FrameGenerator.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="VSilicon"
@@ -207,7 +217,47 @@
 				Name="Windows"
 				>
 				<File
+					RelativePath=".\WindowClasses\ArticleBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\BGRABoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\BitmapBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\BitmapDynamicBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\CardBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\CMDBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\CurveBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\CustomWindowClassesInit.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WindowClasses\CustomWindowClassRegister.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\DoubleBufferBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\EmptyBoard.cpp"
 					>
 				</File>
 				<File
@@ -219,11 +269,71 @@
 					>
 				</File>
 				<File
+					RelativePath=".\WindowClasses\Game2Board.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\GameBoard.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WindowClasses\HexViewWindow.cpp"
 					>
 				</File>
 				<File
+					RelativePath=".\WindowClasses\HTMLBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\ListBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\LogBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\MenuBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\MyButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\PaintBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\Platform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\PngBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\ProgressBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\RingBufferBoard.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WindowClasses\RingBufferWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\ScrollBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\TextBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowClasses\TVBoard.cpp"
 					>
 				</File>
 				<File
@@ -255,6 +365,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Misc\load_png.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\log.cpp"
 					>
 				</File>
@@ -280,6 +394,14 @@
 				</File>
 				<File
 					RelativePath=".\Misc\trim.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="3rdparty"
+				>
+				<File
+					RelativePath=".\3rdparty\tinyxml2.cpp"
 					>
 				</File>
 			</Filter>

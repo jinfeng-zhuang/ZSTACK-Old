@@ -9,9 +9,9 @@
  */
 
 #include <Windows.h>
-#include "common.h"
 #include <math.h>
 #include <assert.h>
+#include <zstack.h>
 
 extern unsigned char *FrameGenerator_Get(void);
 

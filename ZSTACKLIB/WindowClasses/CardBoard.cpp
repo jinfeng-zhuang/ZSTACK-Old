@@ -1,6 +1,6 @@
 #include <Windows.h>
-#include "common.h"
-#include <png.h>
+#include <zstack.h>
+#include <3rdparty/png.h>
 
 extern png_bytep* read_png_file(const char* file_name, int* width, int* height);
 extern long ReadPngData(const char* szPath, int* pnWidth, int* pnHeight, unsigned char** cbData);

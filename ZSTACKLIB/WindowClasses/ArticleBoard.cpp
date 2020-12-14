@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
 
 static WCHAR email[] = TEXT("\
 On Tue, 17 Dec 2002, Linus Torvalds wrote :\n\

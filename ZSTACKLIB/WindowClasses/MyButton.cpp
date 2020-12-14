@@ -1,5 +1,14 @@
 #include <Windows.h>
-#include "common.h"
+#include <zstack.h>
+
+struct window_desc {
+    int x;
+    int y;
+    int width;
+    int height;
+    int style;
+    wchar_t value[32];
+};
 
 struct window_desc vertical_buttons[] = {
 	{0, 0, 200, 20, BS_PUSHBUTTON, TEXT("BS_PUSHBUTTON")},
