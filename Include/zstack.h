@@ -1,6 +1,7 @@
 #ifndef ZSTACK_H
 #define ZSTACK_H
 
+#include <zstack/algo.h>
 #include <zstack/log.h>
 #include <zstack/misc.h>
 #include <zstack/yuv.h>

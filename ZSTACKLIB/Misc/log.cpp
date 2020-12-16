@@ -116,7 +116,7 @@ void log_init(char *config)
     return;
 
 FAILED:
-    LOG_OUTPUT("log config: \"%s\"\n", DEFAULT_LOG_CONFIG);
+    //LOG_OUTPUT("log config: \"%s\"\n", DEFAULT_LOG_CONFIG);
     log_inited = 0;
 }
 
