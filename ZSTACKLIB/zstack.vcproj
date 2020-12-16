@@ -124,8 +124,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="getopt.lib libpng.lib zlib.lib"
-				AdditionalLibraryDirectories="$(SolutionDir)\Library"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"

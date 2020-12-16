@@ -21,11 +21,10 @@ int mem_format_detect(void)
             return FORMAT_STRUCT;
         }
         else {
-            return FORMAT_HEXDUMP;
         }
     }
 
-    return FORMAT_INVALID;
+    return FORMAT_HEXDUMP;
 }
 
 int main(int argc, char *argv[])
@@ -52,6 +51,8 @@ int main(int argc, char *argv[])
     // determine the format
     app.format = mem_format_detect();
 
+    printf("app.format = %d\n", app.format);
+
     if ((app.param.operation == OPERATION_READ) && (app.format == FORMAT_HEXDUMP)) {
         // TODO while to read all, per 256 bytes
         ret = dbg_host_read8(app.param.address, (unsigned char *)app.param.data, app.param.bytecount);
@@ -62,11 +63,8 @@ int main(int argc, char *argv[])
 
     if ((app.param.operation == OPERATION_WRITE) && (app.format == FORMAT_STRUCT) && (app.param.data[0] != '\0')) {
         ret = mem_format_parser_simple(app.param.data, app.buffer);
-        //ret = (ret > app.param.bytecount) ? app.param.bytecount : ret; // don't require bytecount
-        hexdump(app.buffer, ret);
         ret = dbg_host_write8(app.param.address, app.buffer, ret);
         if (0 == ret) {
-            log(LOG_USER, "Done!\n");
         }
     }
 

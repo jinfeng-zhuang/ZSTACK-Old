@@ -126,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="zstack.lib getopt.lib"
+				AdditionalDependencies="zstack.lib getopt.lib libpng.lib zlib.lib"
 				AdditionalLibraryDirectories="$(SolutionDir)/Library"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"

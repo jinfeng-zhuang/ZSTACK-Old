@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="template"
-	ProjectGUID="{7D3D5914-FB79-40AA-B8AF-AAC0F81BBEE8}"
-	RootNamespace="template"
+	Name="test_png"
+	ProjectGUID="{2D756B39-021B-492B-AAE7-863E7BE795EA}"
+	RootNamespace="test_png"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -58,7 +58,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="zstack.lib"
+				AdditionalDependencies="zstack.lib getopt.lib"
 				AdditionalLibraryDirectories="$(SolutionDir)\Library"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="zstack.lib getopt.lib"
+				AdditionalDependencies="zstack.lib getopt.lib libpng.lib zlib.lib"
 				AdditionalLibraryDirectories="$(SolutionDir)\Library"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"

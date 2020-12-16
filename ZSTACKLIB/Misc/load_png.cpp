@@ -54,12 +54,18 @@ png_bytep* read_png_file(const char* file_name, int *width, int *height)
 
     row_pointers = png_get_rows(png_ptr, info_ptr);
 
+    //for (y = 0; y < height; y++) {
+    //    png_read_rows(png_ptr, &row_pointers[y], NULL, 1);
+    //}
+
+    //png_read_end(png_ptr, info_ptr);
+
     fclose(fp);
 
     return row_pointers;
 }
 
-long ReadPngData(const char* szPath, int* pnWidth, int* pnHeight, unsigned char** cbData)
+long png_to_bgra(const char* szPath, int* pnWidth, int* pnHeight, unsigned char** cbData)
 {
     FILE* fp = NULL;
     long file_size = 0, pos = 0, mPos = 0;
@@ -70,7 +76,9 @@ long ReadPngData(const char* szPath, int* pnWidth, int* pnHeight, unsigned char*
     png_bytep* row_point = NULL;
 
     fp = fopen(szPath, "rb");
-    if (!fp)    return 0;            //文件打开错误则返回 FILE_ERROR
+    if (!fp) {
+        return 0;            //文件打开错误则返回 FILE_ERROR
+    }
 
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);        //创建png读取结构
     info_ptr = png_create_info_struct(png_ptr);        //png 文件信息结构

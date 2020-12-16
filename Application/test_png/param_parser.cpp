@@ -44,9 +44,11 @@ int param_parser(int argc, char *argv[], struct application *app)
     }
 
     if (argc > 1) {
-        // for (i = optind; i < argc; i++)
-        // argv[optind]
+        strncpy(app->param.path, argv[optind], FILENAME_MAX - 1);
     }
+
+    if (app->param.path[0] == '\0')
+        return -1;
 
     // Do param validation
 

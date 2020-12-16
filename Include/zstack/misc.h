@@ -16,7 +16,7 @@
 
 #define BITGET(RegValue, StartBit, Bits) (((RegValue) >> (StartBit)) & ((0x1 << (Bits)) - 1))
 
-#define FILE_PATH_MAX   (256)
+#define FILE_PATH_MAX   (FILENAME_MAX)
 #define IP_LENGTH       (16)
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,5 +48,7 @@ extern int trim_test(void);
 extern int split(char *dst, int dst_size, char *src, int src_size, char flag, int *offset);
 
 extern int mem_format_parser_simple(const char *input, unsigned char *output);
+
+extern long png_to_bgra(const char* path, int* w, int* h, unsigned char** bgra);
 
 #endif

@@ -127,7 +127,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     {
     case WM_CREATE:
         int w, h;
-        ReadPngData("test.png", &w, &h, &data);
+        png_to_bgra("test.png", &w, &h, &data);
 
         hPngFr = CreateBitmap(w, h, 32, 1, data);
         hPngBk = CreateBitmap(CARD_WIDTH, CARD_HEIGHT, 32, 1, NULL);
