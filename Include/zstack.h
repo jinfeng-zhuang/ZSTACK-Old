@@ -8,6 +8,10 @@
 #include <zstack/platform.h>
 #include <zstack/window_class.h>
 
+#include <zstack/vp9.h>
+#include <zstack/h264.h>
+#include <zstack/h265.h>
+
 extern int window_class_register(void);
 
 #endif
