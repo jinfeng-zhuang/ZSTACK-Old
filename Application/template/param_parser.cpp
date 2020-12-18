@@ -23,6 +23,9 @@ int param_parser(int argc, char *argv[], struct application *app)
 {
     int c;
 
+    if (argc <= 1)
+        return -1;
+
     while((c=getopt_long(argc, argv, "", opts, NULL))!=-1){
         switch (c) {
         case OPTION_VERSION:
@@ -44,8 +47,9 @@ int param_parser(int argc, char *argv[], struct application *app)
     }
 
     if (argc > 1) {
-        // for (i = optind; i < argc; i++)
-        // argv[optind]
+        if (strlen(argv[optind]) >= FILENAME_MAX)
+            return -1;
+        memcpy(app->param.filename, argv[optind], strlen(argv[optind]));
     }
 
     // Do param validation
