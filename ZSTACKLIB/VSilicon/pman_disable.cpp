@@ -35,7 +35,7 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
         for(region_idx = 0; region_idx < 32; region_idx++)
         {
             ret = dbg_host_read32(OFFSET(struct pman_ip_1040, regions[region_idx].addr_low) + pman_umac_ctrl_base[umac_idx], &regval, 1);
-            log(LOG_DEBUG, "[%d] pman address %x\n", ret, regval);
+            log(LOG_DEBUG, "UMAC[%d] pman address 0x%08X\n", umac_idx, regval);
             if((0 ==ret) && (regval == address)) {
                 goto FOUND;
             }

@@ -31,6 +31,14 @@ enum log_module_e {
 #define log(lvl, argv, ...) _log(LOG_MODULE, lvl, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
 #endif
 
+#ifndef log_info
+#define log_info(argv, ...) _log(LOG_MODULE, LOG_USER, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#endif
+
+#ifndef log_warn
+#define log_warn(argv, ...) _log(LOG_MODULE, LOG_WARNING, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#endif
+
 #define ENTER log(LOG_DEBUG, "\n")
 #define EXIT  log(LOG_DEBUG, "\n")
 

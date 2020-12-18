@@ -2,6 +2,17 @@
 #include <string.h>
 #include <zstack/ringbuf.h>
 
+typedef struct _ringbuf
+{
+	unsigned char *buffer;
+	unsigned int length;
+
+	unsigned int datalen;
+
+	unsigned int head;
+	unsigned int tail;
+} ringbuf_t;
+
 int g_ringbuf_datalen = 0;
 
 unsigned int ringbuf_get_datalen(ringbuf_t *ringbuf)
@@ -243,4 +254,40 @@ unsigned int ringbuf_get(ringbuf_t *ringbuf, unsigned char *buffer, unsigned int
 	ringbuf->datalen -= realget;
 
 	return realget;
+}
+
+// wp < rp:
+// wp -> keep 1 slot -> rp
+unsigned int ringbuf_measure(struct ring *r, unsigned int request)
+{
+    unsigned int remain;
+    unsigned int remain2;
+    unsigned int response;
+
+    if (r->wp >= r->rp) {
+        remain = r->wp - r->rp;
+        response = (request > remain) ? remain : request;
+        return response;
+    }
+    else{
+        remain = r->end - r->rp;
+        response = (request > remain) ? remain : request;
+        return response;
+    }
+}
+
+unsigned int ringbuf_get_datalen(struct ring *r)
+{
+    unsigned int remain;
+    unsigned int remain2;
+
+    if (r->wp >= r->rp) {
+        remain = r->wp - r->rp;
+        return remain;
+    }
+    else{
+        remain = r->end - r->rp;
+        remain2 = r->wp - r->start;
+        return remain + remain2;
+    }
 }

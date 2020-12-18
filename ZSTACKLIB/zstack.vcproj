@@ -392,6 +392,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Misc\ringbuf.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\split.cpp"
 					>
 				</File>

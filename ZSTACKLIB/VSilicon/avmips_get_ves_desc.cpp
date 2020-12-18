@@ -12,6 +12,17 @@
 #define UXL_HW_DEMUX_REG_BASE 0x10019000
 #define UXL_HW_DEMUX_REG_BASE_MASK 0xFFFFF000
 
+static inline unsigned int K01UPA2DA(unsigned int pa)
+{
+	unsigned int da = pa;
+	unsigned int offset = 0x30000000;	//2'b x 256M
+	if((pa & 0x40000000) && !(pa & 0x80000000))	/* [1G, 2G) */
+	{
+		da -= offset;
+	}
+	return da;
+}
+
 int avmips_get_ves_desc(struct ring *r)
 {
     int ret;
@@ -39,24 +50,25 @@ int avmips_get_ves_desc(struct ring *r)
     {
         flag_hardware_demux = 1;
     }
-        
+
+    // TODO
     if (flag_hardware_demux) {
         ves_addr |= 0xF5080000;
         
         dbg_host_read8(ves_addr, (unsigned char *)&HWDesc, sizeof(struct HWDemuxVESDesc_t));
 
         r->start = HWDesc.start;
-        r->end = HWDesc.end;
+        r->end = HWDesc.end + 1;
         r->wp = HWDesc.wp;
         r->rp = HWDesc.rp;
     }
     else {
         dbg_host_read8(ves_addr, (unsigned char *)&AVDesc, sizeof(struct AVStreamVESDesc_t));
         
-        r->start = AVDesc.start;
-        r->end = AVDesc.end;
-        r->wp = AVDesc.wp;
-        r->rp = AVDesc.rp;
+        r->start = K01UPA2DA(AVDesc.start);
+        r->end = K01UPA2DA(AVDesc.end + 1);
+        r->wp = K01UPA2DA(AVDesc.wp);
+        r->rp = K01UPA2DA(AVDesc.rp);
     }
 
     if (r->wp >= r->rp) {

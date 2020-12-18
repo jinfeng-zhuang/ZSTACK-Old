@@ -28,7 +28,7 @@ int file_append(const char* filename, unsigned char* buffer, unsigned int length
 
     fclose(fp);
 
-    log(LOG_WARNING, "%s done\n", filename);
+    log(LOG_DEBUG, "%s done\n", filename);
 
     return 0;
 }
