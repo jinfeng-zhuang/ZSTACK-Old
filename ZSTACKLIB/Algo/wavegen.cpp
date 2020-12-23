@@ -2,9 +2,9 @@
 #include <stdio.h>
 
 #define PI 3.1415927
-#define DOUBLE_PI   6.283185307179586476925286766559
+#define DOUBLE_PI   6.283185307179 //6.283185307179586476925286766559
 
-int wavegen(float *output, int length, int freq, int sample_freq)
+int wavegen(double *output, int length, int freq, int sample_freq)
 {
 	int i;
 	double value;
@@ -13,11 +13,10 @@ int wavegen(float *output, int length, int freq, int sample_freq)
 		return -1;
 
 	for (i = 0; i < length; i++) {
-		value = sin(freq * PI * i * 2 / sample_freq);
+		//value = sin(1.0 * freq * PI * i * 2.0 / sample_freq);
+        value = sin(1.0 * freq * DOUBLE_PI * i / sample_freq);
 
-		printf("%f \n", value);
-
-		//output[i] = value;
+		output[i] = value;
 	}
 
 	return 0;

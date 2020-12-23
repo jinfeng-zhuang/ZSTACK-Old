@@ -10,7 +10,8 @@ void fft(double * data, int n, int isInverse)
     int mmax, m, j, step, i;
     double temp;
     double theta, sin_htheta, sin_theta, pwr, wr, wi, tempr, tempi;
-    n = 2 * (1 << n);
+    //n = 2 * (1 << n);
+    n = 2 * n;
     int nn = n >> 1;
     // 长度为1的傅里叶变换, 位置交换过程
     j = 1;

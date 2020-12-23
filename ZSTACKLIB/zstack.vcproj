@@ -160,6 +160,18 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Algo\hanning_window.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Algo\linear_regression.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Algo\statistics.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Algo\wavegen.cpp"
 					>
 				</File>
