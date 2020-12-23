@@ -46,7 +46,7 @@ int param_parser(int argc, char *argv[], struct application *app)
         }
     }
 
-    if (argc > 1) {
+    if (optind < argc) {
         if (strlen(argv[optind]) >= FILENAME_MAX)
             return -1;
         memcpy(app->param.filename, argv[optind], strlen(argv[optind]));
