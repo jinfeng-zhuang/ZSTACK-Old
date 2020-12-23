@@ -175,6 +175,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\simulate_data.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\usage.cpp"
 				>
 			</File>

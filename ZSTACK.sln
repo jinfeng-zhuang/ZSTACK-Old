@@ -49,8 +49,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xg9900", "Application\xg990
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_png", "Application\test_png\test_png.vcproj", "{2D756B39-021B-492B-AAE7-863E7BE795EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sx_iomux", "Application\sx_iomux\sx_iomux.vcproj", "{8DE03E2D-30B4-4BC3-BD91-A30D8F8F4CEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vp9", "Application\vp9\vp9.vcproj", "{E87E0A00-3321-40A7-B03F-13BDE51D693F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -63,6 +69,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aves", "Application\aves\av
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "avlog", "Application\avlog\avlog.vcproj", "{1E9E1F57-D059-4ED2-B493-9A2E8391BFE9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wavegen", "Application\wavegen\wavegen.vcproj", "{4EBE6719-9A0B-45A5-A7A2-71C2D2AC1204}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fft", "Application\fft\fft.vcproj", "{BEC68D16-D393-4B27-B34E-353659A2F204}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
 	EndProjectSection
@@ -129,6 +145,14 @@ Global
 		{1E9E1F57-D059-4ED2-B493-9A2E8391BFE9}.Debug|Win32.Build.0 = Debug|Win32
 		{1E9E1F57-D059-4ED2-B493-9A2E8391BFE9}.Release|Win32.ActiveCfg = Release|Win32
 		{1E9E1F57-D059-4ED2-B493-9A2E8391BFE9}.Release|Win32.Build.0 = Release|Win32
+		{4EBE6719-9A0B-45A5-A7A2-71C2D2AC1204}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4EBE6719-9A0B-45A5-A7A2-71C2D2AC1204}.Debug|Win32.Build.0 = Debug|Win32
+		{4EBE6719-9A0B-45A5-A7A2-71C2D2AC1204}.Release|Win32.ActiveCfg = Release|Win32
+		{4EBE6719-9A0B-45A5-A7A2-71C2D2AC1204}.Release|Win32.Build.0 = Release|Win32
+		{BEC68D16-D393-4B27-B34E-353659A2F204}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BEC68D16-D393-4B27-B34E-353659A2F204}.Debug|Win32.Build.0 = Debug|Win32
+		{BEC68D16-D393-4B27-B34E-353659A2F204}.Release|Win32.ActiveCfg = Release|Win32
+		{BEC68D16-D393-4B27-B34E-353659A2F204}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

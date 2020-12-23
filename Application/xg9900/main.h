@@ -8,6 +8,7 @@
 struct application {
     struct {
         char log_config[LOG_CONFIG_LENGTH];
+        char filename[FILENAME_MAX];
 		// FOR TEST
 		int freq;
 		int sample_freq;
@@ -23,7 +24,7 @@ struct application {
 	// 117 KB, but sram total 112KB + 16KB
 	// 优化涉及到如何采样，可否复用，中间是否允许计算
 	// sample_area
-	unsigned int sample[SAMPLE_SIZE];
+	double sample[SAMPLE_SIZE];
 	//struct {
 	//	unsigned int D9557[9557]; // 计算量纲之后只需要前 1024 个点
 	//	unsigned int fft_src[5*4096];
@@ -31,6 +32,23 @@ struct application {
 	//} sample;
 	
 	//有量纲参数
+    struct {
+        double max;
+        double min;
+        double mean;
+        double aver;
+        double rms;
+        double smra;
+        double formf;
+        double crestfpos;
+        double crestfneg;
+        double impulsefpos;
+        double impulsefneg;
+        double marginfpos;
+        double marginfneg;
+        double kurtosis;
+        double skewness;
+    } waveform_parameter;
 	//无量纲因子
 	//理论峰峰值
 	//频域3参数

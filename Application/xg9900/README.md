@@ -1,5 +1,9 @@
 # README
 
+## Files
+
+* source.txt - 和 Python 生成的模拟数据一样，为了确保我的计算结果对的上
+
 ## Workflow
 
 获取配置文件（参考转速，channel_enable）
