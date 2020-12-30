@@ -19,6 +19,10 @@
 #define FILE_PATH_MAX   (FILENAME_MAX)
 #define IP_LENGTH       (16)
 
+#ifndef PI
+#define PI (3.141592653589793)
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 
 struct application;

@@ -1,6 +1,10 @@
+// 《C语言系列之FFT算法实现》 (https://zhuanlan.zhihu.com/p/135259438)
+// 
+
 #include <math.h>
 
 #define DOUBLE_PI   6.283185307179586476925286766559
+#define PI 3.141592653589793
 
 // data 是复数：实数，虚数，实数，虚数
 // data 最后也是输出部分
@@ -68,4 +72,76 @@ void fft(double * data, int n, int isInverse)
         }
         mmax = step;
     }
+}
+
+void FFT2(double dataR[],double dataI[],double dataA[],int N,int M)
+{
+	int i,j,k,r;
+	int p,L,B;
+	unsigned int I,J,K,F0,F1,m,n;
+	double Tr,Ti,temp;
+
+	//输入序列倒序
+	for(I=0;I< N;I++)   //根据规律四，需要对数组元素执行码间倒序
+	{  
+		/*获取下标I的反序J的数值*/ 
+		J=0;
+		for(k=0;k<(M/2+0.5);k++)     //k表示操作
+	     {
+	         //*反序操作*/
+	         m=1;//m是最低位为1的二进制数
+			 n=(unsigned int)pow((double)2,(double)(M-1));//n是第M位为1的二进制数
+			 m <<= k; //对m左移k位
+	         n >>= k; //对n右移k位
+	         F0=I & n;//I与n按位与提取出前半部分第k位
+			 F1=I & m;//I与m按位与提取出F0对应的后半部分的低位
+	         if(F0) J=J | m; //J与m按位或使F0对应低位为1
+	         if(F1) J=J | n; //J与n按位或使F1对应高位为1 
+	     }
+	 		
+	 	 if(I<J)
+		{
+			temp = dataR[I];
+			dataR[I] = dataR[J];
+			dataR[J] = temp;
+			//补充虚数部分交换： 
+			temp = dataI[I];
+			dataI[I] = dataI[J];
+			dataI[J] = temp;
+		}                                
+	} 
+
+	for(L=1; L<=M;L++)	//FFT蝶形级数L从1--M
+	{
+		//先计算一下间隔 B = 2^(L-1);
+		B = 1;
+		B = (int)pow((double)2,(double)(L-1));	
+		for(j=0;j<=B-1;j++)		
+		//j = 0,1,2,...,2^(L-1) - 1
+		{	/*同种蝶形运算*/	
+			//先计算增量k=2^(M-L)
+			k=1;
+			k = (int)pow((double)2,(double)(M-L));
+			//计算旋转指数p，增量为k时，则P=j*k
+			p=1;
+			p=j*k;
+			for(i=0; i<=k-1;i++) 
+				{
+					//数组下标定为r
+					r=1;
+					r=j+2*B*i;
+					Tr=dataR[r+B]*cos(2.0*PI*p/N) + dataI[r+B]*sin(2.0*PI*p/N);
+					Ti=dataI[r+B]*cos(2.0*PI*p/N) - dataR[r+B]*sin(2.0*PI*p/N);
+					dataR[r+B]=dataR[r]-Tr;
+					dataI[r+B]=dataI[r]-Ti;
+					dataR[r]=dataR[r]+Tr;
+					dataI[r]=dataI[r]+Ti;
+				}	
+			}
+	}
+	//计算幅值 
+	for ( i=0;i<N;i++ )
+	{ 		
+	 	dataR[i]=sqrt(dataR[i]*dataR[i]+dataI[i]*dataI[i]);
+	}
 }

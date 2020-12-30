@@ -61,6 +61,11 @@ int param_parser(int argc, char *argv[], struct application *app)
         memcpy(app->param.filename, argv[optind], strlen(argv[optind]));
     }
 
+    app->config.chan_enable[0] = 1;
+    app->config.chan_enable[1] = 1;
+    app->config.chan_enable[2] = 1;
+    app->config.ref_speed_rpm = 54000;
+
     // Do param validation
 
     return 0;

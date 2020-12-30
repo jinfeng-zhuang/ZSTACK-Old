@@ -15,7 +15,7 @@ int linear_regression(double *y, unsigned int length)
     slope = (avg_XY - avg_X * avg_Y) / (avg_XX - avg_X * avg_X);
     intercept = avg_Y - slope * avg_X;
 
-    printf("slope = %f, intercept = %f\n", slope, intercept);
+    //printf("slope = %f, intercept = %f\n", slope, intercept);
 
     for (i = 0; i < length; i++) {
         y[i] = y[i] - (slope * i + intercept);
