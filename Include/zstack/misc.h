@@ -27,6 +27,12 @@
 
 struct application;
 
+struct index_buffer {
+    unsigned int total;
+    unsigned int *index;
+    unsigned char *data;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 extern const char *version;
@@ -54,5 +60,11 @@ extern int split(char *dst, int dst_size, char *src, int src_size, char flag, in
 extern int mem_format_parser_simple(const char *input, unsigned char *output);
 
 extern long png_to_bgra(const char* path, int* w, int* h, unsigned char** bgra);
+
+extern unsigned int count_char(unsigned char *buffer, unsigned int length, unsigned char c);
+
+extern unsigned int replace_char(unsigned char *buffer, unsigned int length, unsigned char origin, unsigned char target);
+
+extern int readlines(const char *filename, struct index_buffer *ib);
 
 #endif

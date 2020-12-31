@@ -58,7 +58,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="zstack.lib"
+				AdditionalDependencies="zstack.lib getopt.lib"
 				AdditionalLibraryDirectories="$(SolutionDir)\Library"
 				GenerateDebugInformation="true"
 				TargetMachine="1"

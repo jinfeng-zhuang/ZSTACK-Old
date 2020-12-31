@@ -1,6 +1,6 @@
 const char *usage =
 "\
-Usage: template [OPTION]... [FILE]...\n\
+Usage: wavegen [OPTION]... [FILE]...\n\
 \n\
 This is a template project to generate a new one.\n\
 \n\
@@ -9,7 +9,8 @@ This is a template project to generate a new one.\n\
   --log         log config\n\
 \n\
 Examples:\n\
-  template --log \"app:5\"\n\
+  wavegen --log \"app:5\"\n\
+  wavegen --number=2048 --freq=50 --sample=15360\n\
 \n\
 Copyright @ 2020, Jinfeng Zhuang\n\
 ";

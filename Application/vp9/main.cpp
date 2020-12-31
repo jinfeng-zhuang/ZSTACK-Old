@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     file_content = file_load(app.param.filename, &file_size);
     if (NULL == file_content) {
-        log(LOG_WARNING, "file open failed: %s\n", app.param.filename);
+        log_warn("file open failed: %s\n", app.param.filename);
         return -1;
     }
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         length = *((unsigned int *)&file_content[i]);
         timestamp = *((unsigned long long *)&file_content[i + 4]);
         //printf("%08x: size %d: %08llx\n", i, length, timestamp);
-		log(LOG_USER, "size %08x, offset %08x, expected %08x\n", length, i, prev_offset + prev_size + 12);
+		log_info("size %08x, offset %08x, expected %08x\n", length, i, prev_offset + prev_size + 12);
         prev_offset = i;
         prev_size = length;
         i += 12;

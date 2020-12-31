@@ -4,8 +4,6 @@
 
 为了复用。
 
-以后我开发的所有应用都放在这里，无关平台语言。
-
 ## 原则
 
 * Keep it Simple, Keep is Stupid!
@@ -22,10 +20,13 @@
 
 ## 框架
 
-* UI 都用 MESSAGE 来传递数据
+* UI 不允许使用同步 API
+* 创建新工程的方法：进入 Application 目录，执行
 
-Application
-	main.cpp
-	application.h: 包含该应用所有需要的结构体信息，包括参数，UI 和 工作线程共享该 DB
-	param_parser.cpp:
-	usage.cpp:
+  python newproj.py template <proj_name>
+
+* LOG 分为 APP 模块和 ZSTACK 中目录如 misc, net, algo 等
+
+## 版本管理
+
+  <架构>.<功能>.<BUG修复>

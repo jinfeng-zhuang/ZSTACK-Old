@@ -54,7 +54,7 @@ int hexdump(void *start, unsigned int length)
         sprintf(&hexdump_buffer[strlen(hexdump_buffer)], "\n");
     }
 
-    log(LOG_USER, "%s\n", hexdump_buffer);
+    log_info("%s\n", hexdump_buffer);
     
     return 0;
 }

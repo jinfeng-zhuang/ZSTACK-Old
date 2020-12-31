@@ -9,13 +9,14 @@ struct application {
     struct {
         char log_config[LOG_CONFIG_LENGTH];
         char filename[FILENAME_MAX];
-        unsigned int number;
-        unsigned int freq;
-        unsigned int sample_freq;
+        int flag_power;
     } param;
 
-    double *sample;
-    double *buffer;
+    float *sample;
+    float *complex;
+    float *r_data;
+    float *i_data;
+    float *A_data;
 };
 
 #endif

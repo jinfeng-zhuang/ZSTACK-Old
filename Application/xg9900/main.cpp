@@ -415,8 +415,6 @@ static int calculate_spectral_parameters(float *pw_spc, unsigned int length, flo
     return 0;
 }
 
-extern void FFT2(float dataR[],float dataI[],float dataA[],int N,int M);
-
 int main(int argc, char *argv[])
 {
 	int i, j;
@@ -473,7 +471,8 @@ int main(int argc, char *argv[])
         fft(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE, 0);
 #else
         memset(&app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], 0, FRAME_SIZE * sizeof(float));
-        FFT2(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], &app.sample[ADDR_FFT], FRAME_SIZE, 12);
+        fft(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], FRAME_SIZE);
+        power_spectrum(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], &app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
 #endif
 
         // FFT Normalization

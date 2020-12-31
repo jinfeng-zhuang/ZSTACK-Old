@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 
 	log_init(NULL);
 
-	log(LOG_USER, "%s\n", __FUNCTION__);
+	log_info("%s\n", __FUNCTION__);
 
 	mem_format_parser_test();
 

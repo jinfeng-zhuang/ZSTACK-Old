@@ -10,7 +10,7 @@ static void Draw(HDC hdc, int width, int height, HBRUSH brush, struct YUVWindowD
 {
     int i;
 
-    log(LOG_USER, "Draw\n");
+    log_info("Draw\n");
 
     Rectangle(hdc, 0, 0, width, height);
 

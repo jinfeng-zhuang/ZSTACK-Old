@@ -8,6 +8,8 @@ struct application app;
 int main(int argc, char *argv[])
 {
     int i;
+    int ret;
+    struct index_buffer ib;
 
     if (param_parser(argc, argv, &app) == -1) {
         print_usage();
@@ -16,24 +18,53 @@ int main(int argc, char *argv[])
 
     log_init(app.param.log_config);
 
-    app.param.number = 2048;
-    app.param.freq = 48;
-    app.param.sample_freq = 1024; // Hz
+    ret = readlines(app.param.filename, &ib);
+    if (0 == ret)
+        return -1;
 
-    app.sample = (double *)malloc(app.param.number * sizeof(double));
-    app.buffer = (double *)malloc(app.param.number * sizeof(double) * 2);
+    app.sample = (float *)malloc(ib.total * sizeof(float));
+    if (NULL == app.sample)
+        return -1;
 
-    wavegen(app.sample, app.param.number, app.param.freq, app.param.sample_freq);
+    app.r_data = (float *)malloc(ib.total * sizeof(float));
+    if (NULL == app.r_data)
+        return -1;
 
-    for (i = 0; i < app.param.number; i++) {
-        app.buffer[i * 2 + 0] = app.sample[i];
-        app.buffer[i * 2 + 1] = 0;
+    app.i_data = (float *)malloc(ib.total * sizeof(float));
+    if (NULL == app.i_data)
+        return -1;
+
+    app.A_data = (float *)malloc(ib.total * sizeof(float));
+    if (NULL == app.A_data)
+        return -1;
+
+    app.complex = (float *)malloc(ib.total * sizeof(float) * 2);
+    if (NULL == app.complex)
+        return -1;
+
+#if 0
+    for (i = 0; i < ib.total; i++) {
+        app.complex[i * 2 + 0] = atof((char *)&ib.data[ib.index[i]]);
+        app.complex[i * 2 + 1] = 0;
     }
 
-    fft(app.buffer, app.param.number, 0);
+    fft(app.complex, ib.total, 0);
+#else
+    for (i = 0; i < ib.total; i++) {
+        app.r_data[i] = atof((char *)&ib.data[ib.index[i]]);
+        app.i_data[i] = 0;
+        app.A_data[i] = 0;
+    }
 
-    for (i = 0; i < app.param.number; i++) {
-        log_info("%f\n", app.buffer[i]); 
+    fft(app.r_data, app.i_data, ib.total);
+#endif
+
+    for (i = 0; i < ib.total; i++) {
+#if 0
+        log_info("%10.5f %10.5f\n", app.complex[i*2 + 0], app.complex[i*2 + 1]);
+#else
+        log_info("%10.5f %10.5f %10.5f\n", app.r_data[i], app.i_data[i]);
+#endif
     }
 
     return 0;

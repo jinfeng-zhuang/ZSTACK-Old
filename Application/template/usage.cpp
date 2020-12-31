@@ -2,7 +2,7 @@ const char *usage =
 "\
 Usage: template [OPTION]... [FILE]...\n\
 \n\
-This is a template project to generate a new one.\n\
+[DESCRIPTION]\n\
 \n\
   --version     version info\n\
   --help        this message\n\

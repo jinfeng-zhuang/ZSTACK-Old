@@ -21,13 +21,9 @@ int main(int argc, char *argv[])
 
     log_init(app.param.log_config);
 
-    app.param.number = 2048;
-    app.param.freq = 48;
-    app.param.sample_freq = 1024; // Hz
+    app.sample = (float *)malloc(app.param.number * sizeof(float));
 
-    app.sample = (double *)malloc(app.param.number * sizeof(double));
-
-    wavegen(app.sample, app.param.number, app.param.freq, app.param.sample_freq);
+    wavegen(app.sample, app.param.number, app.param.freq, app.param.sample);
 
     for (i = 0; i < app.param.number; i++) {
         log_info("%f\n", app.sample[i]);

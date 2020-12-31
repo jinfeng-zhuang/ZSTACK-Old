@@ -58,7 +58,7 @@ int vs_chip_id_get(void)
     
     ret = dbg_host_read32(0xF500E000, &id, 1);
     if (0 == ret) {
-        log(LOG_USER, "Chip(%#x): %s\n", id, chip_name(id));
+        log_info("Chip(%#x): %s\n", id, chip_name(id));
         return chip_id(id);
     }
     

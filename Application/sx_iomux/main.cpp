@@ -23,12 +23,12 @@ int main(int argc, char *argv[])
 #if 0
     chip_id = vs_chip_id_get();
     if ((chip_id != CHIP_SX7B) && (chip_id != CHIP_SX7A) && (chip_id != CHIP_SX8B) && (chip_id != CHIP_SX8A)) {
-        log(LOG_WARNING, "CHIP Not supported\n");
+        log_warn("CHIP Not supported\n");
         return -1;
     }
 #endif
 
-    log(LOG_USER, "SET\n");
+    log_info("SET\n");
     
     if (app.param.uart_share == SX_AVMIPS) {
         value[0] = 0x11;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     }
 
     if (0 != ret) {
-        log(LOG_WARNING, "failed to write value\n");
+        log_warn("failed to write value\n");
     }
 
     return 0;

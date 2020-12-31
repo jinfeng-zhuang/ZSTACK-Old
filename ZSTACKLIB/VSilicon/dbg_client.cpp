@@ -34,16 +34,16 @@ int dbg_init(const char* ip)
     struct endian request;
     short port = (short)VS_DEBUG_PORT;
 
-    log(LOG_USER, "Connecting...\n");
+    log_info("Connecting...\n");
 
     ret = net_connect(ip, port, 0);
 
     if (ret != 0) {
-        log(LOG_ERROR, "%s failed\n", __FUNCTION__);
+        log_err("%s failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_USER, "Connected\n");
+    log_info("Connected\n");
 
     request.head = 18 | ((sizeof(struct endian) - 4) << 16); // TODO
     request.little = 1;
@@ -51,11 +51,11 @@ int dbg_init(const char* ip)
     ret = net_transfer((unsigned char*)& request, NULL);
 
     if (-1 == ret) {
-        log(LOG_WARNING, "%s set endian failed\n", __FUNCTION__);
+        log_warn("%s set endian failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_DEBUG, "%s set endian done\n", __FUNCTION__);
+    debug("%s set endian done\n", __FUNCTION__);
 
     return 0;
 }
@@ -73,7 +73,7 @@ int dbg_host_read32(unsigned int addr, unsigned int* buffer, int count)
     int ret;
 
     if ((NULL == buffer) || (0 != (addr % 4)) || (count <= 0)) {
-        log(LOG_WARNING, "%s param not correct\n", __FUNCTION__);
+        log_warn("%s param not correct\n", __FUNCTION__);
         return -1;
     }
 
@@ -85,11 +85,11 @@ int dbg_host_read32(unsigned int addr, unsigned int* buffer, int count)
     ret = net_transfer((unsigned char *)& request, buffer);
 
     if (-1 == ret) {
-        log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+        log_warn("%s failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -100,7 +100,7 @@ int dbg_host_write32(unsigned int addr, unsigned int* buffer, int count)
     int ret;
 
     if ((NULL == buffer) || (0 != (addr % 4)) || (count <= 0)) {
-        log(LOG_WARNING, "%s param not correct\n", __FUNCTION__);
+        log_warn("%s param not correct\n", __FUNCTION__);
         return -1;
     }
 
@@ -114,11 +114,11 @@ int dbg_host_write32(unsigned int addr, unsigned int* buffer, int count)
     ret = net_transfer((unsigned char *)& request, NULL);
 
     if (-1 == ret) {
-        log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+        log_warn("%s failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -129,7 +129,7 @@ int dbg_avmips_read32(unsigned int addr, unsigned int* buffer, int count)
     int ret;
 
     if ((NULL == buffer) || (((addr & 0xFFFFFF00) != 0xBADBAD00) && (0 != (addr % 4))) || (count <= 0)) {
-        log(LOG_WARNING, "%s param not correct\n", __FUNCTION__);
+        log_warn("%s param not correct\n", __FUNCTION__);
         return -1;
     }
 
@@ -141,11 +141,11 @@ int dbg_avmips_read32(unsigned int addr, unsigned int* buffer, int count)
     ret = net_transfer((unsigned char*)& request, buffer);
 
     if (-1 == ret) {
-        log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+        log_warn("%s failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -157,7 +157,7 @@ static int dbg_host_read8_4K(unsigned int addr, unsigned char* buffer, int count
     int ret;
 
     if ((NULL == buffer) || (count <= 0)) {
-        log(LOG_WARNING, "%s param not correct\n", __FUNCTION__);
+        log_warn("%s param not correct\n", __FUNCTION__);
         return -1;
     }
 
@@ -170,11 +170,11 @@ static int dbg_host_read8_4K(unsigned int addr, unsigned char* buffer, int count
     ret = net_transfer((unsigned char*)& request, buffer);
 
     if (-1 == ret) {
-        log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+        log_warn("%s failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -191,7 +191,7 @@ int dbg_host_read8(unsigned int addr, unsigned char* buffer, int count)
     dst_inc = buffer;
     remain = count;
 
-    log(LOG_DEBUG, "dbg_host_read8 %d...\n", count);
+    debug("dbg_host_read8 %d...\n", count);
 
     memset(buffer, 0, count);
 
@@ -201,7 +201,7 @@ int dbg_host_read8(unsigned int addr, unsigned char* buffer, int count)
 
         ret = dbg_host_read8_4K(src_inc, dst_inc, bytes2read);
         if (0 != ret) {
-            log(LOG_WARNING, "dbg_host_read8 failed\n");
+            log_warn("dbg_host_read8 failed\n");
             goto END;
         }
 
@@ -211,12 +211,12 @@ int dbg_host_read8(unsigned int addr, unsigned char* buffer, int count)
         remain = remain - bytes2read;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 
 END:
-    log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+    log_warn("%s failed\n", __FUNCTION__);
 
     return -1;
 }
@@ -228,7 +228,7 @@ static int dbg_host_write8_4K(unsigned int addr, unsigned char* buffer, int coun
     int ret;
 
     if ((NULL == buffer) || (count <= 0)) {
-        log(LOG_WARNING, "%s param not correct\n", __FUNCTION__);
+        log_warn("%s param not correct\n", __FUNCTION__);
         return -1;
     }
 
@@ -242,11 +242,11 @@ static int dbg_host_write8_4K(unsigned int addr, unsigned char* buffer, int coun
     ret = net_transfer((unsigned char*)& request, NULL);
 
     if (-1 == ret) {
-        log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+        log_warn("%s failed\n", __FUNCTION__);
         return -1;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 }
@@ -263,7 +263,7 @@ int dbg_host_write8(unsigned int addr, unsigned char* buffer, int count)
     dst_inc = buffer;
     remain = count;
 
-    log(LOG_DEBUG, "dbg_host_write8 %d...\n", count);
+    debug("dbg_host_write8 %d...\n", count);
 
     while (remain > 0) {
 
@@ -271,7 +271,7 @@ int dbg_host_write8(unsigned int addr, unsigned char* buffer, int count)
 
         ret = dbg_host_write8_4K(src_inc, dst_inc, bytes2write);
         if (0 != ret) {
-            log(LOG_WARNING, "dbg_host_write8 failed\n");
+            log_warn("dbg_host_write8 failed\n");
             goto END;
         }
 
@@ -281,12 +281,12 @@ int dbg_host_write8(unsigned int addr, unsigned char* buffer, int count)
         remain = remain - bytes2write;
     }
 
-    log(LOG_DEBUG, "%s done\n", __FUNCTION__);
+    debug("%s done\n", __FUNCTION__);
 
     return 0;
 
 END:
-    log(LOG_WARNING, "%s failed\n", __FUNCTION__);
+    log_warn("%s failed\n", __FUNCTION__);
 
     return -1;
 }

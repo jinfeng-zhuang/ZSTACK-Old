@@ -120,7 +120,7 @@ int net_transfer(unsigned char* request, void* response)
 
     // send command
     if (send(_socket, (const char*)request, request_len, 0) <= 0) {
-        log(LOG_WARNING, "send failed\n");
+        log_warn("send failed\n");
         goto FAILED;
     }
 
@@ -130,7 +130,7 @@ int net_transfer(unsigned char* request, void* response)
 
     // receive data length
     if (recv(_socket, (char*)len, sizeof(len), 0) <= 0) {
-        log(LOG_WARNING, "recv len failed\n");
+        log_warn("recv len failed\n");
         goto FAILED;
     }
 
@@ -138,7 +138,7 @@ int net_transfer(unsigned char* request, void* response)
     response_length = len[0] + ((int)len[1] << 8);
     count = response_length;
 
-    log(LOG_DEBUG, "response len: %d\n", response_length);
+    debug("response len: %d\n", response_length);
 
     // receive data
     while (count > 0)
@@ -146,7 +146,7 @@ int net_transfer(unsigned char* request, void* response)
         length = recv(_socket, (char*)p, count, 0);
 
         if (length <= 0) {
-            log(LOG_WARNING, "recv data failed\n");
+            log_warn("recv data failed\n");
             goto FAILED;
         }
 

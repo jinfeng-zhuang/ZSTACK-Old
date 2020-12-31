@@ -35,12 +35,12 @@ int avmips_get_ves_desc(struct ring *r)
     
     ret = dbg_avmips_read32(GET_VIDEO_DEBUG_INFO_VESDESCADDR | 0<<6, &ves_addr, 1);
     if (0 != ret) {
-        log(LOG_DEBUG, "can't get address\n");
+        debug("can't get address\n");
         return -1;
     }
 
     if (ves_addr == 0) {
-        log(LOG_DEBUG, "no stream playback through avmips\n");
+        debug("no stream playback through avmips\n");
         return -1;
     }
     
@@ -85,7 +85,7 @@ int avmips_get_ves_desc(struct ring *r)
         remain = (r->end - r->start + 1) - (r->rp - r->wp);
     }
 
-    log(LOG_USER, "%s: %#X %#X %dMB %#X %#X, remain %dM %dK %dB, %s\n",
+    log_info("%s: %#X %#X %dMB %#X %#X, remain %dM %dK %dB, %s\n",
         flag_hardware_demux ? "HW" : "SW",
         r->start, r->end,
         (r->end - r->start + 1) >> 20,

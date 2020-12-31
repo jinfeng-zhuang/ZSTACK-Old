@@ -10,12 +10,14 @@ enum {
     OPTION_VERSION = 1,
     OPTION_HELP,
     OPTION_LOG,
+    OPTION_POWER,
 };
 
 static struct option opts[] = {
     {"version", no_argument, 0, OPTION_VERSION},
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
+    {"power", no_argument, 0, OPTION_POWER},
     {0, 0, 0, 0}
 };
 
@@ -29,17 +31,20 @@ int param_parser(int argc, char *argv[], struct application *app)
     while((c=getopt_long(argc, argv, "", opts, NULL))!=-1){
         switch (c) {
         case OPTION_VERSION:
-            log(LOG_USER, "Version: %s\n", version);
+            log_info("Version: %s\n", version);
             break;
         case OPTION_HELP:
-            log(LOG_USER, usage);
+            log_info(usage);
             break;
         case OPTION_LOG:
             if (strlen(optarg) >= LOG_CONFIG_LENGTH) {
-                log(LOG_USER, "log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
+                log_info("log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
                 return -1;
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
+            break;
+        case OPTION_POWER:
+            app->param.flag_power = 1;
             break;
         default:
             return -1;

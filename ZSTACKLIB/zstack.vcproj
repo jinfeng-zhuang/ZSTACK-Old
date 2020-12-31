@@ -364,6 +364,10 @@
 				Name="Misc"
 				>
 				<File
+					RelativePath=".\Misc\count_char.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\file_append.cpp"
 					>
 				</File>
@@ -401,6 +405,14 @@
 				</File>
 				<File
 					RelativePath=".\Misc\print_usage.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Misc\readlines.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Misc\replace_char.cpp"
 					>
 				</File>
 				<File

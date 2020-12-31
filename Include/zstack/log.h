@@ -27,10 +27,6 @@ enum log_module_e {
 #define LOG_MODULE LOG_MODULE_DEFAULT
 #endif
 
-#ifndef log
-#define log(lvl, argv, ...) _log(LOG_MODULE, lvl, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
-#endif
-
 #ifndef log_info
 #define log_info(argv, ...) _log(LOG_MODULE, LOG_USER, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
 #endif
@@ -39,10 +35,18 @@ enum log_module_e {
 #define log_warn(argv, ...) _log(LOG_MODULE, LOG_WARNING, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
 #endif
 
-#define ENTER log(LOG_DEBUG, "\n")
-#define EXIT  log(LOG_DEBUG, "\n")
+#ifndef log_err
+#define log_err(argv, ...) _log(LOG_MODULE, LOG_ERROR, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#endif
 
-#define TRACE log(LOG_USER, "%s %d\n", __FUNCTION__, __LINE__)
+#ifndef debug
+#define debug(argv, ...) _log(LOG_MODULE, LOG_DEBUG, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#endif
+
+#define ENTER debug("\n")
+#define EXIT  debug("\n")
+
+#define TRACE log_info("%s %d\n", __FUNCTION__, __LINE__)
 
 #define LOG_CONFIG_LENGTH   (256)
 

@@ -43,7 +43,7 @@ void dump_mpegdisp_registers(struct mpegdisp_regs *regs)
         return;
     }
 
-    log(LOG_USER,
+    log_info(
         "Mode %s, ToSVP %s, Vsync %s, Interrupt %s, bluescreen %d\n"
         "Resolution Change %d Int %d, %dx%d\n"
         "Y: %#x %#x %#x %#x\n"

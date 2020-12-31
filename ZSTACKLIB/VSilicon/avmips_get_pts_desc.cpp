@@ -29,12 +29,12 @@ int avmips_get_pts_desc(struct ring *r)
     
     ret = dbg_avmips_read32(GET_VIDEO_DEBUG_INFO_PTSDESCADDR | 0<<6, &ves_addr, 1);
     if (0 != ret) {
-        log(LOG_DEBUG, "can't get address\n");
+        debug("can't get address\n");
         return -1;
     }
 
     if (ves_addr == 0) {
-        log(LOG_DEBUG, "can get address from avmips\n");
+        debug("can get address from avmips\n");
         return -1;
     }
 
@@ -59,7 +59,7 @@ int avmips_get_pts_desc(struct ring *r)
         remain = (r->end - r->start + 1) - (r->rp - r->wp);
     }
 
-    log(LOG_USER, "%#X %#X %dMB %#X %#X, remain %dM %dK %dB, %s\n",
+    log_info("%#X %#X %dMB %#X %#X, remain %dM %dK %dB, %s\n",
         r->start, r->end,
         (r->end - r->start + 1) >> 20,
         r->wp, r->rp,

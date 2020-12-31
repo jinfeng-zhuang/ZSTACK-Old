@@ -5,7 +5,7 @@
 #define CHANNEL_MAX			(3)
 #define SAMPLE_SIZE         (9557)
 #define FRAME_SIZE          (4096)
-#define SAMPLE_FREQ         (SAMPLE_FREQ)
+#define SAMPLE_FREQ         (15360)
 #define FREQ_LIMIT_LOW      (5)     // 5Hz
 #define FREQ_LIMIT_HIGH     (6000)  // 6KHz
 

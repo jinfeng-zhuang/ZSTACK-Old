@@ -9,26 +9,26 @@ int file_append(const char* filename, unsigned char* buffer, unsigned int length
     unsigned int ret;
 
     if ((NULL == filename) || (NULL == buffer) || (length == 0)) {
-        log(LOG_WARNING, "param error\n");
+        log_warn("param error\n");
         return -1;
     }
 
     fp = fopen(filename, "a");
     if (NULL == fp) {
-        log(LOG_WARNING, "fopen %s failed\n", filename);
+        log_warn("fopen %s failed\n", filename);
         return -1;
     }
 
     ret = fwrite(buffer, sizeof(unsigned char), length, fp);
 
     if (ret != length) {
-        log(LOG_WARNING, "fwrite %s failed: %d != %d\n", filename, ret, length);
+        log_warn("fwrite %s failed: %d != %d\n", filename, ret, length);
         return -1;
     }
 
     fclose(fp);
 
-    log(LOG_DEBUG, "%s done\n", filename);
+    debug("%s done\n", filename);
 
     return 0;
 }

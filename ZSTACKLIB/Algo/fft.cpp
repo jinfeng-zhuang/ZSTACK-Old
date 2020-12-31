@@ -9,11 +9,14 @@
 // data 是复数：实数，虚数，实数，虚数
 // data 最后也是输出部分
 // N = 复数的数量
-void fft(double * data, int n, int isInverse)
+void fft_complex(float * data, int n, int isInverse)
 {
+    // not correct !!!
+    return;
+
     int mmax, m, j, step, i;
-    double temp;
-    double theta, sin_htheta, sin_theta, pwr, wr, wi, tempr, tempi;
+    float temp;
+    float theta, sin_htheta, sin_theta, pwr, wr, wi, tempr, tempi;
     //n = 2 * (1 << n);
     n = 2 * n;
     int nn = n >> 1;
@@ -74,12 +77,15 @@ void fft(double * data, int n, int isInverse)
     }
 }
 
-void FFT2(float dataR[],float dataI[],float dataA[],int N,int M)
+void fft(float *dataR, float *dataI, int N)
 {
 	int i,j,k,r;
 	int p,L,B;
 	unsigned int I,J,K,F0,F1,m,n;
 	float Tr,Ti,temp;
+    int M;
+
+    M = log((double)N) / log(2.0);
 
 	//输入序列倒序
 	for(I=0;I< N;I++)   //根据规律四，需要对数组元素执行码间倒序
@@ -139,9 +145,26 @@ void FFT2(float dataR[],float dataI[],float dataA[],int N,int M)
 				}	
 			}
 	}
-	//计算幅值 
-	for ( i=0;i<N;i++ )
-	{ 		
-	 	dataR[i]=sqrt(dataR[i]*dataR[i]+dataI[i]*dataI[i]);
-	}
+}
+
+int power_spectrum(float *real, float *image, float *power, unsigned int size)
+{
+    unsigned int i;
+
+    for (i = 0; i < size; i++) {
+        power[i] = sqrt(real[i]*real[i] + image[i]*image[i]);
+    }
+
+    return 0;
+}
+
+int power_spectrum_complex(float *complex, float *power, unsigned int size)
+{
+    unsigned int i;
+
+    for (i = 0; i < size; i++) {
+        power[i] = sqrt(complex[i * 2 + 0] * complex[i * 2 + 0] + complex[i * 2 + 1] * complex[i * 2 + 1]);
+    }
+
+    return 0;
 }

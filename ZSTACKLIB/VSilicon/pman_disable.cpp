@@ -18,7 +18,7 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
     int ret;
 
     if ((chip != CHIP_SX7A) && (chip != CHIP_SX7B) && (chip != CHIP_SX8A) && (chip != CHIP_SX8B)) {
-        log(LOG_WARNING, "PMAN not supportedn");
+        log_warn("PMAN not supportedn");
         return -1;
     }
 
@@ -26,7 +26,7 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
     ret = dbg_host_read32(OFFSET(struct pman_ip_1040, module_id) + pman_umac_ctrl_base[umac_idx], &regval, 1);
     if (0 == ret) {
         if ((regval >> 16) != 0x1040) {
-            log(LOG_WARNING, "PMAN module ID = %#x, it should be 0x1040xxxx\n", regval);
+            log_warn("PMAN module ID = %#x, it should be 0x1040xxxx\n", regval);
             return -1;
         }
     }
@@ -35,7 +35,7 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
         for(region_idx = 0; region_idx < 32; region_idx++)
         {
             ret = dbg_host_read32(OFFSET(struct pman_ip_1040, regions[region_idx].addr_low) + pman_umac_ctrl_base[umac_idx], &regval, 1);
-            log(LOG_DEBUG, "UMAC[%d] pman address 0x%08X\n", umac_idx, regval);
+            debug("UMAC[%d] pman address 0x%08X\n", umac_idx, regval);
             if((0 ==ret) && (regval == address)) {
                 goto FOUND;
             }
@@ -43,11 +43,11 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
     }
 
 NOT_FOUND:
-    log(LOG_WARNING, "pman address not found\n");
+    log_warn("pman address not found\n");
     return -1;
 
 FOUND:
-    log(LOG_DEBUG, "address found in UMAC[%d] Region[%d]\n", umac_idx, region_idx);
+    debug("address found in UMAC[%d] Region[%d]\n", umac_idx, region_idx);
 
     dbg_host_read32(OFFSET(struct pman_ip_1040, regions[region_idx].sec_access) + pman_umac_ctrl_base[umac_idx], &regval, 1);
 

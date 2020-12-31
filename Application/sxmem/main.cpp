@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     chip_id = vs_chip_id_get();
     if ((chip_id != CHIP_SX7B) && (chip_id != CHIP_SX7A) && (chip_id != CHIP_SX8B) && (chip_id != CHIP_SX8A)) {
-        log(LOG_WARNING, "CHIP Not supported\n");
+        log_warn("CHIP Not supported\n");
         return -1;
     }
 

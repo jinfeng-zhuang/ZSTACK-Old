@@ -43,7 +43,7 @@ static unsigned int __stdcall worker_thread(void *arg)
         else if (msg.wParam == MSG_SET_DATA) {
             ret = platform_callback(msg.wParam, (void *)msg.lParam, &output);
             if (ret != 0) {
-                log(LOG_WARNING, "Callback return failed\n");
+                log_warn("Callback return failed\n");
             }
             else {
                 if  (hwnd) {
@@ -68,7 +68,7 @@ int Platform_Init(const wchar_t *classname, int (*callback)(int evt, void *in, v
     unsigned int worker_thread_id;
 
     if (NULL == classname) {
-        log(LOG_ERROR, "classname shouldn't be NULL\n");
+        log_err("classname shouldn't be NULL\n");
         return -1;
     }
 
@@ -95,7 +95,7 @@ int Platform_Init(const wchar_t *classname, int (*callback)(int evt, void *in, v
         NULL);
 
     if (NULL == hwnd) {
-        log(LOG_ERROR, "Window '%s' create failed\n", classname);
+        log_err("Window '%s' create failed\n", classname);
         return -1;
     }
 

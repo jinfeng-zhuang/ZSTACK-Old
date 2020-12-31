@@ -12,7 +12,7 @@ enum {
     OPTION_LOG,
     OPTION_FREQ,
     OPTION_NUMBER,
-    OPTION_SAMPLE_RATE,
+    OPTION_SAMPLE,
 };
 
 static struct option opts[] = {
@@ -21,7 +21,7 @@ static struct option opts[] = {
     {"log", required_argument, 0, OPTION_LOG},
     {"freq", required_argument, 0, OPTION_FREQ},
     {"number", required_argument, 0, OPTION_NUMBER},
-    {"sample_rate", required_argument, 0, OPTION_SAMPLE_RATE},
+    {"sample", required_argument, 0, OPTION_SAMPLE},
     {0, 0, 0, 0}
 };
 
@@ -35,14 +35,14 @@ int param_parser(int argc, char *argv[], struct application *app)
     while((c=getopt_long(argc, argv, "", opts, NULL))!=-1){
         switch (c) {
         case OPTION_VERSION:
-            log(LOG_USER, "Version: %s\n", version);
+            log_info("Version: %s\n", version);
             break;
         case OPTION_HELP:
-            log(LOG_USER, usage);
+            log_info(usage);
             break;
         case OPTION_LOG:
             if (strlen(optarg) >= LOG_CONFIG_LENGTH) {
-                log(LOG_USER, "log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
+                log_info("log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
                 return -1;
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
@@ -53,8 +53,8 @@ int param_parser(int argc, char *argv[], struct application *app)
         case OPTION_NUMBER:
             app->param.number = atoi(optarg);
             break;
-        case OPTION_SAMPLE_RATE:
-            app->param.sample_freq = atoi(optarg);
+        case OPTION_SAMPLE:
+            app->param.sample = atoi(optarg);
             break;
         default:
             return -1;
@@ -68,6 +68,8 @@ int param_parser(int argc, char *argv[], struct application *app)
     }
 
     // Do param validation
+    if ((0 == app->param.number) || (0 == app->param.freq) || (0 == app->param.sample))
+        return -1;
 
     return 0;
 }
