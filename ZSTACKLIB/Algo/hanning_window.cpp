@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-int hanning_window(double *io, unsigned int size)
+int hanning_window(float *io, unsigned int size)
 {
     unsigned int i;
     double temp;

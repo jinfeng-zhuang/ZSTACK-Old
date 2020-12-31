@@ -39,7 +39,7 @@ struct application {
 	// 优化涉及到如何采样，可否复用，中间是否允许计算
 	// sample_area
     //union {
-	double sample[SAMPLE_SIZE];
+	float sample[SAMPLE_SIZE];
 	//struct {
 	//	unsigned int D9557[9557]; // 计算量纲之后只需要前 1024 个点
 	//	unsigned int fft_src[5*4096];
@@ -51,54 +51,54 @@ struct application {
 	
 	//有量纲参数 + 无量纲因子
     struct {
-        double max;
-        double min;
-        double mean;
-        double aver;
-        double rms;
-        double smra;
-        double formf;
-        double crestfpos;
-        double crestfneg;
-        double impulsefpos;
-        double impulsefneg;
-        double marginfpos;
-        double marginfneg;
-        double kurtosis;
-        double skewness;
+        float max;
+        float min;
+        float mean;
+        float aver;
+        float rms;
+        float smra;
+        float formf;
+        float crestfpos;
+        float crestfneg;
+        float impulsefpos;
+        float impulsefneg;
+        float marginfpos;
+        float marginfneg;
+        float kurtosis;
+        float skewness;
     } waveform_parameter;
 
 	//理论峰峰值
 
     // 计算位移通频值（峰峰值），频谱的平方和，经过修正
-    double dsp_Overall;
-    double dsp_Overall_um;
+    float dsp_Overall;
+    float dsp_Overall_um;
 
     // 计算速度通频值（有效均方根值），频谱的平方和，经过修正
-    double spectrum_vel;
-    double vel_Overall;
-    double vel_Overall_mmps;
+    float spectrum_vel;
+    float vel_Overall;
+    float vel_Overall_mmps;
 
     // 计算加速度通频值（有效均方根值），频谱的平方和，经过修正
-    double spectrum_acc;
-    double acc_Overall;
-    double acc_Overall_gs;
+    float spectrum_acc;
+    float acc_Overall;
+    float acc_Overall_gs;
 
     // 真实转速
-    double spd_ref_hz;
-    double spd_ref_line;
-    double spd_true_line;
-    double Amplitude_1xRPM_true;
-    double spd_true_hz;
-    double spd_true_rpm;
+    float spd_ref_hz;
+    float spd_ref_line;
+    float spd_true_line;
+    float Amplitude_1xRPM_true;
+    float spd_true_hz;
+    float spd_true_rpm;
 
     // 频域参数
-    double overall_pkpk;
-    double para_nonsyn_value[10];
-    double para_harmonic_value[10];
+    float overall_pkpk;
+    float para_nonsyn_value[10];
+    float para_harmonic_value[10];
 
 	// 最大真峰峰值
-    double true_pkpk_digit;
+    float true_pkpk_digit;
 };
 
 #endif

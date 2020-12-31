@@ -74,12 +74,12 @@ void fft(double * data, int n, int isInverse)
     }
 }
 
-void FFT2(double dataR[],double dataI[],double dataA[],int N,int M)
+void FFT2(float dataR[],float dataI[],float dataA[],int N,int M)
 {
 	int i,j,k,r;
 	int p,L,B;
 	unsigned int I,J,K,F0,F1,m,n;
-	double Tr,Ti,temp;
+	float Tr,Ti,temp;
 
 	//输入序列倒序
 	for(I=0;I< N;I++)   //根据规律四，需要对数组元素执行码间倒序

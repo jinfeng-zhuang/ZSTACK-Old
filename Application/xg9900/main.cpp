@@ -4,14 +4,14 @@
 
 #include "main.h"
 
-extern double simulate_data[];
+extern float simulate_data[];
 
 struct application app;
 
 static void calc_waveform_parameter(void)
 {
     int i;
-    double max = 0;
+    float max = 0;
 
     for (i = 0; i < 9557; i++) {
         if (app.sample[i] > max)
@@ -19,14 +19,14 @@ static void calc_waveform_parameter(void)
     }
     app.waveform_parameter.max = max;
 
-    double min = 0xFFFFFFFF;
+    float min = 0xFFFFFFFF;
     for (i = 0; i < 9557; i++) {
         if (app.sample[i] < min)
             min = app.sample[i];
     }
     app.waveform_parameter.min = min;
 
-    double total = 0;
+    float total = 0;
     for (i = 0; i < 9557; i++) {
         total += app.sample[i];
     }
@@ -34,7 +34,7 @@ static void calc_waveform_parameter(void)
 
     total = 0;
     for (i = 0; i < 9557; i++) {
-        total += _abs64(app.sample[i]);
+        total += abs(app.sample[i]);
     }
     app.waveform_parameter.aver = total / 9557;
 
@@ -46,7 +46,7 @@ static void calc_waveform_parameter(void)
 
     total = 0;
     for (i = 0; i < 9557; i++) {
-        total += sqrt((double)_abs64(app.sample[i]));
+        total += sqrt((float)abs(app.sample[i]));
     }
     total = total / 9557;
     total = pow(total, 2);
@@ -114,7 +114,7 @@ static void calc_waveform_parameter(void)
     log_info("-------------------------------------------------------------------------------------------------------\n");
 }
 
-static int convert_to_complex(double *data, unsigned int n)
+static int convert_to_complex(float *data, unsigned int n)
 {
     unsigned int i;
 
@@ -126,12 +126,12 @@ static int convert_to_complex(double *data, unsigned int n)
     return 0;
 }
 
-static double digit2micron(double x)
+static float digit2micron(float x)
 {
-    double ref_voltage = 3300.0;
-    double adc_resolution_bit = 15;
-    double sensor_sensitivity = 7.874;
-    double hardware_gain = 12.0;
+    float ref_voltage = 3300.0;
+    float adc_resolution_bit = 15;
+    float sensor_sensitivity = 7.874;
+    float hardware_gain = 12.0;
 
     x *= ref_voltage/pow(2, adc_resolution_bit);
     x /= hardware_gain;
@@ -140,16 +140,16 @@ static double digit2micron(double x)
     return x;
 }
 
-static int find_running_speed_true(double *power, unsigned int length, unsigned int ref_line, double *true_speed)
+static int find_running_speed_true(float *power, unsigned int length, unsigned int ref_line, float *true_speed)
 {
     unsigned int i;
     unsigned int start, end;
-    double max = 0;
+    float max = 0;
     unsigned int max_index = -1;
-    double freq_span = 0.025;
+    float freq_span = 0.025;
     unsigned int petal_num = 2;
-    double sum;
-    double petal_power_sum, left_petal_ratio, right_petal_ratio, petal_ratio_sum, speed_true, Amp_1xRPM_true;
+    float sum;
+    float petal_power_sum, left_petal_ratio, right_petal_ratio, petal_ratio_sum, speed_true, Amp_1xRPM_true;
 
     // 寻找范围，参考转速左右各2.5%，找到最大峰值
     start = ref_line * (1 - freq_span);
@@ -206,7 +206,7 @@ static int find_running_speed_true(double *power, unsigned int length, unsigned 
     return 0;
 }
 
-double round(double number)
+float round(float number)
 {
     return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
 }
@@ -218,8 +218,8 @@ enum np_type {
 unsigned long long np_amax(enum np_type, void *a, unsigned int s, unsigned int e)
 {
     unsigned int i;
-    double *a_double = (double *)a;
-    double a_double_max = -1; // TODO
+    float *a_double = (float *)a;
+    float a_double_max = -1; // TODO
 
     for (i = s; i < e; i++) {
         if (a_double[i] > a_double_max)
@@ -232,8 +232,8 @@ unsigned long long np_amax(enum np_type, void *a, unsigned int s, unsigned int e
 unsigned long long np_amin(enum np_type, void *a, unsigned int s, unsigned int e)
 {
     unsigned int i;
-    double *a_double = (double *)a;
-    double a_double_min = 0xFFFFFFFF; // TODO
+    float *a_double = (float *)a;
+    float a_double_min = 0xFFFFFFFF; // TODO
 
     for (i = s; i < e; i++) {
         if (a_double[i] < a_double_min)
@@ -250,12 +250,12 @@ unsigned long long np_amin(enum np_type, void *a, unsigned int s, unsigned int e
  * 移动1个周期，找下一个最大值最小值的差
  * 比较，保留大的
  */
-static int find_true_pkpk(double *wvfm, unsigned int length, double spd, double *pkpk)
+static int find_true_pkpk(float *wvfm, unsigned int length, float spd, float *pkpk)
 {
     unsigned int wvfm_len;
     unsigned int sampling_points_in_cycle;
     unsigned int i, j;
-    double true_pkpk_digit;
+    float true_pkpk_digit;
 
     wvfm_len = length;
     sampling_points_in_cycle = round(4096 / spd);
@@ -277,16 +277,16 @@ static int find_true_pkpk(double *wvfm, unsigned int length, double spd, double 
     return 0;
 }
 
-static int calculate_probability_density(double *x)
+static int calculate_probability_density(float *x)
 {
     return 0;
 }
 
-static double calculate_band_energy(double *power, unsigned int *ctrl)
+static float calculate_band_energy(float *power, unsigned int *ctrl)
 {
     unsigned int i;
-    double energy;
-    double sum = 0;
+    float energy;
+    float sum = 0;
     unsigned int s = ctrl[0];
     unsigned int e = ctrl[1];
 
@@ -320,15 +320,15 @@ static char *para_harmonic[] = {"Harmonic 1xRPM", "Harmonic 2xRPM", "Harmonic 3x
                         "Harmonic 7xRPM", "Harmonic 8xRPM", "Harmonic 9xRPM",
                         "Harmonic 10xRPM"};
 
-static int calculate_spectral_parameters(double *pw_spc, unsigned int length, double spd, double *para_overall_pkpk, double *pa_nonsyn_value, double *pa_harmonic_value)
+static int calculate_spectral_parameters(float *pw_spc, unsigned int length, float spd, float *para_overall_pkpk, float *pa_nonsyn_value, float *pa_harmonic_value)
 {
-    double pa_span = 0.15;
+    float pa_span = 0.15;
 
     unsigned int spc_len;
     unsigned int pa_harmonic_span[10][2];
     unsigned int pa_nonsyn_span[10][2];
     unsigned int harmonic_number;
-    double overall_pkpk_value;
+    float overall_pkpk_value;
     unsigned int i;
     unsigned int overall_pkpk_span[2];
 
@@ -352,7 +352,7 @@ static int calculate_spectral_parameters(double *pw_spc, unsigned int length, do
     *para_overall_pkpk = overall_pkpk_value;
 
     // 计算频段的上下限
-    pa_nonsyn_span[0][0] = (double)4096 * FREQ_LIMIT_LOW / 15360 + 0.5; // TODO if double take effect
+    pa_nonsyn_span[0][0] = (float)4096 * FREQ_LIMIT_LOW / 15360 + 0.5; // TODO if float take effect
 
     for (i = 0; i < harmonic_number; i++) {
         pa_nonsyn_span[i][1] = round((i + 1 - pa_span) * spd);
@@ -406,12 +406,16 @@ static int calculate_spectral_parameters(double *pw_spc, unsigned int length, do
     return 0;
 }
 
-extern void FFT2(double dataR[],double dataI[],double dataA[],int N,int M);
+extern void FFT2(float dataR[],float dataI[],float dataA[],int N,int M);
 
 int main(int argc, char *argv[])
 {
 	int i, j;
     unsigned int sample_start_point;
+    unsigned char *file_content;
+    unsigned int file_size;
+    int split_offset;
+    char digit_str[64];
 
     if (param_parser(argc, argv, &app) == -1) {
         print_usage();
@@ -420,8 +424,19 @@ int main(int argc, char *argv[])
 
     log_init(app.param.log_config);
 
+    log_info("Application Size %d KB\n", sizeof(app) >> 10);
+
+    file_content = file_load(app.param.filename, &file_size);
+    if (NULL == file_content) {
+        log_info("Can't open '%s'\n", app.param.filename);
+        return -1;
+    }
+
+    split_offset = 0;
     for (i = 0; i < 9557; i++) {
-        app.sample[i] = simulate_data[i];
+        memset(digit_str, 0, sizeof(digit_str));
+        split(digit_str, sizeof(digit_str), (char*)file_content, file_size, ',', &split_offset);
+        app.sample[i] = atoi(digit_str);
     }
 
     linear_regression(app.sample, 9557);
@@ -431,7 +446,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < 5; i++) {
         sample_start_point = i * 4096 * (1.0 - 2.0/3.0);
 
-        memcpy(&app.sample[SAMPLE_CALC_ADDR], &app.sample[sample_start_point], 4096 * sizeof(double));
+        memcpy(&app.sample[SAMPLE_CALC_ADDR], &app.sample[sample_start_point], 4096 * sizeof(float));
 
         linear_regression(&app.sample[SAMPLE_CALC_ADDR], 4096);
 
@@ -443,7 +458,7 @@ int main(int argc, char *argv[])
 
         fft(&app.sample[SAMPLE_CALC_ADDR], 4096, 0);
 #else
-        memset(&app.sample[SAMPLE_CALC_ADDR + 4096], 0, 4096 * sizeof(double));
+        memset(&app.sample[SAMPLE_CALC_ADDR + 4096], 0, 4096 * sizeof(float));
         FFT2(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + 4096], &app.sample[ADDR_FFT], 4096, 12);
 #endif
 
@@ -474,15 +489,8 @@ int main(int argc, char *argv[])
         app.sample[ADDR_FFT + j] *= 4.0;
     }
 
-#if 0
-    // For FFT result print
-    for (j = 0; j < app.lines; j++) {
-        log_info("%f\n", app.sample[ADDR_POWER + j]);
-    }
-#endif
-
     // 计算位移通频值（峰峰值），频谱的平方和，经过修正
-    double sum = 0;
+    float sum = 0;
     for (i = 0; i < app.lines; i++) {
         sum += pow(app.sample[ADDR_FFT + i], 2);
     }

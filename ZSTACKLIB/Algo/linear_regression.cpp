@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int linear_regression(double *y, unsigned int length)
+int linear_regression(float *y, unsigned int length)
 {
     unsigned int i;
     double avg_XY = 0, avg_X = 0, avg_Y = 0, avg_XX = 0, slope, intercept;

@@ -1,5 +1,9 @@
 # README
 
+## Usage
+
+xg9900 input_reference.txt
+
 ## Files
 
 * source.txt - 和 Python 生成的模拟数据一样，为了确保我的计算结果对的上
