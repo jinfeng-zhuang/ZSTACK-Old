@@ -3,29 +3,30 @@
 
 #define LOG_CONFIG_LENGTH   (256)
 #define CHANNEL_MAX			(3)
-#define SAMPLE_SIZE			(9557 + 4096 * 2 + 4096)
+#define SAMPLE_SIZE         (9557)
+#define FRAME_SIZE          (4096)
+#define SAMPLE_FREQ         (SAMPLE_FREQ)
+#define FREQ_LIMIT_LOW      (5)     // 5Hz
+#define FREQ_LIMIT_HIGH     (6000)  // 6KHz
 
-#define SAMPLE_CALC_ADDR    (9557)
-#define SAMPLE_AVER_ADDR    (9557 + 4096 * 2)
+#define BUFFER_SIZE			(SAMPLE_SIZE + FRAME_SIZE * 2 + FRAME_SIZE)
+
+#define SAMPLE_CALC_ADDR    (SAMPLE_SIZE)
+#define SAMPLE_AVER_ADDR    (SAMPLE_SIZE + FRAME_SIZE * 2)
 #define SAMPLE_POWER_ADDR   (0)
 
 #define ADDR_RAW            (0)
-#define ADDR_CALC           (9557)
+#define ADDR_CALC           (SAMPLE_SIZE)
 #define ADDR_VEL            (ADDR_CALC)
-#define ADDR_ACC            (ADDR_VEL + 4096)
-#define ADDR_FFT            (9557 + 4096 * 2)
-#define ADDR_POWER          (9557)
-
-#define FREQ_LIMIT_LOW      (5)     // 5Hz
-#define FREQ_LIMIT_HIGH     (6000)  // 6KHz
+#define ADDR_ACC            (ADDR_VEL + FRAME_SIZE)
+#define ADDR_FFT            (SAMPLE_SIZE + FRAME_SIZE * 2)
+#define ADDR_POWER          (SAMPLE_SIZE)
 
 struct application {
     struct {
         char log_config[LOG_CONFIG_LENGTH];
         char filename[FILENAME_MAX];
-		// FOR TEST
-		int freq;
-		int sample_freq;
+        unsigned int reference_speed_rpm;
     } param;
 
 	// 配置文件
@@ -39,7 +40,7 @@ struct application {
 	// 优化涉及到如何采样，可否复用，中间是否允许计算
 	// sample_area
     //union {
-	float sample[SAMPLE_SIZE];
+	float sample[BUFFER_SIZE];
 	//struct {
 	//	unsigned int D9557[9557]; // 计算量纲之后只需要前 1024 个点
 	//	unsigned int fft_src[5*4096];

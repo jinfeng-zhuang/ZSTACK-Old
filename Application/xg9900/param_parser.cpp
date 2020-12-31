@@ -10,18 +10,14 @@ enum {
     OPTION_VERSION = 1,
     OPTION_HELP,
     OPTION_LOG,
-
-	// FOR TEST
-	OPTION_FREQ,
-	OPTION_SAMPLE_FREQ
+    OPTION_REFERENCE_SPEED_RPM,
 };
 
 static struct option opts[] = {
     {"version", no_argument, 0, OPTION_VERSION},
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
-	{"freq", required_argument, 0, OPTION_FREQ},
-	{"sample_freq", required_argument, 0, OPTION_SAMPLE_FREQ},
+    {"reference_speed_rpm", required_argument, 0, OPTION_REFERENCE_SPEED_RPM},
     {0, 0, 0, 0}
 };
 
@@ -44,12 +40,9 @@ int param_parser(int argc, char *argv[], struct application *app)
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
             break;
-		case OPTION_FREQ:
-			app->param.freq = atoi(optarg);
-			break;
-		case OPTION_SAMPLE_FREQ:
-			app->param.sample_freq = atoi(optarg);
-			break;
+        case OPTION_REFERENCE_SPEED_RPM:
+            app->param.reference_speed_rpm = atoi(optarg);
+            break;
         default:
             return -1;
         }
@@ -64,9 +57,12 @@ int param_parser(int argc, char *argv[], struct application *app)
     app->config.chan_enable[0] = 1;
     app->config.chan_enable[1] = 1;
     app->config.chan_enable[2] = 1;
-    app->config.ref_speed_rpm = 54000;
+    app->config.ref_speed_rpm = app->param.reference_speed_rpm;
 
     // Do param validation
+    if (0 == app->param.reference_speed_rpm) {
+        return -1;
+    }
 
     return 0;
 }

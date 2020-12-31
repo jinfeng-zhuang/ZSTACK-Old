@@ -1,6 +1,7 @@
 #include <math.h>
 #include <assert.h>
 #include <zstack.h>
+#include <limits.h>
 
 #include "main.h"
 
@@ -13,42 +14,42 @@ static void calc_waveform_parameter(void)
     int i;
     float max = 0;
 
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         if (app.sample[i] > max)
             max = app.sample[i];
     }
     app.waveform_parameter.max = max;
 
     float min = 0xFFFFFFFF;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         if (app.sample[i] < min)
             min = app.sample[i];
     }
     app.waveform_parameter.min = min;
 
     float total = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         total += app.sample[i];
     }
-    app.waveform_parameter.mean = total / 9557;
+    app.waveform_parameter.mean = total / SAMPLE_SIZE;
 
     total = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         total += abs(app.sample[i]);
     }
-    app.waveform_parameter.aver = total / 9557;
+    app.waveform_parameter.aver = total / SAMPLE_SIZE;
 
     total = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         total += pow(app.sample[i], 2);
     }
-    app.waveform_parameter.rms = sqrt(total / 9557);
+    app.waveform_parameter.rms = sqrt(total / SAMPLE_SIZE);
 
     total = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         total += sqrt((float)abs(app.sample[i]));
     }
-    total = total / 9557;
+    total = total / SAMPLE_SIZE;
     total = pow(total, 2);
 
     app.waveform_parameter.smra = total;
@@ -62,17 +63,17 @@ static void calc_waveform_parameter(void)
     app.waveform_parameter.marginfneg = app.waveform_parameter.min / app.waveform_parameter.smra;
 
     total = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         total += pow(app.sample[i], 4);
     }
-    total = total / 9557;
+    total = total / SAMPLE_SIZE;
     app.waveform_parameter.kurtosis = total / pow(app.waveform_parameter.rms, 4);
 
     total = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         total += pow(app.sample[i], 3);
     }
-    total = total / 9557;
+    total = total / SAMPLE_SIZE;
     app.waveform_parameter.skewness = total / pow(app.waveform_parameter.rms, 3);
 
     log_info("-------------------------------------------------------------------------------------------------------\n");
@@ -258,7 +259,7 @@ static int find_true_pkpk(float *wvfm, unsigned int length, float spd, float *pk
     float true_pkpk_digit;
 
     wvfm_len = length;
-    sampling_points_in_cycle = round(4096 / spd);
+    sampling_points_in_cycle = round(FRAME_SIZE / spd);
 
     i = 0;
     j = i + sampling_points_in_cycle * 1.5;
@@ -303,22 +304,30 @@ static float calculate_band_energy(float *power, unsigned int *ctrl)
 }
 
 static char *para_nonsyn[] = {
-"Subsynchronous",
-"Nonsyn 1-2xRPM",
-"Nonsyn 2-3xRPM",
-"Nonsyn 3-4xRPM",
-"Nonsyn 4-5xRPM",
-"Nonsyn 5-6xRPM",
-"Nonsyn 6-7xRPM",
-"Nonsyn 7-8xRPM",
-"Nonsyn 8-9xRPM",
-"Nonsyn 9-10xRPM"
+    "Subsynchronous",
+    "Nonsyn 1-2xRPM",
+    "Nonsyn 2-3xRPM",
+    "Nonsyn 3-4xRPM",
+    "Nonsyn 4-5xRPM",
+    "Nonsyn 5-6xRPM",
+    "Nonsyn 6-7xRPM",
+    "Nonsyn 7-8xRPM",
+    "Nonsyn 8-9xRPM",
+    "Nonsyn 9-10xRPM"
 };
 
-static char *para_harmonic[] = {"Harmonic 1xRPM", "Harmonic 2xRPM", "Harmonic 3xRPM",
-                        "Harmonic 4xRPM", "Harmonic 5xRPM", "Harmonic 6xRPM",
-                        "Harmonic 7xRPM", "Harmonic 8xRPM", "Harmonic 9xRPM",
-                        "Harmonic 10xRPM"};
+static char *para_harmonic[] = {
+    "Harmonic 1xRPM",
+    "Harmonic 2xRPM",
+    "Harmonic 3xRPM",
+    "Harmonic 4xRPM",
+    "Harmonic 5xRPM",
+    "Harmonic 6xRPM",
+    "Harmonic 7xRPM",
+    "Harmonic 8xRPM",
+    "Harmonic 9xRPM",
+    "Harmonic 10xRPM"
+};
 
 static int calculate_spectral_parameters(float *pw_spc, unsigned int length, float spd, float *para_overall_pkpk, float *pa_nonsyn_value, float *pa_harmonic_value)
 {
@@ -352,7 +361,7 @@ static int calculate_spectral_parameters(float *pw_spc, unsigned int length, flo
     *para_overall_pkpk = overall_pkpk_value;
 
     // 计算频段的上下限
-    pa_nonsyn_span[0][0] = (float)4096 * FREQ_LIMIT_LOW / 15360 + 0.5; // TODO if float take effect
+    pa_nonsyn_span[0][0] = (float)FRAME_SIZE * FREQ_LIMIT_LOW / SAMPLE_FREQ + 0.5; // TODO if float take effect
 
     for (i = 0; i < harmonic_number; i++) {
         pa_nonsyn_span[i][1] = round((i + 1 - pa_span) * spd);
@@ -433,43 +442,48 @@ int main(int argc, char *argv[])
     }
 
     split_offset = 0;
-    for (i = 0; i < 9557; i++) {
+    for (i = 0; i < SAMPLE_SIZE; i++) {
         memset(digit_str, 0, sizeof(digit_str));
         split(digit_str, sizeof(digit_str), (char*)file_content, file_size, ',', &split_offset);
         app.sample[i] = atoi(digit_str);
     }
 
-    linear_regression(app.sample, 9557);
+    //===================== 采样结束 ==============================
 
+    // 去除趋势项
+    linear_regression(app.sample, SAMPLE_SIZE);
+
+    // 计算波形参数
     calc_waveform_parameter();
 
+    // 进行 5 次 FFT 做平均
     for (i = 0; i < 5; i++) {
-        sample_start_point = i * 4096 * (1.0 - 2.0/3.0);
+        sample_start_point = i * FRAME_SIZE * (1.0 - 2.0/3.0);
 
-        memcpy(&app.sample[SAMPLE_CALC_ADDR], &app.sample[sample_start_point], 4096 * sizeof(float));
+        memcpy(&app.sample[SAMPLE_CALC_ADDR], &app.sample[sample_start_point], FRAME_SIZE * sizeof(float));
 
-        linear_regression(&app.sample[SAMPLE_CALC_ADDR], 4096);
+        linear_regression(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
 
         // TODO: shouldn't change the value in sample, otherwise the overlapped area will be change
-        hanning_window(&app.sample[SAMPLE_CALC_ADDR], 4096);
+        hanning_window(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
 
 #if 0
-        convert_to_complex(&app.sample[SAMPLE_CALC_ADDR], 4096);
+        convert_to_complex(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
 
-        fft(&app.sample[SAMPLE_CALC_ADDR], 4096, 0);
+        fft(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE, 0);
 #else
-        memset(&app.sample[SAMPLE_CALC_ADDR + 4096], 0, 4096 * sizeof(float));
-        FFT2(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + 4096], &app.sample[ADDR_FFT], 4096, 12);
+        memset(&app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], 0, FRAME_SIZE * sizeof(float));
+        FFT2(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], &app.sample[ADDR_FFT], FRAME_SIZE, 12);
 #endif
 
         // FFT Normalization
-        for (j = 1; j < 4096; j++) {
-            app.sample[SAMPLE_CALC_ADDR + j] = app.sample[SAMPLE_CALC_ADDR + j] * 2.0 / 4096;
+        for (j = 1; j < FRAME_SIZE; j++) {
+            app.sample[SAMPLE_CALC_ADDR + j] = app.sample[SAMPLE_CALC_ADDR + j] * 2.0 / FRAME_SIZE;
         }
         app.sample[SAMPLE_CALC_ADDR] = 0; // Remove DC current
 
         // 计算 5 次的平均值
-        for (j = 0; j < 4096; j++) {
+        for (j = 0; j < FRAME_SIZE; j++) {
             app.sample[ADDR_FFT + j] *= i;
             app.sample[ADDR_FFT + j] += app.sample[SAMPLE_CALC_ADDR + j];
             app.sample[ADDR_FFT + j] /= (i + 1);
@@ -477,15 +491,14 @@ int main(int argc, char *argv[])
     }
 
     // 将传感器频率下限以下的值置零
-    app.lines = (4096 / 2.56) + 1;
-    app.low_cut = ((4096 * FREQ_LIMIT_LOW) / 15360) + 1;
+    app.lines = (FRAME_SIZE / 2.56) + 1;
+    app.low_cut = ((FRAME_SIZE * FREQ_LIMIT_LOW) / SAMPLE_FREQ) + 1;
 
     for (j = 0; j < app.low_cut; j++) {
         app.sample[ADDR_FFT + j] = 0.0;
     }
 
-    // POST Process after FFT
-    for (j = 0; j < 4096; j++) {
+    for (j = 0; j < FRAME_SIZE; j++) {
         app.sample[ADDR_FFT + j] *= 4.0;
     }
 
@@ -501,7 +514,7 @@ int main(int argc, char *argv[])
     // 计算速度通频值（有效均方根值），频谱的平方和，经过修正
     sum = 0;
     for (i = 0; i < app.lines; i++) {
-        app.sample[ADDR_VEL + i] = app.sample[ADDR_FFT + i] * i * 2.0 * PI * 15360 / 4096; // 将位移谱转为速度谱，谱上每一点乘以2*PI*该点频率
+        app.sample[ADDR_VEL + i] = app.sample[ADDR_FFT + i] * i * 2.0 * PI * SAMPLE_FREQ / FRAME_SIZE; // 将位移谱转为速度谱，谱上每一点乘以2*PI*该点频率
         sum += pow(app.sample[ADDR_VEL + i], 2);
     }
     app.vel_Overall = sum;
@@ -512,7 +525,7 @@ int main(int argc, char *argv[])
     // 计算加速度通频值（有效均方根值），频谱的平方和，经过修正
     sum = 0;
     for (i = 0; i < app.lines; i++) {
-        app.sample[ADDR_ACC + i] = app.sample[ADDR_VEL + i] * i * 2.0 * PI * 15360 / 4096; // 将位移谱转为速度谱，谱上每一点乘以2*PI*该点频率
+        app.sample[ADDR_ACC + i] = app.sample[ADDR_VEL + i] * i * 2.0 * PI * SAMPLE_FREQ / FRAME_SIZE; // 将位移谱转为速度谱，谱上每一点乘以2*PI*该点频率
         sum += pow(app.sample[ADDR_ACC + i], 2);
     }
     app.acc_Overall = sum;
@@ -532,22 +545,20 @@ int main(int argc, char *argv[])
         app.sample[ADDR_POWER + i] = pow(app.sample[ADDR_FFT + i], 2);
     }
 
-#if 1
-    // For FFT result print
+    // 输出功率谱
     for (j = 0; j < app.lines; j++) {
         log_info("%f ", app.sample[ADDR_POWER + j]);
     }
-#endif
 
     log_info("\n-------------------------------------------------------------------------------------------------------\n");
 
     // 确定真实转速
     app.spd_ref_hz = app.config.ref_speed_rpm / 60.0;
-    app.spd_ref_line = app.spd_ref_hz * 4096 / 15360;
+    app.spd_ref_line = app.spd_ref_hz * FRAME_SIZE / SAMPLE_FREQ;
     
     find_running_speed_true(&app.sample[ADDR_POWER], app.lines, app.spd_ref_line, &app.spd_true_line);
 
-    app.spd_true_hz = app.spd_true_line * 15360 / 4096;
+    app.spd_true_hz = app.spd_true_line * SAMPLE_FREQ / FRAME_SIZE;
     app.spd_true_rpm = app.spd_true_hz * 60;
 
     log_info("-------------------------------------------------------------------------------------------------------\n");
@@ -558,7 +569,7 @@ int main(int argc, char *argv[])
     }
 
     // 真峰峰值
-    find_true_pkpk(&app.sample[ADDR_RAW], 9557, app.spd_true_line, &app.true_pkpk_digit);
+    find_true_pkpk(&app.sample[ADDR_RAW], SAMPLE_SIZE, app.spd_true_line, &app.true_pkpk_digit);
 
     // 在时域波形中，取完整周期的最大整数倍
 
