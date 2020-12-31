@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <zstack.h>
-
 #include <3rdparty/getopt.h>
 
 #include "main.h"

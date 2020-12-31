@@ -1,8 +1,10 @@
 #ifndef ZSTACK_CONFIG_H
 #define ZSTACK_CONFIG_H
 
+#ifdef WIN32
 #define ZSTACK_ENABLE_VSILICON
 #define ZSTACK_ENABLE_WINDOWS
 #define ZSTACK_ENABLE_XG9900
+#endif
 
 #endif

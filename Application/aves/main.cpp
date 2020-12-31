@@ -1,5 +1,6 @@
 #include <zstack.h>
 #include <vs.h>
+#include <Windows.h>
 #include "main.h"
 
 #define DUMP_SIZE   (1<<20)

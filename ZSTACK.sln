@@ -89,6 +89,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mpeg2", "Application\mpeg2\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "avformat", "Application\avformat\avformat.vcproj", "{8DDD9181-53CE-4546-BC1A-4F743500E47B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A45A6DA-907C-45CE-92B6-ACC0EA43266C} = {8A45A6DA-907C-45CE-92B6-ACC0EA43266C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

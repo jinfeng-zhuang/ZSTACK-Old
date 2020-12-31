@@ -146,24 +146,25 @@ static int find_running_speed_true(float *power, unsigned int length, unsigned i
     unsigned int i;
     unsigned int start, end;
     float max = 0;
-    unsigned int max_index = -1;
+    unsigned int max_index = 0;
     float freq_span = 0.025;
     unsigned int petal_num = 2;
     float sum;
-    float petal_power_sum, left_petal_ratio, right_petal_ratio, petal_ratio_sum, speed_true, Amp_1xRPM_true;
+    float petal_power_sum, left_petal_ratio, right_petal_ratio, petal_ratio_sum, speed_true;
+	  //float Amp_1xRPM_true;
 
     // 寻找范围，参考转速左右各2.5%，找到最大峰值
     start = ref_line * (1 - freq_span);
     end   = ref_line * (1 + freq_span) + 1;
 
-    for (i = 0; i < length; i++) {
+    for (i = start; i < end + 1; i++) {
         if (power[i] > max) {
             max = power[i];
             max_index = i;
         }
     }
 
-    assert(-1 != max_index);
+    assert(0 != max_index);
 
     // 峰值左右各取2点，共5点，进行计算
     sum = 0;
@@ -186,7 +187,7 @@ static int find_running_speed_true(float *power, unsigned int length, unsigned i
 
     petal_ratio_sum = left_petal_ratio + right_petal_ratio;
 
-    if ((petal_ratio_sum<0.33) || (petal_ratio_sum>0.52)) {
+    if ((petal_ratio_sum < 0.33) || (petal_ratio_sum > 0.52)) {
         *true_speed = 0.0;
 
         log_warn("True speed not found\n");
@@ -197,11 +198,12 @@ static int find_running_speed_true(float *power, unsigned int length, unsigned i
             speed_true += i * power[i];
         }
         speed_true /= petal_power_sum;
-        Amp_1xRPM_true = sqrt(petal_power_sum * 8.0 / 3.0) / 2.0;
+        //Amp_1xRPM_true = sqrt(petal_power_sum * 8.0 / 3.0) / 2.0;
 
         *true_speed = speed_true;
 
-        log_info("True speed: %f %f\n", speed_true, Amp_1xRPM_true); // TODO 'Amp_1xRPM_true' not used
+        //log_info("True speed: %f %f\n", speed_true, Amp_1xRPM_true); // TODO 'Amp_1xRPM_true' not used
+				log_info("True speed: %f\n", speed_true);
     }
 
     return 0;
@@ -465,15 +467,9 @@ int main(int argc, char *argv[])
         // TODO: shouldn't change the value in sample, otherwise the overlapped area will be change
         hanning_window(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
 
-#if 0
-        convert_to_complex(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
-
-        fft(&app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE, 0);
-#else
         memset(&app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], 0, FRAME_SIZE * sizeof(float));
         fft(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], FRAME_SIZE);
         power_spectrum(&app.sample[SAMPLE_CALC_ADDR], &app.sample[SAMPLE_CALC_ADDR + FRAME_SIZE], &app.sample[SAMPLE_CALC_ADDR], FRAME_SIZE);
-#endif
 
         // FFT Normalization
         for (j = 1; j < FRAME_SIZE; j++) {

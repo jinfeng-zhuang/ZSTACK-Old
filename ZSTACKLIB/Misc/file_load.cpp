@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <zstack.h>
 
 #define __func__ __FUNCTION__
 
@@ -11,9 +10,9 @@ unsigned char *file_load(const char* filename, unsigned int *size)
     unsigned int bytes_read = 0;
     unsigned char* buffer = NULL;
 
-    ret = fopen_s(&fp, filename, "rb");
-    if ((0 != ret) || (NULL == fp)) {
-        printf("%s: fopen_s failed %s\n", __func__, filename);
+    fp = fopen(filename, "rb");
+    if (NULL == fp) {
+        log_info("%s: fopen_s failed %s\n", __func__, filename);
         goto END;
     }
 

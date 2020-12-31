@@ -1,12 +1,15 @@
 Debug/
 Release/
 .vs/
+Objects/
+Listings/
 
 *.filters
 *.user
 *.suo
 *.ncb
 *.yuv
+*.jinfengz
 
 zstacklib.lib
 zstack.lib

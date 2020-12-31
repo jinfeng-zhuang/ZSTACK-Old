@@ -28,19 +28,35 @@ enum log_module_e {
 #endif
 
 #ifndef log_info
+#ifdef _WIN32
 #define log_info(argv, ...) _log(LOG_MODULE, LOG_USER, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#else
+#define log_info(argv, ...) do {} while (0)
+#endif
 #endif
 
 #ifndef log_warn
+#ifdef _WIN32
 #define log_warn(argv, ...) _log(LOG_MODULE, LOG_WARNING, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#else
+#define log_warn(argv, ...) do {} while (0)
+#endif
 #endif
 
 #ifndef log_err
+#ifdef _WIN32
 #define log_err(argv, ...) _log(LOG_MODULE, LOG_ERROR, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#else
+#define log_err(argv, ...) do {} while (0)
+#endif
 #endif
 
 #ifndef debug
+#ifdef _WIN32
 #define debug(argv, ...) _log(LOG_MODULE, LOG_DEBUG, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#else
+#define debug(argv, ...) do {} while (0)
+#endif
 #endif
 
 #define ENTER debug("\n")
@@ -53,7 +69,12 @@ enum log_module_e {
 //=============================================================================
 
 extern void log_init(char *config);
+
+#ifdef _WIN32
 extern int _log(int module, int lvl, char *filename, char *function, int linenum, const char *fmt, ...);
+#else
+extern int _log(int module, int lvl, char *filename, char *function, int linenum, char *fmt, ...);
+#endif
 
 //=============================================================================
 
