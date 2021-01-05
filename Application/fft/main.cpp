@@ -57,13 +57,20 @@ int main(int argc, char *argv[])
     }
 
     fft(app.r_data, app.i_data, ib.total);
+
+    power_spectrum(app.r_data, app.i_data, app.A_data, ib.total);
 #endif
 
     for (i = 0; i < ib.total; i++) {
 #if 0
         log_info("%10.5f %10.5f\n", app.complex[i*2 + 0], app.complex[i*2 + 1]);
 #else
-        log_info("%10.5f %10.5f %10.5f\n", app.r_data[i], app.i_data[i]);
+        if (app.param.flag_power) {
+            log_info("%f\n", app.A_data[i]);
+        }
+        else {
+            log_info("%10.5f %10.5f\n", app.r_data[i], app.i_data[i]);
+        }
 #endif
     }
 
