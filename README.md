@@ -7,6 +7,7 @@
 ## 原则
 
 * Keep it Simple, Keep is Stupid!
+* 头文件仅用于 ZSTACKLIB 外部引用，内部仅依赖于标准 C 库
 
 ## Build
 
