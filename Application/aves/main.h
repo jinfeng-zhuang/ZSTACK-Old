@@ -10,6 +10,8 @@ struct application {
         char log_config[LOG_CONFIG_LENGTH];
         char filename[FILENAME_MAX];
         char ip[16];
+        int dump_flag;
+        unsigned int channel;
     } param;
 };
 

@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
     unsigned int rp;
     
     struct ring ves_local;
-    unsigned int remain;
     unsigned int size;
     unsigned int response;
 
@@ -33,14 +32,14 @@ int main(int argc, char *argv[])
     }
 
     do {
-        ret = avmips_get_ves_desc(&ves);
+        ret = avmips_get_ves_desc(&ves, app.param.channel);
     } while (ret != 0);
 
     size = ves.end - ves.start;
 
     log_info("VES (%x %x), size %dM\n", ves.start, ves.end, size>>20);
 
-    ret = vs_pman_enable(CHIP_SX7B, PMAN_SECURITY_GROUP_ARM, ves.start);
+    ret = vs_pman_enable((sx_chip)vs_chip_id_get(), PMAN_SECURITY_GROUP_ARM, ves.start);
     if (0 != ret) {
         return -1;
     }
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
     rp = ves.start;
 
     while (1) {
-        ret = avmips_get_ves_desc(&ves);
+        ret = avmips_get_ves_desc(&ves, app.param.channel);
         if (0 != ret) {
             return -1;
         }
@@ -56,27 +55,40 @@ int main(int argc, char *argv[])
         memcpy(&ves_local, &ves, sizeof(struct ring));
         ves_local.rp = (rp - ves_local.start) % size + ves_local.start;
 
-        // print remaining data
-        log_info("[Remain] Decoder: %dM, Dump: %dM\n", ringbuf_get_datalen(&ves) >> 20, ringbuf_get_datalen(&ves_local) >> 20);
+        if (app.param.dump_flag) {
+            // print remaining data
+            log_info("Decoder: %dM %4dK %4dB, Dump: %dM %4dK %4dB\n",
+                (ringbuf_get_datalen(&ves) >> 20) & 0x3FF,
+                (ringbuf_get_datalen(&ves) >> 10) & 0x3FF,
+                ringbuf_get_datalen(&ves) & 0x3FF,
 
-        // get start address and size for current ringbuf
-        response = ringbuf_measure(&ves_local, DUMP_SIZE);
-        if (0 == response) {
-            Sleep(100);
-            continue;
+                (ringbuf_get_datalen(&ves_local) >> 20) & 0x3FF,
+                (ringbuf_get_datalen(&ves_local) >> 10) & 0x3FF,
+                ringbuf_get_datalen(&ves_local) & 0x3FF
+                );
+
+            // get start address and size for current ringbuf
+            response = ringbuf_measure(&ves_local, DUMP_SIZE);
+            if (0 == response) {
+                Sleep(100);
+                continue;
+            }
+
+            ret = dbg_host_read8(ves_local.rp, buffer, response);
+            if (0 != ret) {
+                return -1;
+            }
+
+            ret = file_append(app.param.filename, buffer, response);
+            if (0 != ret) {
+                return -1;
+            }
+
+            rp += response;
         }
-
-        ret = dbg_host_read8(ves_local.rp, buffer, response);
-        if (0 != ret) {
-            return -1;
+        else {
+            log_info("[Remain] Decoder: %dM\n", ringbuf_get_datalen(&ves) >> 20);
         }
-
-        ret = file_append(app.param.filename, buffer, response);
-        if (0 != ret) {
-            return -1;
-        }
-
-        rp += response;
 
         Sleep(10);
     }
