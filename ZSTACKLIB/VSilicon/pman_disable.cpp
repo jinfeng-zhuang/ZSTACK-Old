@@ -4,6 +4,8 @@
 #include <vs/sx.h>
 #include <vs/dbg.h>
 
+#define LOG_MODULE LOG_MODULE_AVMIPS
+
 // SX7A, SX7B, SX8B use the same address for UMAC0/1/2, according to SPG
 static unsigned int pman_umac_ctrl_base[3] = {
     0xF5005000, 0xF5008000, 0xF5036000
@@ -16,6 +18,8 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
     int umac_idx = 0;
     int region_idx = 0;
     int ret;
+    unsigned int addr_high;
+    unsigned int addr_low;
 
     if ((chip != CHIP_SX7A) && (chip != CHIP_SX7B) && (chip != CHIP_SX8A) && (chip != CHIP_SX8B)) {
         log_warn("PMAN not supportedn");
@@ -34,9 +38,10 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
     for (umac_idx = 0; umac_idx < 3; umac_idx++) {
         for(region_idx = 0; region_idx < 32; region_idx++)
         {
-            ret = dbg_host_read32(OFFSET(struct pman_ip_1040, regions[region_idx].addr_low) + pman_umac_ctrl_base[umac_idx], &regval, 1);
-            debug("UMAC[%d] pman address 0x%08X\n", umac_idx, regval);
-            if((0 ==ret) && (regval == address)) {
+            ret = dbg_host_read32(OFFSET(struct pman_ip_1040, regions[region_idx].addr_low) + pman_umac_ctrl_base[umac_idx], &addr_low, 1);
+            ret = dbg_host_read32(OFFSET(struct pman_ip_1040, regions[region_idx].addr_high) + pman_umac_ctrl_base[umac_idx], &addr_high, 1);
+            debug("UMAC[%d] PMAN Address [0x%08X 0x%08X]\n", umac_idx, addr_low, addr_high);
+            if((0 ==ret) && (address >= addr_low) && (address <= addr_high)) {
                 goto FOUND;
             }
         }
