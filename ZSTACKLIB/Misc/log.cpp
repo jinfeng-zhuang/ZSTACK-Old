@@ -8,6 +8,13 @@
 
 #include <zstack/log.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+
+#define snprintf _snprintf
+#else
+#endif
+
 #define LOG_OUTPUT printf
 #define DEFAULT_LOG_CONFIG "default:2"
 
@@ -18,11 +25,20 @@ static char *map[LOG_MODULE_MAX] = {
     "misc",
     "net",
     "avmips",
-    "algo"
+    "algo",
+    "file"
+};
+
+static char *prefix[] = {
+    "\033[31m[ERROR]",
+    "\033[33m[WARNING]",
+    "",
+    "\033[32m"
 };
 
 static unsigned int log_mask[LOG_MODULE_MAX] = {0};
 static int log_inited = 0;
+static FILE *logfile = NULL;
 static char LOG_buffer[1 << 20];
 
 static int find_index_by_name(char *name)
@@ -55,6 +71,7 @@ static int add_to_log_mask(char *config)
     int level;
     int index;
     int ret;
+    char filename[FILENAME_MAX];
 
     ret = sscanf(config, "%[^:]:%d", module_name, &level);
     if (2 != ret) {
@@ -66,6 +83,24 @@ static int add_to_log_mask(char *config)
     if (-1 == index) {
         LOG_OUTPUT("log config name '%s' not valid\n", config);
         return -1;
+    }
+
+    if ((index == LOG_MODULE_FILE) && (level != 0)) {
+#ifdef _WIN32
+        SYSTEMTIME time;
+        GetLocalTime(&time);
+        snprintf(filename, sizeof(filename), "%d-%02d-%02d_%02d-%02d-%02d.log",
+            time.wYear,
+            time.wMonth,
+            time.wDay,
+            time.wHour,
+            time.wMinute,
+            time.wSecond
+            );
+#else
+        snprintf(filename, sizeof(filename), "default.log");
+#endif
+        logfile = fopen(filename, "w");
     }
 
     log_mask[index] = correct_level(level);
@@ -122,29 +157,34 @@ FAILED:
 
 int _log(int module, int lvl, char *filename, char *function, int linenum, const char *fmt, ...)
 {
+    char *_prefix = prefix[lvl];
+
     if (! log_inited) {
         log_init(NULL);
     }
 
+    if (logfile)
+        _prefix = "";
+
     lvl = correct_level(lvl);
 
-    if (lvl > log_mask[module]) {
+    if ((lvl >= LOG_USER) && (lvl > log_mask[module])) {
         return 0;
     }
 
     LOG_buffer[0] = '\0';
 
     if (lvl == LOG_ERROR) {
-        sprintf(LOG_buffer, "[ERROR] [%s:%d] ", function, linenum);
+        sprintf(LOG_buffer, "%s [%s:%d] ", _prefix, function, linenum);
     }
     else if (lvl == LOG_WARNING) {
-        sprintf(LOG_buffer, "[WARNING] [%s:%d] ", function, linenum);
+        sprintf(LOG_buffer, "%s [%s:%d] ", _prefix, function, linenum);
     }
     else if (lvl == LOG_USER) {
         ;
     }
     else {
-        sprintf(LOG_buffer, "    [%s:%d] ", function, linenum);
+        sprintf(LOG_buffer, "%s    [%s:%d] ", _prefix, function, linenum);
     }
     
     va_list args;
@@ -158,8 +198,13 @@ int _log(int module, int lvl, char *filename, char *function, int linenum, const
 
     va_end(args);
 
-    LOG_OUTPUT("%s", LOG_buffer);
+    LOG_OUTPUT("%s%s", LOG_buffer, (lvl == LOG_USER) ? "" : "\033[0m");
     fflush(stdout);
+
+    if (logfile) {
+        fprintf(logfile, "%s", LOG_buffer);
+        fflush(logfile);
+    }
 
     if (lvl == LOG_ERROR)
         exit(0xFF);
