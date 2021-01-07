@@ -23,7 +23,7 @@ static inline unsigned int K01UPA2DA(unsigned int pa)
 	return da;
 }
 
-int avmips_get_ves_desc(struct ring *r)
+int avmips_get_ves_desc(struct ring *r, unsigned int channel)
 {
     int ret;
     unsigned int ves_addr;
@@ -33,15 +33,24 @@ int avmips_get_ves_desc(struct ring *r)
     struct AVStreamVESDesc_t AVDesc;
     int flag_dir;
     
-    ret = dbg_avmips_read32(GET_VIDEO_DEBUG_INFO_VESDESCADDR | 0<<6, &ves_addr, 1);
+    ret = dbg_avmips_read32(GET_VIDEO_DEBUG_INFO_VESDESCADDR | (channel<<6), &ves_addr, 1);
     if (0 != ret) {
         debug("can't get address\n");
         return -1;
     }
 
     if (ves_addr == 0) {
-        debug("no stream playback through avmips\n");
-        return -1;
+        if (vs_ves_descriptor_address != 0) {
+            ves_addr = vs_ves_descriptor_address;
+        }
+        else {
+            warn("ves descriptor address is NULL!\n");
+            return -1;
+        }
+    }
+    else {
+        vs_ves_descriptor_address = ves_addr;
+        //log_info("ves_address = %#8x\n", ves_addr);
     }
     
     if(((ves_addr & SX6_HW_DEMUX_REG_BASE_MASK) == SX6_HW_DEMUX_REG_BASE)
@@ -58,9 +67,9 @@ int avmips_get_ves_desc(struct ring *r)
         dbg_host_read8(ves_addr, (unsigned char *)&HWDesc, sizeof(struct HWDemuxVESDesc_t));
 
         r->start = HWDesc.start;
-        r->end = HWDesc.end + 1;
-        r->wp = HWDesc.wp;
-        r->rp = HWDesc.rp;
+        r->end = HWDesc.end;
+        r->wp = HWDesc.wp & 0x3FFFFFFF;
+        r->rp = HWDesc.rp & 0x3FFFFFFF;
     }
     else {
         dbg_host_read8(ves_addr, (unsigned char *)&AVDesc, sizeof(struct AVStreamVESDesc_t));
@@ -85,11 +94,11 @@ int avmips_get_ves_desc(struct ring *r)
         remain = (r->end - r->start + 1) - (r->rp - r->wp);
     }
 
-    log_info("%s: %#X %#X %dMB %#X %#X, remain %dM %dK %dB, %s\n",
+    info("[CH%d][%s] %#8X %#8X RD: %#8X WR: %#8X, remain %2dM %4dK %4dB, %s\n",
+        channel,
         flag_hardware_demux ? "HW" : "SW",
         r->start, r->end,
-        (r->end - r->start + 1) >> 20,
-        r->wp, r->rp,
+        r->rp, r->wp, 
         remain>>20 & 0x3FF,
         remain>>10 & 0x3FF,
         remain & 0x3FF,
