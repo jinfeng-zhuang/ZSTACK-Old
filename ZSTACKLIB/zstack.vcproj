@@ -508,6 +508,10 @@
 				Name="3rdparty"
 				>
 				<File
+					RelativePath=".\3rdparty\cJSON.c"
+					>
+				</File>
+				<File
 					RelativePath=".\3rdparty\tinyxml2.cpp"
 					>
 				</File>
