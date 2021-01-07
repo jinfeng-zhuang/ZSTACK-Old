@@ -16,7 +16,7 @@ static const char *chip_name_array[] = {
     "Union2-B"
 };
 
-int chip_id(unsigned int value)
+static int chip_id(unsigned int value)
 {
     int id;
 
