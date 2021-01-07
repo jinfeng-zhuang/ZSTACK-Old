@@ -260,10 +260,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\VSilicon\chip_id.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\VSilicon\dbg_client.cpp"
 					>
 				</File>
@@ -281,6 +277,22 @@
 				</File>
 				<File
 					RelativePath=".\VSilicon\pman_disable.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VSilicon\vs_address.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VSilicon\vs_chip_id_get.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VSilicon\vs_disable_avsync.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VSilicon\vs_get_Ready2DispQ_value.cpp"
 					>
 				</File>
 				<File
