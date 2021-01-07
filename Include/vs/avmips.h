@@ -330,7 +330,46 @@ struct VideoPTSQueue_t {
     unsigned int sz;
     unsigned int wrIdx;
     unsigned int rdIdx;
-} ;
+};
+
+typedef struct _tagVideoFrame
+{
+	short Idx;
+	unsigned char PicType;		/**< 0-null, 1-I, 2-P, 3-B */
+	unsigned char bUsed;
+	unsigned int PTS;
+	unsigned int AddrLum;
+	unsigned int AddrChrom;
+
+	short Idx1;
+	unsigned char RefCnt;
+	unsigned char Reserved;
+	unsigned int AddrLum1;		/*For 3D video: [0] top or left; [1] bottom or right*/
+	unsigned int AddrChrom1;
+	
+	unsigned int AddrMetaDat;
+	unsigned int AddrMetaDat1;
+}Frame_t;
+
+#define FRAMEQ_SIZE 		128				/* max frame buffer num. align with malone */
+typedef struct _tagVideoFrameQ
+{
+	Frame_t q[FRAMEQ_SIZE];
+	unsigned int sz;
+	unsigned int wrIdx;
+	unsigned int rdIdx;	
+}FrameQ_t;
+
+typedef struct _tagVideoFrameQArray
+{
+	FrameQ_t rdy2DispQ;
+	FrameQ_t dispQ;
+	FrameQ_t dispDoneQ;
+	FrameQ_t discardQ;
+	
+	FrameQ_t s3dPictQueue;		/*record un-matched pictures;*/
+	FrameQ_t rdy2EncQ;	/* ready 2 encoder queue */
+}FrameQArray_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -339,7 +378,19 @@ extern void dump_mpegdisp_registers(struct mpegdisp_regs *regs);
 extern int read_mpegdisp_regsiters(unsigned int base, struct mpegdisp_regs *regs);
 extern bool mpegdisp_is_resolution_change(struct mpegdisp_regs *regs);
 
-extern int avmips_get_ves_desc(struct ring *r);
+extern int avmips_get_ves_desc(struct ring *r, unsigned int channel);
 extern int avmips_get_pts_desc(struct ring *r);
+
+extern int vs_disable_avsync(void);
+
+extern int vs_get_Ready2DispQ_value(unsigned int *value, unsigned int channel);
+
+extern int chip_id(unsigned int value);
+
+///////////////////////////////////////////////////////////////////////////////
+
+extern unsigned int vs_ves_descriptor_address;
+
+///////////////////////////////////////////////////////////////////////////////
 
 #endif

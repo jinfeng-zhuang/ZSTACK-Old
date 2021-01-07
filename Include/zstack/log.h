@@ -18,6 +18,7 @@ enum log_module_e {
     LOG_MODULE_NET,
     LOG_MODULE_AVMIPS,
     LOG_MODULE_ALGO,
+    LOG_MODULE_FILE,
     LOG_MODULE_MAX
 };
 
@@ -33,6 +34,14 @@ enum log_module_e {
 #else
 #define log_info(argv, ...) do {} while (0)
 #endif
+#endif
+
+#ifndef info
+#define info(argv, ...) _log(LOG_MODULE, LOG_USER, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
+#endif
+
+#ifndef warn
+#define warn(argv, ...) _log(LOG_MODULE, LOG_WARNING, __FILE__, __FUNCTION__, __LINE__, argv, ##__VA_ARGS__)
 #endif
 
 #ifndef log_warn
