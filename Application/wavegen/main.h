@@ -5,6 +5,11 @@
 
 #define LOG_CONFIG_LENGTH   (256)
 
+enum {
+    FORMAT_DATA,
+    FORMAT_CARRAY,
+};
+
 struct application {
     struct {
         char log_config[LOG_CONFIG_LENGTH];
@@ -12,6 +17,7 @@ struct application {
         unsigned int freq;
         unsigned int sample;
         unsigned int number;
+        unsigned int format;
     } param;
 
     float *sample;

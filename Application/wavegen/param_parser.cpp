@@ -13,6 +13,7 @@ enum {
     OPTION_FREQ,
     OPTION_NUMBER,
     OPTION_SAMPLE,
+    OPTION_FORMAT,
 };
 
 static struct option opts[] = {
@@ -22,6 +23,7 @@ static struct option opts[] = {
     {"freq", required_argument, 0, OPTION_FREQ},
     {"number", required_argument, 0, OPTION_NUMBER},
     {"sample", required_argument, 0, OPTION_SAMPLE},
+    {"format", required_argument, 0, OPTION_FORMAT},
     {0, 0, 0, 0}
 };
 
@@ -55,6 +57,11 @@ int param_parser(int argc, char *argv[], struct application *app)
             break;
         case OPTION_SAMPLE:
             app->param.sample = atoi(optarg);
+            break;
+        case OPTION_FORMAT:
+            if (0 == strcmp(optarg, "c-array")) {
+                app->param.format = FORMAT_CARRAY;
+            }
             break;
         default:
             return -1;

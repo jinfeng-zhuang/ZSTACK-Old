@@ -25,8 +25,17 @@ int main(int argc, char *argv[])
 
     wavegen(app.sample, app.param.number, app.param.freq, app.param.sample);
 
-    for (i = 0; i < app.param.number; i++) {
-        log_info("%f\n", app.sample[i]);
+    if (app.param.format == FORMAT_CARRAY) {
+        log_info("float data[%d] = {\n", app.param.number);
+        for (i = 0; i < app.param.number - 1; i++) {
+            log_info("%f,", app.sample[i]);
+        }
+        log_info("%f};\n", app.sample[i]);
+    }
+    else {
+        for (i = 0; i < app.param.number; i++) {
+            log_info("%f\n", app.sample[i]);
+        }
     }
 
     return 0;
