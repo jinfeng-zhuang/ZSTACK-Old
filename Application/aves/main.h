@@ -12,6 +12,7 @@ struct application {
         char ip[16];
         int dump_flag;
         unsigned int channel;
+        int snapshot;
     } param;
 };
 

@@ -3,17 +3,23 @@
 #include <Windows.h>
 #include "main.h"
 
+#define LOG_MODULE LOG_MODULE_APP
+
 #define DUMP_SIZE   (1<<20)
+#define SNAPSHOT_BUFFER_SIZE    (12<<20)
 
 struct application app;
 
 static unsigned char buffer[DUMP_SIZE];
+static unsigned char snapshot_buffer[SNAPSHOT_BUFFER_SIZE];
 
 int main(int argc, char *argv[])
 {
     int ret;
     struct ring ves;
     unsigned int rp;
+
+    unsigned int i;
     
     struct ring ves_local;
     unsigned int size;
@@ -45,6 +51,30 @@ int main(int argc, char *argv[])
     }
 
     rp = ves.start;
+
+    if (app.param.snapshot) {
+        info("snapshot start\n");
+
+        for (i = 0; i < 12; i++) {
+            info("%d ", i);
+
+            // it seems read very slow: 5sec/1MB
+            ret = dbg_host_read8(ves.start, snapshot_buffer, 1<<20);
+            if (0 != ret) {
+                log_err("dbg_host_read8 failed\n");
+                return -1;
+            }
+
+            ret = file_append(app.param.filename, snapshot_buffer, 1<<20);
+            if (0 != ret) {
+                log_err("file_append failed\n");
+                return -1;
+            }
+        }
+        info("snapshot complete\n");
+
+        goto END;
+    }
 
     while (1) {
         ret = avmips_get_ves_desc(&ves, app.param.channel);
@@ -87,11 +117,16 @@ int main(int argc, char *argv[])
             rp += response;
         }
         else {
-            log_info("[Remain] Decoder: %dM\n", ringbuf_get_datalen(&ves) >> 20);
+            log_info("Decoder: %dM %4dK %4dB\n",
+                (ringbuf_get_datalen(&ves) >> 20) & 0x3FF,
+                (ringbuf_get_datalen(&ves) >> 10) & 0x3FF,
+                ringbuf_get_datalen(&ves) & 0x3FF);
         }
 
         Sleep(10);
     }
+
+END:
 
     return 0;
 }

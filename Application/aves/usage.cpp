@@ -9,6 +9,7 @@ This is a template project to generate a new one.\n\
   --log         log config\n\
   \n\
   --channel <0|1|2>\n\
+  --snapshot\n\
 \n\
 Examples:\n\
   aves --log \"app:5\"\n\

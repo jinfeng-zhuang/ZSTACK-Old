@@ -11,6 +11,7 @@ enum {
     OPTION_HELP,
     OPTION_LOG,
     OPTION_CHANNEL,
+    OPTION_SNAPSHOT,
 };
 
 static struct option opts[] = {
@@ -18,6 +19,7 @@ static struct option opts[] = {
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
     {"channel", required_argument, 0, OPTION_CHANNEL},
+    {"snapshot", no_argument, 0, OPTION_SNAPSHOT},
     {0, 0, 0, 0}
 };
 
@@ -46,6 +48,9 @@ int param_parser(int argc, char *argv[], struct application *app)
         case OPTION_CHANNEL:
             app->param.channel = atoi(optarg);
             break;
+        case OPTION_SNAPSHOT:
+            app->param.snapshot = 1;
+            break;
         default:
             return -1;
         }
@@ -71,6 +76,12 @@ int param_parser(int argc, char *argv[], struct application *app)
 
     if (app->param.channel > 2) {
         return -1;
+    }
+
+    if (app->param.snapshot && (app->param.dump_flag == 0)) {
+        warn("output file not specified\n");
+        _snprintf(app->param.filename, FILENAME_MAX, "snapshot.aves");
+        app->param.dump_flag = 1;
     }
 
     return 0;
