@@ -88,7 +88,10 @@ int param_parser(int argc, char *argv[], struct application *app)
         memcpy(app->param.output_filename, argv[optind + 1], strlen(argv[optind + 1]));
     }
     else {
-        strcpy(app->param.output_filename, "output.cutoff");
+        if (app->param.size)
+            _snprintf(app->param.output_filename, FILENAME_MAX, "cutoff_%#x_to_%#x.bin", app->param.start, app->param.start + app->param.size);
+        else
+            _snprintf(app->param.output_filename, FILENAME_MAX, "cutoff_%#x_to_END.bin", app->param.start);
     }
 
     // Do param validation
