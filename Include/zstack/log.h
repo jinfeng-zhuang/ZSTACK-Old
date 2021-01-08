@@ -19,6 +19,7 @@ enum log_module_e {
     LOG_MODULE_AVMIPS,
     LOG_MODULE_ALGO,
     LOG_MODULE_FILE,
+    LOG_MODULE_TIME,
     LOG_MODULE_MAX
 };
 

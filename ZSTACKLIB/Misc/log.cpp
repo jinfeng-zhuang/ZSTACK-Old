@@ -26,7 +26,8 @@ static char *map[LOG_MODULE_MAX] = {
     "net",
     "avmips",
     "algo",
-    "file"
+    "file",
+    "time",
 };
 
 static char *prefix[] = {
@@ -40,6 +41,7 @@ static unsigned int log_mask[LOG_MODULE_MAX] = {0};
 static int log_inited = 0;
 static FILE *logfile = NULL;
 static char LOG_buffer[1 << 20];
+static int flag_time = 0;
 
 static int find_index_by_name(char *name)
 {
@@ -103,6 +105,10 @@ static int add_to_log_mask(char *config)
         logfile = fopen(filename, "w");
     }
 
+    if ((index == LOG_MODULE_TIME) && (level != 0)) {
+        flag_time = 1;
+    }
+
     log_mask[index] = correct_level(level);
 
     return 0;
@@ -157,20 +163,28 @@ FAILED:
 
 int _log(int module, int lvl, char *filename, char *function, int linenum, const char *fmt, ...)
 {
-    char *_prefix = prefix[lvl];
+    char _prefix[128] = {0};
 
     if (! log_inited) {
         log_init(NULL);
     }
-
-    if (logfile)
-        _prefix = "";
 
     lvl = correct_level(lvl);
 
     if ((lvl >= LOG_USER) && (lvl > log_mask[module])) {
         return 0;
     }
+
+    if (flag_time) {
+#ifdef _WIN32
+        SYSTEMTIME time;
+        GetSystemTime(&time);
+        snprintf(_prefix, sizeof(_prefix), "%02d:%02d:%02d)", time.wHour, time.wMinute, time.wSecond);
+#endif
+    }
+
+    if (! logfile)
+        strcpy(&_prefix[strlen(_prefix)], prefix[lvl]);
 
     LOG_buffer[0] = '\0';
 
@@ -181,7 +195,7 @@ int _log(int module, int lvl, char *filename, char *function, int linenum, const
         sprintf(LOG_buffer, "%s [%s:%d] ", _prefix, function, linenum);
     }
     else if (lvl == LOG_USER) {
-        ;
+        sprintf(LOG_buffer, "%s ", _prefix);;
     }
     else {
         sprintf(LOG_buffer, "%s    [%s:%d] ", _prefix, function, linenum);
