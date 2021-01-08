@@ -98,7 +98,7 @@ int avmips_get_ves_desc(struct ring *r, unsigned int channel)
         channel,
         flag_hardware_demux ? "HW" : "SW",
         r->start, r->end,
-        r->rp, r->wp, 
+        r->rp - r->start, r->wp - r->start, 
         remain>>20 & 0x3FF,
         remain>>10 & 0x3FF,
         remain & 0x3FF,
