@@ -69,8 +69,7 @@ int param_parser(int argc, char *argv[], struct application *app)
     if (0 == app->param.output_filename[0]) {
 #ifdef _WIN32
         GetLocalTime(&time);
-        _snprintf(app->param.output_filename, FILENAME_MAX, "%s_%d-%02d-%02d_%02d-%02d-%02d.log",
-            argv[0],
+        _snprintf(app->param.output_filename, FILENAME_MAX, "template_%d-%02d-%02d_%02d-%02d-%02d.log",
             time.wYear,
             time.wMonth,
             time.wDay,
@@ -81,8 +80,7 @@ int param_parser(int argc, char *argv[], struct application *app)
 #else
         seconds = time(NULL);
         tm = localtime(&seconds);
-        snprintf(app->param.output_filename, FILENAME_MAX, "%s_%d-%02d-%02d_%02d-%02d-%02d.log",
-            argv[0],
+        snprintf(app->param.output_filename, FILENAME_MAX, "template_%d-%02d-%02d_%02d-%02d-%02d.log",
             tm->tm_year + 1900,
             tm->tm_mon + 1,
             tm->tm_day,
