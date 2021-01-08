@@ -13,13 +13,15 @@ int file_save(const char* filename, unsigned char* buffer, unsigned int length)
         return -1;
     }
 
-    fp = fopen(filename, "w");
+    fp = fopen(filename, "wb");
     if (NULL == fp) {
         log_warn("fopen %s failed\n", filename);
         return -1;
     }
 
     ret = fwrite(buffer, sizeof(unsigned char), length, fp);
+
+    fflush(fp);
 
     if (ret != length) {
         log_warn("fwrite %s failed: %d != %d\n", filename, ret, length);
@@ -28,7 +30,7 @@ int file_save(const char* filename, unsigned char* buffer, unsigned int length)
 
     fclose(fp);
 
-    log_warn("%s done\n", filename);
+    debug("Save to '%s' done\n", filename);
 
     return 0;
 }

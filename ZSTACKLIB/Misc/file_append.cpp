@@ -13,13 +13,15 @@ int file_append(const char* filename, unsigned char* buffer, unsigned int length
         return -1;
     }
 
-    fp = fopen(filename, "a");
+    fp = fopen(filename, "ab");
     if (NULL == fp) {
         log_warn("fopen %s failed\n", filename);
         return -1;
     }
 
     ret = fwrite(buffer, sizeof(unsigned char), length, fp);
+
+    fflush(fp);
 
     if (ret != length) {
         log_warn("fwrite %s failed: %d != %d\n", filename, ret, length);
