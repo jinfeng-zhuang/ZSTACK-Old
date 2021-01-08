@@ -28,6 +28,7 @@ static char *map[LOG_MODULE_MAX] = {
     "algo",
     "file",
     "time",
+    "color",
 };
 
 static char *prefix[] = {
