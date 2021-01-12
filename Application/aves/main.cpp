@@ -52,30 +52,6 @@ int main(int argc, char *argv[])
 
     rp = ves.start;
 
-    if (app.param.snapshot) {
-        info("snapshot start\n");
-
-        for (i = 0; i < 12; i++) {
-            info("%d ", i);
-
-            // it seems read very slow: 5sec/1MB
-            ret = dbg_host_read8(ves.start, snapshot_buffer, 1<<20);
-            if (0 != ret) {
-                log_err("dbg_host_read8 failed\n");
-                return -1;
-            }
-
-            ret = file_append(app.param.filename, snapshot_buffer, 1<<20);
-            if (0 != ret) {
-                log_err("file_append failed\n");
-                return -1;
-            }
-        }
-        info("snapshot complete\n");
-
-        goto END;
-    }
-
     while (1) {
         ret = avmips_get_ves_desc(&ves, app.param.channel);
         if (0 != ret) {
