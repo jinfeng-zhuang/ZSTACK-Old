@@ -25,6 +25,7 @@ static struct option opts[] = {
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
     {"addr", required_argument, 0, OPTION_ADDR},
+    {"address", required_argument, 0, OPTION_ADDR},
     {"size", required_argument, 0, OPTION_SIZE},
     {0, 0, 0, 0}
 };
