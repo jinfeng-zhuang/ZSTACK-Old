@@ -43,10 +43,10 @@ int param_parser(int argc, char *argv[], struct application *app)
         switch (c) {
         case OPTION_VERSION:
             log_info("Version: %s\n", version);
-            break;
+            return -1;
         case OPTION_HELP:
             log_info(usage);
-            break;
+            return -1;
         case OPTION_LOG:
             if (strlen(optarg) >= LOG_CONFIG_LENGTH) {
                 log_info("log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
