@@ -40,5 +40,7 @@ int main(int argc, char *argv[])
 
     file_save(app.param.output_filename, &app.file_content[app.param.start], app.output_file_size);
 
+    info("%s", app.param.output_filename);
+
     return 0;
 }

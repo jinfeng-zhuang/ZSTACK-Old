@@ -76,6 +76,10 @@ int param_parser(int argc, char *argv[], struct application *app)
         }
     }
 
+    if ((app->param.size == 0) && (app->param.end != 0)) {
+        app->param.size = app->param.end - app->param.start;
+    }
+
     if (optind < argc) {
         if (strlen(argv[optind]) >= FILENAME_MAX)
             return -1;
@@ -94,7 +98,6 @@ int param_parser(int argc, char *argv[], struct application *app)
             _snprintf(app->param.output_filename, FILENAME_MAX, "cutoff_%#x_to_END.bin", app->param.start);
     }
 
-    // Do param validation
     if (app->param.filename[0] == 0) {
         warn("input file required\n");
         return -1;
