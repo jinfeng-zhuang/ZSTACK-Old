@@ -31,6 +31,8 @@
 #include <zstack/vs/sx.h>
 #endif
 
+#include <zstack/codec.h>
+
 extern int window_class_register(void);
 
 #endif

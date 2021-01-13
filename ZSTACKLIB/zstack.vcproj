@@ -516,6 +516,58 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Codec"
+				>
+				<File
+					RelativePath=".\Codec\bitstream_init.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\byte_aligned.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\g_nalu_callback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\more_rbsp_data.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\nalu_parse_all.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\pic_parameter_set_rbsp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\rbsp_trailing_bits.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\se.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\slice_layer_without_partitioning_rbsp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\sps_proc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\u.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Codec\ue.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
