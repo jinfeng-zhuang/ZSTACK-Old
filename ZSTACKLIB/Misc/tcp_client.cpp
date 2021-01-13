@@ -111,8 +111,10 @@ int net_transfer(unsigned char* request, void* response)
     unsigned int count = 0;
     int length = 0;
 
-    if (_socket == INVALID_SOCKET)
+    if (_socket == INVALID_SOCKET) {
+        warn("dbg client not inited\n");
         return -1;
+    }
 
     p = (unsigned char*)response;
 
