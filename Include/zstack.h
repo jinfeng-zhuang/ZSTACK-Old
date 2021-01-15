@@ -18,13 +18,13 @@
 #include <zstack/h264.h>
 #include <zstack/h265.h>
 
-#ifdef ZSTACK_ENABLE_WINDOWS
+#ifdef _WIN32
 #include <zstack/platform.h>
 #include <zstack/window_class.h>
 #include <Windows.h>
 #endif
 
-#ifdef ZSTACK_ENABLE_VSILICON
+#ifdef _WIN32
 #include <zstack/vs/avmips.h>
 #include <zstack/vs/dbg.h>
 #include <zstack/vs/pman.h>

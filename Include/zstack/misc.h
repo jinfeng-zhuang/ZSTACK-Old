@@ -47,6 +47,7 @@ extern int hexdump(void* buffer, unsigned int length);
 extern unsigned char *file_load(const char* filename, unsigned int *size);
 extern int file_save(const char* filename, unsigned char* buffer, unsigned int length);
 extern int file_append(const char* filename, unsigned char* buffer, unsigned int length);
+extern unsigned char *file_load_ex(const char* filename, unsigned long long offset, unsigned int size);
 
 extern void print_usage(void);
 extern int param_parser(int argc, char *argv[], struct application *app);

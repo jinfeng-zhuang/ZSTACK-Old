@@ -6,3 +6,10 @@
 * 为每个 app 增加配置文件，比如无法与 AVMIPS 通信，但是仍然可以得到 AVMIPS VES DESC 的地址，甚至最开始先获取所有的地址信息，记录下来，下次直接用
 * [待定] 为 AVMIPS 相关应用程序增加 template
 * [待定] 改变 AVMIPS 的 DEBUG 接口，变成一个线程周期查询，写入全局结构体中
+* 将 LOG MODULE 改成 #ifdef XXXX #define log_(LOG_MODULE_XXX) 这样不需要在文件中定义 #define XXX XXX 这样了
+	#define MODULE_AVMIPS
+	
+	#ifdef MODULE_AVMIPS
+	#define LOG()
+	#endif
+	

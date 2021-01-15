@@ -42,3 +42,37 @@ END:
 
     return buffer;
 }
+
+unsigned char *file_load_ex(const char* filename, unsigned long long offset, unsigned int size)
+{
+    int ret = 0;
+    FILE* fp = NULL;
+    unsigned int bytes_read = 0;
+    unsigned char* buffer = NULL;
+
+    fp = fopen(filename, "rb");
+    if (NULL == fp) {
+        log_info("%s: fopen_s failed %s\n", __func__, filename);
+        goto END;
+    }
+
+    _fseeki64(fp, offset, SEEK_END);
+
+    buffer = (unsigned char*)malloc(size);
+    if (NULL == buffer) {
+        printf("%s: malloc failed %d\n", __func__, size);
+        goto END;
+    }
+
+    bytes_read = fread(buffer, sizeof(unsigned char), size, fp);
+    if (bytes_read != size) {
+        printf("%s: fread failed %d\n", __func__, bytes_read);
+        goto END;
+    }
+
+END:
+    if (fp)
+        fclose(fp);
+
+    return buffer;
+}

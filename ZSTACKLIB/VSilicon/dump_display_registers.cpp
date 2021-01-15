@@ -25,7 +25,7 @@ int read_mpegdisp_regsiters(unsigned int base, struct mpegdisp_regs *regs)
     return -1;
 }
 
-bool mpegdisp_is_resolution_change(struct mpegdisp_regs *regs)
+int mpegdisp_is_resolution_change(struct mpegdisp_regs *regs)
 {
     static unsigned int res_prev = 0;
 
