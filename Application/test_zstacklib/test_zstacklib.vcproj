@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="template"
-	ProjectGUID="{7D3D5914-FB79-40AA-B8AF-AAC0F81BBEE8}"
-	RootNamespace="template"
+	Name="test_zstacklib"
+	ProjectGUID="{AC231294-FEC0-462F-8DDB-74493AB0334D}"
+	RootNamespace="test_zstacklib"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -182,6 +182,14 @@
 				RelativePath=".\version.cpp"
 				>
 			</File>
+			<Filter
+				Name="testsuite"
+				>
+				<File
+					RelativePath=".\testsuite\test_list.c"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

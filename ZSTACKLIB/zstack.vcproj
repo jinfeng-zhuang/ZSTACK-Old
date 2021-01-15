@@ -460,6 +460,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Misc\list.c"
+					>
+				</File>
+				<File
 					RelativePath=".\Misc\load_png.cpp"
 					>
 				</File>
@@ -501,6 +505,10 @@
 				</File>
 				<File
 					RelativePath=".\Misc\trim.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Misc\yuv_size.c"
 					>
 				</File>
 			</Filter>

@@ -196,7 +196,7 @@ int _log(int module, int lvl, char *filename, char *function, int linenum, const
         sprintf(LOG_buffer, "%s [%s:%d] ", _prefix, function, linenum);
     }
     else if (lvl == LOG_USER) {
-        sprintf(LOG_buffer, "%s ", _prefix);;
+        sprintf(LOG_buffer, "%s", _prefix);
     }
     else {
         sprintf(LOG_buffer, "%s    [%s:%d] ", _prefix, function, linenum);

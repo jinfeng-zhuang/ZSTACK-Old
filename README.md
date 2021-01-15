@@ -7,7 +7,8 @@
 ## 原则
 
 * Keep it Simple, Keep is Stupid!
-* 头文件仅用于 ZSTACKLIB 外部引用，内部仅依赖于标准 C 库
+* Include 目录：根据 ZSTACKLIB 的功能划分为几个头文件，配合 ZSTACK.LIB 发布
+* 调试问题的时候尽量用工具先诊断一下，如果工具不行，就给它加功能，让它达到诊断工具的水平
 
 ## Build
 
@@ -18,6 +19,10 @@
 * MIPS
 * RISVC
 * DSP
+
+### 注意
+
+* 在需要的时候，在头文件中加入 extern "C" 之前没注意
 
 ## 框架
 

@@ -1,6 +1,10 @@
 #ifndef ZSTACK_WINDOW_CLASS_H
 #define ZSTACK_WINDOW_CLASS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <Windows.h>
 
 // YUVWindow
@@ -15,8 +19,14 @@ struct YUVWindowData {
     unsigned int width;
     unsigned int height;
     unsigned int stride;
-    enum YUVFormat format;
+    unsigned int format; // enum YUVFormat
     unsigned char *data;
 };
+
+extern unsigned int yuv_size(int width, int height, int format);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

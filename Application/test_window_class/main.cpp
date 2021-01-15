@@ -33,6 +33,9 @@ int main(int argc, char *argv[])
         NULL,
         NULL);
 
+    // NULL means self-test message
+    SendMessage(data.hwnd, WM_USER, NULL, NULL);
+
     ShowWindow(data.hwnd, 1);
     UpdateWindow(data.hwnd);
 

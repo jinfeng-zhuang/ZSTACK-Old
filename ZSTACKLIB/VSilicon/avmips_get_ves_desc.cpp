@@ -94,7 +94,7 @@ int avmips_get_ves_desc(struct ring *r, unsigned int channel)
         remain = (r->end - r->start + 1) - (r->rp - r->wp);
     }
 
-    info("[CH%d][%s] %#8X %#8X RD: %#8X WR: %#8X, remain %2dM %4dK %4dB, %s\n",
+    info("[CH%d][%s] %#8X %#8X RD: %#08X WR: %#08X, remain %2dM %4dK %4dB, %s\n",
         channel,
         flag_hardware_demux ? "HW" : "SW",
         r->start, r->end,

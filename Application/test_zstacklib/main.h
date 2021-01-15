@@ -23,6 +23,8 @@ struct application {
     unsigned int   output_file_size;
 };
 
+extern int test_list(void);
+
 #ifdef __cplusplus
 }
 #endif

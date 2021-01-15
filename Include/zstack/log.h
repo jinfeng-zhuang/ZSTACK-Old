@@ -1,6 +1,10 @@
 #ifndef ZSTACK_LOG_H
 #define ZSTACK_LOG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //=============================================================================
 
 enum log_level_e {
@@ -73,7 +77,7 @@ enum log_module_e {
 #define ENTER debug("\n")
 #define EXIT  debug("\n")
 
-#define TRACE log_info("%s %d\n", __FUNCTION__, __LINE__)
+#define TRACE debug("[TRACE] %s %d\n", __FUNCTION__, __LINE__)
 
 #define LOG_CONFIG_LENGTH   (256)
 
@@ -88,5 +92,9 @@ extern int _log(int module, int lvl, char *filename, char *function, int linenum
 #endif
 
 //=============================================================================
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

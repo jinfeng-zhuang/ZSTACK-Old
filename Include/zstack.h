@@ -33,6 +33,8 @@
 
 #include <zstack/codec.h>
 
+#include <zstack/list.h>
+
 extern int window_class_register(void);
 
 #endif

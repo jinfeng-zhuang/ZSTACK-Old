@@ -376,7 +376,7 @@ typedef struct _tagVideoFrameQArray
 extern const char *mpegformat_framerate_name(int rate);
 extern void dump_mpegdisp_registers(struct mpegdisp_regs *regs);
 extern int read_mpegdisp_regsiters(unsigned int base, struct mpegdisp_regs *regs);
-extern bool mpegdisp_is_resolution_change(struct mpegdisp_regs *regs);
+extern int mpegdisp_is_resolution_change(struct mpegdisp_regs *regs);
 
 extern int avmips_get_ves_desc(struct ring *r, unsigned int channel);
 extern int avmips_get_pts_desc(struct ring *r);
