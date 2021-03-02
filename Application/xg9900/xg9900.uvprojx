@@ -399,11 +399,6 @@
               <FileType>8</FileType>
               <FilePath>.\simulate_data.cpp</FilePath>
             </File>
-            <File>
-              <FileName>zstack.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\Library\zstack.lib</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

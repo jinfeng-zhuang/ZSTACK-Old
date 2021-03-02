@@ -24,13 +24,6 @@
 #include <Windows.h>
 #endif
 
-#ifdef _WIN32
-#include <zstack/vs/avmips.h>
-#include <zstack/vs/dbg.h>
-#include <zstack/vs/pman.h>
-#include <zstack/vs/sx.h>
-#endif
-
 #include <zstack/codec.h>
 
 #include <zstack/list.h>

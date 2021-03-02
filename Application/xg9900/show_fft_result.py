@@ -3,12 +3,12 @@ from scipy.fftpack import fft,ifft
 import matplotlib.pyplot as plt
 import math
 
-N = 1601
+N = 1602
 Fs = 15360
 
-x=np.linspace(0,Fs,N)
+x=np.linspace(0,Fs,N-1)
 
-fft_y = np.loadtxt('fft_result.txt', delimiter='\r\n')
+fft_y = np.loadtxt('output.txt', delimiter='\r\n')
 abs_y=np.abs(fft_y)
 
 #normalization_abs_y=(abs_y/N) * 2

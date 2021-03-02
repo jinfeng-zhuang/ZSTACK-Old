@@ -200,6 +200,10 @@
 				RelativePath=".\README.md"
 				>
 			</File>
+			<File
+				RelativePath=".\TODO"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

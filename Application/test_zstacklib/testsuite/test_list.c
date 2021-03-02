@@ -30,4 +30,6 @@ int test_list(void)
         test = list_entry(pos, struct test_t, list);
         info("ID = %d\n", test->id);
     }
+
+    return 0;
 }

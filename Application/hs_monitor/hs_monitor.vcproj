@@ -167,6 +167,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
+				RelativePath=".\hs_card_dump.c"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -182,11 +186,55 @@
 				RelativePath=".\version.cpp"
 				>
 			</File>
+			<Filter
+				Name="card"
+				>
+				<File
+					RelativePath=".\basic.c"
+					>
+				</File>
+				<File
+					RelativePath=".\Snapjaw_Shellfighter.json"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="function"
+				>
+				<File
+					RelativePath=".\func_damage_and_draw.c"
+					>
+				</File>
+				<File
+					RelativePath=".\hs_draw_a_card.c"
+					>
+				</File>
+				<File
+					RelativePath=".\hs_event_add.c"
+					>
+				</File>
+				<File
+					RelativePath=".\hs_event_queue.c"
+					>
+				</File>
+				<File
+					RelativePath=".\snapjaw_shellfighter.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
+			<File
+				RelativePath=".\hs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\hs_attr.h"
+				>
+			</File>
 			<File
 				RelativePath=".\main.h"
 				>

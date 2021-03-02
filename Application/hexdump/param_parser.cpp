@@ -16,12 +16,14 @@ enum {
     OPTION_VERSION = 1,
     OPTION_HELP,
     OPTION_LOG,
+    OPTION_COUNT,
 };
 
 static struct option opts[] = {
     {"version", no_argument, 0, OPTION_VERSION},
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
+    {"count", required_argument, 0, OPTION_COUNT},
     {0, 0, 0, 0}
 };
 
@@ -53,6 +55,9 @@ int param_parser(int argc, char *argv[], struct application *app)
                 return -1;
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
+            break;
+        case OPTION_COUNT:
+            app->param.count = atoi(optarg);
             break;
         default:
             return -1;

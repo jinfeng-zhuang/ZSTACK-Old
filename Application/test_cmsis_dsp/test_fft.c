@@ -2,6 +2,8 @@
 #include "arm_const_structs.h"
 #include <stdio.h>
 
+extern float data[];
+
 #define USE_50HZ
 #define USE_100HZ
 #define USE_200HZ
@@ -79,22 +81,16 @@ void test_fft(void)
 {
     unsigned int i;
 
-    wavegen_complex();
-
-    arm_cfft_f32(&arm_cfft_sR_f32_len4096, fft_in_out_buffer, 0, 1);
-    arm_cmplx_mag_f32(fft_in_out_buffer, fft_mag_buffer, FFT_SIZE);
-    
-    for (i = 0; i < FFT_SIZE - 1; i++) {
-        if ((fft_in_out_buffer[i] != 0) && (fft_in_out_buffer[i + 1] != 0)) {
-            printf("%f + %f\n%f\n",
-                fft_in_out_buffer[i], fft_in_out_buffer[i + 1],
-                fft_mag_buffer[i]);
-            break;
-        }
+    //wavegen_complex();
+    for (i = 0; i < FFT_SIZE; i++) {
+        fft_in_out_buffer[i * 2 + 0] = data[i];
+        fft_in_out_buffer[i * 2 + 1] = 0;
     }
 
+    arm_cfft_f32(&arm_cfft_sR_f32_len4096, fft_in_out_buffer, 0, 1);
+
     for (i = 0; i < FFT_SIZE; i++) {
-        //printf("%d %f\n", i, fft_mag_buffer[i]);
+        printf("%f %f\n", fft_in_out_buffer[i * 2 + 0], fft_in_out_buffer[i * 2 + 1]);
     }
 }
 
@@ -103,11 +99,11 @@ void test_rfft(void)
     unsigned int i;
     arm_rfft_fast_instance_f32 S;
 
-    wavegen_real();
+    //wavegen_real();
     
     arm_rfft_fast_init_f32(&S, 4096);
-    arm_rfft_fast_f32(&S, fft_in_out_buffer, fft_mag_buffer, 0);
-    arm_cmplx_mag_f32(fft_mag_buffer, fft_mag_buffer, FFT_SIZE);
+    arm_rfft_fast_f32(&S, data, fft_mag_buffer, 0);
+    //arm_cmplx_mag_f32(fft_mag_buffer, fft_mag_buffer, FFT_SIZE);
 
     for (i = 0; i < FFT_SIZE; i++) {
         printf("%f\n", fft_mag_buffer[i]);

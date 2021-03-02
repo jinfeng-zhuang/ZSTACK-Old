@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     }
 
     if (app.param.ves_desc_addr != 0)
-        vs_ves_descriptor_address = app.param.ves_desc_addr;
+        return -1;
 
     id = vs_chip_id_get();
     if (0 == id) {

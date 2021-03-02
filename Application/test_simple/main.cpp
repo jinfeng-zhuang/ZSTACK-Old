@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <zstack.h>
+#include <Windows.h>
 
 typedef enum {
     MediaIPSW_DEC_ScaleFactor1_1, /**< 1:1 scaling */
@@ -128,9 +129,18 @@ int main(int argc, char *argv[])
 
 	log_init(NULL);
 
-	log_info("%s\n", __FUNCTION__);
+	//log_info("%s\n", __FUNCTION__);
 
-	mem_format_parser_test();
+	//mem_format_parser_test();
+
+
+    DWORD time_start, time_end;
+    /* 获取开始时间 */
+    time_start = GetTickCount(); //从操作系统启动经过的毫秒数
+    Sleep(3000);
+    time_end = GetTickCount();
+
+    printf("time_end - time_start = %d\n", time_end - time_start);
 
     return 0;
 }

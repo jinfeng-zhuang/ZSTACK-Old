@@ -1,0 +1,46 @@
+{
+	"uuid" : 1,
+	"cost" : 5,
+	"attack" : 3,
+	"health" : 8,
+	"type" : "Minion",
+	"rarity" : "epic",
+	"race" : [],
+	"function" : [
+		{
+		"ID" : HS_FUNC_SNAPJAW_SHELLFIGHTER, // 对应了一个注册信息
+		"param_count" : 0,
+		"param" : []
+		},
+		{
+		}
+	]
+}
+
+// 无论是血量还是战吼，都是属性，可以自由添加和删除
+
+// 维度感知，添加感知能力，比如颜色，看起来没用，其实增加了一个维度，变得更加丰富
+// 就像一个人的心情， action 是属性与属性之间的路径，当一个属性值发生改变，触发一些反应，可以添加更多的路径
+
+{
+	"uuid" : 1,
+	{"attr" : "cost", "value" : 5, "preAction" : "DEFAULT", "postAction" : "DEFAULT"},
+	
+	// 使用时
+	{"attr" : "field", "value" : LIB, "preAction" : ["DEFAULT"], "postAction" : ["DEFAULT"]},
+	"cost" : 5,
+	"attack" : 3,
+	"health" : 8,
+	"type" : "Minion",
+	"rarity" : "epic",
+	"race" : [],
+	"function" : [
+		{
+		"ID" : HS_FUNC_SNAPJAW_SHELLFIGHTER, // 对应了一个注册信息
+		"param_count" : 0,
+		"param" : []
+		},
+		{
+		}
+	]
+}

@@ -10,6 +10,7 @@ struct application {
         char log_config[LOG_CONFIG_LENGTH];
         char input_filename[FILENAME_MAX];
         char output_filename[FILENAME_MAX];
+        int count;
     } param;
 
     unsigned char *input_file_content;

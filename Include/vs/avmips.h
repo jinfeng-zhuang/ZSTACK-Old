@@ -1,6 +1,10 @@
 #ifndef AVMIPS_H
 #define AVMIPS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -332,6 +336,12 @@ struct VideoPTSQueue_t {
     unsigned int rdIdx;
 };
 
+struct VideoPTSQueue_t_Part {
+    int size;
+    int wr;
+    int rd;
+};
+
 typedef struct _tagVideoFrame
 {
 	short Idx;
@@ -379,7 +389,7 @@ extern int read_mpegdisp_regsiters(unsigned int base, struct mpegdisp_regs *regs
 extern int mpegdisp_is_resolution_change(struct mpegdisp_regs *regs);
 
 extern int avmips_get_ves_desc(struct ring *r, unsigned int channel);
-extern int avmips_get_pts_desc(struct ring *r);
+extern int avmips_get_pts_desc(struct ring *r, int channel);
 
 extern int vs_disable_avsync(void);
 
@@ -387,10 +397,14 @@ extern int vs_get_Ready2DispQ_value(unsigned int *value, unsigned int channel);
 
 extern int chip_id(unsigned int value);
 
+extern unsigned char *avmips_dump_pts_queue(int channel);
+
+extern const char *mpegformat_framerate_name(int rate);
+
 ///////////////////////////////////////////////////////////////////////////////
 
-extern unsigned int vs_ves_descriptor_address;
-
-///////////////////////////////////////////////////////////////////////////////
+#ifdef __cplusplus
+}
+#endif
 
 #endif

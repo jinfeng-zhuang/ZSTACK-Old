@@ -1,8 +1,14 @@
 #ifndef MISC_H
 #define MISC_H
 
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
+
 #include <stddef.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <time.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +58,7 @@ extern unsigned char *file_load_ex(const char* filename, unsigned long long offs
 extern void print_usage(void);
 extern int param_parser(int argc, char *argv[], struct application *app);
 
-extern unsigned int fsize(FILE *fp);
+extern int64_t fsize(const char *filename);
 
 /*
  * Attention: str should be in array!!!
@@ -71,5 +77,13 @@ extern unsigned int count_char(unsigned char *buffer, unsigned int length, unsig
 extern unsigned int replace_char(unsigned char *buffer, unsigned int length, unsigned char origin, unsigned char target);
 
 extern int readlines(const char *filename, struct index_buffer *ib);
+
+extern unsigned int get_ms(void);
+extern unsigned int get_second(void);
+extern unsigned int get_date_time(struct tm *tm);
+
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif

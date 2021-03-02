@@ -1,6 +1,8 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -11,7 +13,7 @@ struct list_head {
 
 #define list_entry(ptr, type, member) container_of(ptr, type, member)
 
-#define offsetof(TYPE, MEMBER) ((size_t)& ((TYPE *)0)->MEMBER)
+//#define offsetof(TYPE, MEMBER) ((size_t)& ((TYPE *)0)->MEMBER)
 
 #define container_of(ptr, type, member) (type*)((char *)ptr - offsetof(type,member))
 

@@ -1,0 +1,28 @@
+{
+    "version": 1,
+    
+    "reference_rpm": [54000,54000,54000],
+    "channel_enable": [1,1,1],
+    "interval":[10, 600, 14400],
+    
+    "running_threshold_digit":938,
+    "overload_threshold_digit":1489,
+    
+    "sensor_sensitivity":7.874,
+    "sensor_low_cutoff":5.0,
+    "sensor_high_cutoff":6000.0,
+    
+    "sampling_freq": 15360,
+    "system_gain":12.0,
+    "adc_resolution_bit":15,
+    "adc_ref_voltage":3300.0,
+    
+    "fft_frame_size":4096,
+    "fft_average":5,
+    "fft_wvfm_overlap":0.667,
+    "freq_span":0.025,
+    "petal_num":2,
+    "hamonic_para_span":0.15,
+    "pdf_plt_range":[-5.0, 5.0],
+    "pdf_bin_width":0.2
+}

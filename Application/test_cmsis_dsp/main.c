@@ -3,7 +3,7 @@ extern void test_rfft(void);
 
 int main(void)
 {
-    test_rfft();
+    test_fft();
     
     return 0;
 }
