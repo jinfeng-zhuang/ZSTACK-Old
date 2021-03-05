@@ -8,7 +8,7 @@ using namespace Gdiplus;
 
 #define CHAR_NUM    11
 #define POINT_NUM   20
-#define PI  (3.1415926)
+//#define PI  (3.1415926)
 
 static HBITMAP hBitmap;
 
@@ -51,8 +51,8 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         angle = 360 / (POINT_NUM);
         radius = 100;
         for (i = 0; i < POINT_NUM; i++) {
-            circle[i].x = radius * cos(angle * i * PI / 180);
-            circle[i].y = radius * sin(angle * i * PI / 180);
+            circle[i].x = radius * (LONG)cos(angle * i * PI / 180);
+            circle[i].y = radius * (LONG)sin(angle * i * PI / 180);
         }
         SetTimer(hWnd, 0, 100, TimerProc);
         break;

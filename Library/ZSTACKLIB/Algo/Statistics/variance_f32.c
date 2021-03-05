@@ -8,7 +8,6 @@ extern void power_f32(float *src, unsigned int size, float *result);
 
 void variance_f32(float *src, unsigned int size, float *result)
 {
-    unsigned int i;
     float sumOfSquare;
     float sum;
 

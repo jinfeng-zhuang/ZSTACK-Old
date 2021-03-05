@@ -41,7 +41,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
     HDC hdcMem;
-    BITMAP bitmap;
     unsigned char* bgra = NULL;
     int i;
     BLENDFUNCTION ftn = { 0 };

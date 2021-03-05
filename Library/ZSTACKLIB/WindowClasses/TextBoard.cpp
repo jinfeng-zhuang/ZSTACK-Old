@@ -8,7 +8,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	HDC hdc;
 	PAINTSTRUCT ps;
 	HINSTANCE hInstance;
-	int i;
 	TEXTMETRICW tm;
     RECT rect;
     RECT clientrect;

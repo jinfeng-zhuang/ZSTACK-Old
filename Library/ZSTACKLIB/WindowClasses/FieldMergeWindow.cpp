@@ -42,13 +42,11 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     static HDC hDeck;
     static HBRUSH hBrush;
     static struct ring ringbuffer = {0, 0, 0, 0};
-    struct YUVWindowStruct yuv_struct;
     
     HDC hdcWindow;
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
     int do_update = 0;
-    HWND hwnd;
 
     hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
 

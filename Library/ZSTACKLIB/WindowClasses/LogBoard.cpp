@@ -7,8 +7,6 @@ static HWND editHwnd;
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    HDC hdc;
-    PAINTSTRUCT ps;
     HINSTANCE hInstance;
     RECT client_rect;
 

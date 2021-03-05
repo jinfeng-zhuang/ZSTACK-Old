@@ -146,8 +146,8 @@ void node_scan(HDC hdc, tinyxml2::XMLElement* node, unsigned char *buffer, int b
 
 static void preprocess(char* src, char* dest)
 {
-    int i;
-    int j;
+    unsigned int i;
+    unsigned int j;
     int tmp;
     int slash_flag = false;
 

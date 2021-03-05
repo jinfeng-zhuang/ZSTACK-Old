@@ -20,7 +20,7 @@ struct ringbuffer_t {
 void ringbuf_init(struct ringbuffer_t *ringbuf, unsigned char *buffer, unsigned int length);
 unsigned int ringbuf_put(struct ringbuffer_t *ringbuf, unsigned char *buffer, unsigned int length);
 unsigned int ringbuf_get(struct ringbuffer_t *ringbuf, unsigned char *buffer, unsigned int length);
-unsigned int ringbuf_get_datalen(struct ringbuffer_t *ringbuf);
+//unsigned int ringbuf_get_datalen(struct ringbuffer_t *ringbuf);
 
 extern unsigned int ringbuf_get_datalen(struct ring *r);
 extern unsigned int ringbuf_measure(struct ring *r, unsigned int request);

@@ -49,7 +49,7 @@ static int Y_Circle(int x, int y, int width, int height)
 
 static void init_wParam_demo(void)
 {
-    int i, j;
+    unsigned int i, j;
 
     wParam_demo.data = (unsigned char *)malloc(yuv_size(wParam_demo.stride, wParam_demo.height, wParam_demo.format));
     if (NULL == wParam_demo.data) {
@@ -80,8 +80,7 @@ static struct window_info *search_window_info(HWND hwnd)
 
 static void Draw(HDC hdc, int width, int height, HBRUSH brush, struct YUVWindowData *data)
 {
-    float scale;
-    int i, j;
+    unsigned int i, j;
     unsigned int color;
     unsigned char r,g,b;
 

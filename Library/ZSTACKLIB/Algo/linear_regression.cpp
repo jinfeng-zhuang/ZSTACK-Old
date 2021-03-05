@@ -18,7 +18,7 @@ int linear_regression(float *y, unsigned int length)
     //printf("slope = %f, intercept = %f\n", slope, intercept);
 
     for (i = 0; i < length; i++) {
-        y[i] = y[i] - (slope * i + intercept);
+        y[i] = y[i] - (float)(slope * i + intercept);
     }
 
     return 0;

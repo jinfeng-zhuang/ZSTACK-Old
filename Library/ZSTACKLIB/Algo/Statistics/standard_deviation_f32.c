@@ -8,14 +8,13 @@ extern void power_f32(float *src, unsigned int size, float *result);
 
 void standard_deviation_f32(float *src, unsigned int size, float *result)
 {
-    unsigned int i;
     float sumOfSquare;
     float sum;
 
     power_f32(src, size, &sumOfSquare);
     sum_f32(src, size, &sum);
 
-    *result = sqrt((sumOfSquare - sum *sum / size) / (size - 1));
+    *result = (float)sqrt((sumOfSquare - sum *sum / size) / (size - 1));
 }
 
 #elif __arm__

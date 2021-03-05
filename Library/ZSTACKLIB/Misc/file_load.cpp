@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <zstack.h>
 
 #define __func__ __FUNCTION__
@@ -6,7 +8,7 @@ unsigned char *file_load(const char* filename, unsigned int *size)
 {
     int ret = 0;
     FILE* fp = NULL;
-    unsigned int file_size = 0;
+    uint64_t file_size = 0;
     unsigned int bytes_read = 0;
     unsigned char* buffer = NULL;
 
@@ -25,7 +27,7 @@ unsigned char *file_load(const char* filename, unsigned int *size)
         return NULL;
     }
 
-    buffer = (unsigned char*)malloc(file_size);
+    buffer = (unsigned char*)malloc((unsigned int)file_size);
     if (NULL == buffer) {
         printf("%s: malloc failed %d\n", __func__, file_size);
         goto END;
@@ -33,7 +35,7 @@ unsigned char *file_load(const char* filename, unsigned int *size)
 
     _fseeki64(fp, 0, SEEK_SET);
 
-    bytes_read = fread(buffer, sizeof(unsigned char), file_size, fp);
+    bytes_read = fread(buffer, sizeof(unsigned char), (unsigned int)file_size, fp);
     if (bytes_read != file_size) {
         printf("%s: fread failed %d\n", __func__, bytes_read);
         goto END;
@@ -43,7 +45,7 @@ END:
     if (fp)
         fclose(fp);
 
-    *size = file_size;
+    *size = (unsigned int)file_size;
 
     return buffer;
 }
@@ -54,6 +56,8 @@ unsigned char *file_load_ex(const char* filename, unsigned long long offset, uns
     FILE* fp = NULL;
     unsigned int bytes_read = 0;
     unsigned char* buffer = NULL;
+
+    info("Offset [%llx]\n", offset);
 
     fp = fopen(filename, "rb");
     if (NULL == fp) {
@@ -68,6 +72,8 @@ unsigned char *file_load_ex(const char* filename, unsigned long long offset, uns
         printf("%s: malloc failed %d\n", __func__, size);
         goto END;
     }
+
+    memset(buffer, 0, size);
 
     bytes_read = fread(buffer, sizeof(unsigned char), size, fp);
     if (bytes_read != size) {

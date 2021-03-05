@@ -18,7 +18,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	HDC hdc;
 	PAINTSTRUCT ps;
 	HINSTANCE hInstance;
-	int i;
     HBRUSH hbrush;
     HBRUSH hbrush_origin;
     RECT client_rect;
@@ -78,11 +77,11 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         
         GetClientRect(hWnd, &client_rect);
 
-        progress_wp = (float)wp_new * 100 / end_new;
-        progress_rp = (float)rp_new * 100 / end_new;
+        progress_wp = (unsigned int)wp_new * 100 / end_new;
+        progress_rp = (unsigned int)rp_new * 100 / end_new;
 
-        progress_wp = (float)progress_wp * (client_rect.right - client_rect.left) / 100;
-        progress_rp = (float)progress_rp * (client_rect.right - client_rect.left) / 100;
+        progress_wp = (unsigned int)progress_wp * (client_rect.right - client_rect.left) / 100;
+        progress_rp = (unsigned int)progress_rp * (client_rect.right - client_rect.left) / 100;
         
         InvalidateRect(hWnd, &client_rect, TRUE);
         break;

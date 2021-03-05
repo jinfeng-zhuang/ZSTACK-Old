@@ -14,7 +14,7 @@ int wavegen(float *output, int length, int freq, int sample_freq)
 
 	for (i = 0; i < length; i++) {
 		//value = sin(1.0 * freq * PI * i * 2.0 / sample_freq);
-        value = sin(1.0 * freq * DOUBLE_PI * i / sample_freq);
+        value = (float)sin(1.0 * freq * DOUBLE_PI * i / sample_freq);
 
 		output[i] = value;
 	}
@@ -31,7 +31,7 @@ int wavegen_complex(float *output, int length, int freq, int sample_freq)
 		return -1;
 
 	for (i = 0; i < length; i++) {
-		value = sin(freq * i * DOUBLE_PI) / sample_freq;
+		value = (float)sin(freq * i * DOUBLE_PI) / sample_freq;
 
 		output[i * 2 + 0] = value;
 		output[i * 2 + 1] = 0;

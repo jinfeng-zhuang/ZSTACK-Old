@@ -4,19 +4,19 @@
 #include <math.h>
 
 #define DOUBLE_PI   6.283185307179586476925286766559
-#define PI 3.141592653589793
+#define PI 3.1415926
 
 // data 是复数：实数，虚数，实数，虚数
 // data 最后也是输出部分
 // N = 复数的数量
-void fft_complex(float * data, int n, int isInverse)
+void fft_complex(double * data, int n, int isInverse)
 {
     // not correct !!!
     return;
 
     int mmax, m, j, step, i;
-    float temp;
-    float theta, sin_htheta, sin_theta, pwr, wr, wi, tempr, tempi;
+    double temp;
+    double theta, sin_htheta, sin_theta, pwr, wr, wi, tempr, tempi;
     //n = 2 * (1 << n);
     n = 2 * n;
     int nn = n >> 1;
@@ -81,11 +81,12 @@ void fft(float *dataR, float *dataI, int N)
 {
 	int i,j,k,r;
 	int p,L,B;
-	unsigned int I,J,K,F0,F1,m,n;
+    int I, J;
+	unsigned int F0,F1,m,n;
 	float Tr,Ti,temp;
     int M;
 
-    M = log((double)N) / log(2.0);
+    M = (int)(log((double)N) / log(2.0));
 
 	//输入序列倒序
 	for(I=0;I< N;I++)   //根据规律四，需要对数组元素执行码间倒序
@@ -136,8 +137,8 @@ void fft(float *dataR, float *dataI, int N)
 					//数组下标定为r
 					r=1;
 					r=j+2*B*i;
-					Tr=dataR[r+B]*cos(2.0*PI*p/N) + dataI[r+B]*sin(2.0*PI*p/N);
-					Ti=dataI[r+B]*cos(2.0*PI*p/N) - dataR[r+B]*sin(2.0*PI*p/N);
+					Tr=dataR[r+B]*(float)cos(2.0*PI*p/N) + dataI[r+B]*(float)sin(2.0*PI*p/N);
+					Ti=dataI[r+B]*(float)cos(2.0*PI*p/N) - dataR[r+B]*(float)sin(2.0*PI*p/N);
 					dataR[r+B]=dataR[r]-Tr;
 					dataI[r+B]=dataI[r]-Ti;
 					dataR[r]=dataR[r]+Tr;

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8A45A6DA-907C-45CE-92B6-ACC0EA43266C}</ProjectGuid>
+    <RootNamespace>zstack</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.28916.169</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>getopt.lib;libpng.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <AssemblerOutput>AssemblyCode</AssemblerOutput>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) $(SolutionDir)\Library</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="3rdparty\cJSON.c" />
+    <ClCompile Include="3rdparty\tinyxml2.cpp" />
+    <ClCompile Include="Algo\BasicMath\add_f32.c" />
+    <ClCompile Include="Algo\BasicMath\dot_product_f32.c" />
+    <ClCompile Include="Algo\BasicMath\mul_f32.c" />
+    <ClCompile Include="Algo\BasicMath\offset_f32.c" />
+    <ClCompile Include="Algo\BasicMath\scale_f32.c" />
+    <ClCompile Include="Algo\BasicMath\sub_f32.c" />
+    <ClCompile Include="Algo\BasicMath\sum_f32.c" />
+    <ClCompile Include="Algo\fft.cpp" />
+    <ClCompile Include="Algo\hanning_window.cpp" />
+    <ClCompile Include="Algo\linear_regression.cpp" />
+    <ClCompile Include="Algo\Statistics\max_f32.c" />
+    <ClCompile Include="Algo\Statistics\mean_f32.c" />
+    <ClCompile Include="Algo\Statistics\min_f32.c" />
+    <ClCompile Include="Algo\Statistics\power_f32.c" />
+    <ClCompile Include="Algo\Statistics\rms_f32.c" />
+    <ClCompile Include="Algo\Statistics\standard_deviation_f32.c" />
+    <ClCompile Include="Algo\Statistics\variance_f32.c" />
+    <ClCompile Include="Algo\wavegen.cpp" />
+    <ClCompile Include="Codec\bitstream_init.cpp" />
+    <ClCompile Include="Codec\byte_aligned.cpp" />
+    <ClCompile Include="Codec\g_nalu_callback.cpp" />
+    <ClCompile Include="Codec\more_rbsp_data.cpp" />
+    <ClCompile Include="Codec\nalu_parse_all.cpp" />
+    <ClCompile Include="Codec\pic_parameter_set_rbsp.cpp" />
+    <ClCompile Include="Codec\rbsp_trailing_bits.cpp" />
+    <ClCompile Include="Codec\se.cpp" />
+    <ClCompile Include="Codec\slice_layer_without_partitioning_rbsp.cpp" />
+    <ClCompile Include="Codec\sps_proc.cpp" />
+    <ClCompile Include="Codec\u.cpp" />
+    <ClCompile Include="Codec\ue.cpp" />
+    <ClCompile Include="Misc\count_char.cpp" />
+    <ClCompile Include="Misc\file_append.cpp" />
+    <ClCompile Include="Misc\file_load.cpp" />
+    <ClCompile Include="Misc\file_save.cpp" />
+    <ClCompile Include="Misc\fsize.cpp" />
+    <ClCompile Include="Misc\get_ms.cpp" />
+    <ClCompile Include="Misc\hexdump.cpp" />
+    <ClCompile Include="Misc\list.c" />
+    <ClCompile Include="Misc\load_png.cpp" />
+    <ClCompile Include="Misc\log.cpp" />
+    <ClCompile Include="Misc\mem_format_parser.cpp" />
+    <ClCompile Include="Misc\print_usage.cpp" />
+    <ClCompile Include="Misc\readlines.cpp" />
+    <ClCompile Include="Misc\replace_char.cpp" />
+    <ClCompile Include="Misc\ringbuf.cpp" />
+    <ClCompile Include="Misc\split.cpp" />
+    <ClCompile Include="Misc\tcp_client.cpp" />
+    <ClCompile Include="Misc\trim.cpp" />
+    <ClCompile Include="Misc\yuv_size.c" />
+    <ClCompile Include="Thread\DrawThread.cpp" />
+    <ClCompile Include="Thread\FrameGenerator.cpp" />
+    <ClCompile Include="VSilicon\avmips_get_pts_desc.cpp" />
+    <ClCompile Include="VSilicon\avmips_get_ves_desc.cpp" />
+    <ClCompile Include="VSilicon\dbg_client.cpp" />
+    <ClCompile Include="VSilicon\dump_display_registers.cpp" />
+    <ClCompile Include="VSilicon\field_merge.cpp" />
+    <ClCompile Include="VSilicon\mpegformat.cpp" />
+    <ClCompile Include="VSilicon\pman_disable.cpp" />
+    <ClCompile Include="VSilicon\vs_chip_id_get.cpp" />
+    <ClCompile Include="VSilicon\vs_disable_avsync.cpp" />
+    <ClCompile Include="VSilicon\vs_get_Ready2DispQ_value.cpp" />
+    <ClCompile Include="VSilicon\yuv.cpp" />
+    <ClCompile Include="WindowClasses\ArticleBoard.cpp" />
+    <ClCompile Include="WindowClasses\BGRABoard.cpp" />
+    <ClCompile Include="WindowClasses\BitmapBoard.cpp" />
+    <ClCompile Include="WindowClasses\BitmapDynamicBoard.cpp" />
+    <ClCompile Include="WindowClasses\CardBoard.cpp" />
+    <ClCompile Include="WindowClasses\CMDBoard.cpp" />
+    <ClCompile Include="WindowClasses\CurveBoard.cpp" />
+    <ClCompile Include="WindowClasses\CustomWindowClassesInit.cpp" />
+    <ClCompile Include="WindowClasses\CustomWindowClassRegister.cpp" />
+    <ClCompile Include="WindowClasses\DoubleBufferBoard.cpp" />
+    <ClCompile Include="WindowClasses\EmptyBoard.cpp" />
+    <ClCompile Include="WindowClasses\FieldMergeWindow.cpp" />
+    <ClCompile Include="WindowClasses\FieldMergeWindowEx.cpp" />
+    <ClCompile Include="WindowClasses\Game2Board.cpp" />
+    <ClCompile Include="WindowClasses\GameBoard.cpp" />
+    <ClCompile Include="WindowClasses\HexViewWindow.cpp" />
+    <ClCompile Include="WindowClasses\HTMLBoard.cpp" />
+    <ClCompile Include="WindowClasses\ListBoard.cpp" />
+    <ClCompile Include="WindowClasses\LogBoard.cpp" />
+    <ClCompile Include="WindowClasses\MenuBoard.cpp" />
+    <ClCompile Include="WindowClasses\MyButton.cpp" />
+    <ClCompile Include="WindowClasses\PaintBoard.cpp" />
+    <ClCompile Include="WindowClasses\Platform.cpp" />
+    <ClCompile Include="WindowClasses\PngBoard.cpp" />
+    <ClCompile Include="WindowClasses\ProgressBoard.cpp" />
+    <ClCompile Include="WindowClasses\RingBufferBoard.cpp" />
+    <ClCompile Include="WindowClasses\RingBufferWindow.cpp" />
+    <ClCompile Include="WindowClasses\ScrollBoard.cpp" />
+    <ClCompile Include="WindowClasses\TextBoard.cpp" />
+    <ClCompile Include="WindowClasses\TransferWindow.cpp" />
+    <ClCompile Include="WindowClasses\TVBoard.cpp" />
+    <ClCompile Include="WindowClasses\YUVWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Include\zstack\algo.h" />
+    <ClInclude Include="..\Include\zstack\log.h" />
+    <ClInclude Include="..\Include\zstack\misc.h" />
+    <ClInclude Include="..\Include\zstack\net.h" />
+    <ClInclude Include="..\Include\zstack\platform.h" />
+    <ClInclude Include="..\Include\zstack\ringbuf.h" />
+    <ClInclude Include="..\Include\zstack\tcp.h" />
+    <ClInclude Include="..\Include\zstack\ui.h" />
+    <ClInclude Include="..\Include\zstack\window_class.h" />
+    <ClInclude Include="..\Include\zstack\yuv.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

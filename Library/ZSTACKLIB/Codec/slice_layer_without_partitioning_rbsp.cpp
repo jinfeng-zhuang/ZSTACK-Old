@@ -200,9 +200,9 @@ int slice_layer_without_partitioning_rbsp_parse(unsigned char* buffer, unsigned 
 
     int MbaffFrameFlag = 0; // TODO
 
-    unsigned int CurrMbAddr = slice.header.first_mb_in_slice * (1 + MbaffFrameFlag);
+    //unsigned int CurrMbAddr = slice.header.first_mb_in_slice * (1 + MbaffFrameFlag);
     int moreDataFlag = 1;
-    int prevMbSkipped = 0;
+    //int prevMbSkipped = 0;
 
     do {
         if (moreDataFlag) {
@@ -223,9 +223,9 @@ int slice_layer_without_partitioning_rbsp_parse(unsigned char* buffer, unsigned 
                     // mb_pred()
                 }
 
-                if (1) {
+                //if (1) {
                     //slice.data.mb.coded_block_pattern = me(); // me ?
-                }
+                //}
             }
         }
 

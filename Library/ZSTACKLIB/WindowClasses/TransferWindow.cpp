@@ -20,7 +20,7 @@ struct dispinfo {
     int height;
 };
 
-struct dispinfo g_dispinfo;
+static struct dispinfo g_dispinfo;
 
 static void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
@@ -35,7 +35,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
     HDC hdcMem;
-    BITMAP bitmap;
     unsigned char* bgra = NULL;
     int i;
     BLENDFUNCTION ftn = { 0 };

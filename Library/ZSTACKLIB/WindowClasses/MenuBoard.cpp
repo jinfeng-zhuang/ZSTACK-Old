@@ -4,10 +4,7 @@
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    HDC hdc;
-    PAINTSTRUCT ps;
     HINSTANCE hInstance;
-    int i;
 
     //printf("Window Message: 0x%04X\n", uMsg);
 

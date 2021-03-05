@@ -56,8 +56,6 @@ int hexdump(void *start, unsigned int length)
         sprintf(&hexdump_buffer[strlen(hexdump_buffer)], "\n");
     }
 
-    info("[0] = %x\n", hexdump_buffer[0]);
-
     log_info("%s\n", hexdump_buffer);
     
     return 0;

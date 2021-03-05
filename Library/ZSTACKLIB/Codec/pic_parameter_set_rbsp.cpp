@@ -4,8 +4,8 @@ struct pic_parameter_set_rbsp pps;
 
 int pic_pararmeter_set_rbsp_parse(unsigned char* buffer, unsigned int length)
 {
-	int i;
-	int iGroup;
+	unsigned int i;
+	unsigned int iGroup;
 
 	bitstream_init(buffer, length);
 
@@ -56,7 +56,7 @@ int pic_pararmeter_set_rbsp_parse(unsigned char* buffer, unsigned int length)
 		pps.transform_8x8_mode_flag = u(1);
 		pps.pic_scaling_matrix_present_flag = u(1);
 		if (pps.pic_scaling_matrix_present_flag) {
-			for (i = 0; i < 6 + ((sps.chroma_format_idc != 3) ? 2 : 6) & pps.transform_8x8_mode_flag; i++) {
+			for (i = 0; i < 6 + (((sps.chroma_format_idc != 3) ? 2 : 6) & pps.transform_8x8_mode_flag); i++) {
 				pps.pic_scaling_list_present_flag[i] = u(1);
 				if (pps.pic_scaling_list_present_flag[i]) {
 					if (i < 6)

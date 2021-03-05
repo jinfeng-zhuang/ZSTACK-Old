@@ -172,7 +172,7 @@ int _log(int module, int lvl, char *filename, char *function, int linenum, const
 
     lvl = correct_level(lvl);
 
-    if ((lvl >= LOG_USER) && (lvl > log_mask[module])) {
+    if ((lvl >= LOG_USER) && ((unsigned int)lvl > log_mask[module])) {
         return 0;
     }
 

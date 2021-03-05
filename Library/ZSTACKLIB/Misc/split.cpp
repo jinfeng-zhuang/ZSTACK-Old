@@ -2,13 +2,13 @@
 
 int split(char *dst, int dst_size, char *src, int src_size, char flag, int *offset)
 {
-	int i;
-	int j;
+	unsigned int i;
+	unsigned int j;
 
 	if ((NULL == dst) || (NULL == src) || (NULL == offset))
 		return -1;
 
-	if (*offset >= strlen(src))
+	if ((unsigned int)*offset >= strlen(src))
 		return -1;
 
 	memset(dst, 0, dst_size);
@@ -22,7 +22,7 @@ int split(char *dst, int dst_size, char *src, int src_size, char flag, int *offs
 			dst[j] = src[i];
 			j++;
 
-			if (j >= dst_size)
+			if (j >= (unsigned int)dst_size)
 				break;
 		}
 	}

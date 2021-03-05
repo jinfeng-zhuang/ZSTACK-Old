@@ -1,10 +1,10 @@
 #include <vs/sx.h>
 #include <vs/dbg.h>
 
+#define LOG_MODULE LOG_MODULE_AVMIPS
+
 #include <zstack/misc.h>
 #include <zstack/log.h>
-
-#define LOG_MODULE LOG_MODULE_AVMIPS
 
 static const char *chip_name_array[] = {
     "UNKNOWN",

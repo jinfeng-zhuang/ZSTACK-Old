@@ -219,7 +219,6 @@ static void AttackAdjustStep(RECT from, RECT to)
 static void Attack(int from, int to)
 { 
     POINT a, b;
-    int c;
 
     attack.valid = 1;
 
@@ -260,7 +259,6 @@ static int selected = -1;
 
 static void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-    RECT rect;
     int i;
 
     // 更新卡牌位置和箭头以及其他特效？
@@ -310,15 +308,10 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     HDC hdcFrame;
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
-    int i;
-    HWND hwnd;
-    POINT mousePos;
     static HWND hwndSelected = NULL;
     RECT rect;
-    POINT delta;
     static int drag = 0;
     static int status = 0;
-    POINT apt[4];
     static POINT mousePosPrev = { 0, 0 };
     int index;
     

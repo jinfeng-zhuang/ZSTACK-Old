@@ -19,8 +19,6 @@ unsigned char *avmips_dump_pts_queue(int channel)
 {
     int ret;
     unsigned int ves_addr;
-    unsigned int remain;
-    int flag_dir;
     struct VideoPTSQueue_t *queue;
 
     queue = (struct VideoPTSQueue_t *)malloc(sizeof(struct VideoPTSQueue_t *));

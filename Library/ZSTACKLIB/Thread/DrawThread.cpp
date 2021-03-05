@@ -142,9 +142,10 @@ static int DrawThread(void* argv)
 int DrawThread_Init(HWND hwnd)
 {
     int i;
+#if 0
     HANDLE hThread;
+#endif
     HDC hdc;
-    int width, height;
     RECT rect;
 
 #if 0

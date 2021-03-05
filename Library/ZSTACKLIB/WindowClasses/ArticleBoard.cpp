@@ -15,7 +15,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	HDC hdc;
 	PAINTSTRUCT ps;
 	HINSTANCE hInstance;
-	int i;
 	TEXTMETRICW tm;
     RECT rect;
     RECT clientrect;
@@ -24,7 +23,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     COLORREF bgcolor;
     LOGFONT logicfont;
     HFONT hfont;
-    SIZE size;
 
 	//printf("Window Message: 0x%04X\n", uMsg);
 

@@ -4,8 +4,6 @@
 #include <vs/sx.h>
 #include <vs/dbg.h>
 
-#define LOG_MODULE LOG_MODULE_AVMIPS
-
 // SX7A, SX7B, SX8B use the same address for UMAC0/1/2, according to SPG
 static unsigned int pman_umac_ctrl_base[3] = {
     0xF5005000, 0xF5008000, 0xF5036000
@@ -47,7 +45,6 @@ int vs_pman_enable(enum sx_chip chip, enum sx_security_group group, unsigned int
         }
     }
 
-NOT_FOUND:
     log_warn("pman address not found\n");
     return -1;
 

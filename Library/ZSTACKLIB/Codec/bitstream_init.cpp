@@ -10,7 +10,7 @@ int bitstream_init(unsigned char *buffer, unsigned int length)
 	if (NULL != bitstream.bits)
 		free(bitstream.bits);
 
-	bits = (unsigned char *)malloc(length << 3 + 1);
+	bits = (unsigned char *)malloc((length << 3) + 1);
 	if (NULL == bits)
 		return -1;
 

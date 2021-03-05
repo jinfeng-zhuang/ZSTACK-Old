@@ -59,6 +59,7 @@ extern void print_usage(void);
 extern int param_parser(int argc, char *argv[], struct application *app);
 
 extern int64_t fsize(const char *filename);
+extern int64_t file_size(const char *filename);
 
 /*
  * Attention: str should be in array!!!

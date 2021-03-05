@@ -4,8 +4,6 @@
 #include <zstack/net.h>
 #include <zstack/log.h>
 
-#define LOG_MODULE LOG_MODULE_AVMIPS
-
 #define VS_DEBUG_PORT (65528)
 
 struct host_request {

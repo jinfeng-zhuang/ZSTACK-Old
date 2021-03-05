@@ -114,8 +114,9 @@
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				AssemblerOutput="1"
-				GenerateXMLDocumentationFiles="true"
+				GenerateXMLDocumentationFiles="false"
 				WarningLevel="3"
+				WarnAsError="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool

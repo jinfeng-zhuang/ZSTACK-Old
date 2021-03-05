@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <Windows.h>
 #include <math.h>
 #include <gdiplus.h>
@@ -12,19 +14,13 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     HDC hdc;
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
-    int radius;
-    int angle;
     POINT center = { 100, 100 };
-    LOGFONT logicfont;
-    HFONT hfont;
-    int index;
     static HDC hdcMem;
-    COLORREF color;
     int i, j;
     FILE* fp;
     int file_size;
     static unsigned char* yuv_buffer = NULL;
-    unsigned char r, g, b, a;
+    unsigned char r, g, b;
     unsigned char y, u, v;
 
     //printf("Window Message: 0x%04X\n", uMsg);

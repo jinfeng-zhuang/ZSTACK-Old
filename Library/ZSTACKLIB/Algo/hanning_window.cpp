@@ -13,7 +13,7 @@ int hanning_window(float *io, unsigned int size)
 
     for (i = 0; i < size; i++) {
         temp = 0.5 * (1.0 + cos(2.0 * M_PI * i / (size-1) - M_PI));
-        io[i] *= temp;
+        io[i] *= (float)temp;
     }
 
     return 0;

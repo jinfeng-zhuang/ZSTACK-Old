@@ -54,7 +54,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     static HBITMAP hPaper;
     static HDC hDeck;
     static HBRUSH hBrush;
-    RECT rect;
     PAINTSTRUCT ps;
 
     switch (uMsg)

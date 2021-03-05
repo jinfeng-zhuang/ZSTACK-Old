@@ -68,7 +68,7 @@ int config_parse(struct config *config, char *buffer)
     array = cJSON_GetObjectItemCaseSensitive(monitor_json, "interval");
     for (i = 0; i < 3; i++) {
         item = cJSON_GetArrayItem(array, i);
-        config->interval[i] = item->valuedouble;
+        config->interval[i] = item->valueint;
     }
 
     item = cJSON_GetObjectItemCaseSensitive(monitor_json, "running_threshold_digit");
@@ -127,56 +127,10 @@ int config_parse(struct config *config, char *buffer)
     return 0;
 }
 
-/* return 1 if the monitor supports full hd, 0 otherwise */
-int supports_full_hd(const char * const monitor)
-{
-    const cJSON *resolution = NULL;
-    const cJSON *resolutions = NULL;
-    const cJSON *name = NULL;
-    int status = 0;
-    cJSON *monitor_json;
-    
-    monitor_json = cJSON_Parse(monitor);
-    if (monitor_json == NULL)
-    {
-        const char *error_ptr = cJSON_GetErrorPtr();
-        if (error_ptr != NULL)
-        {
-            fprintf(stderr, "Error before: %s\n", error_ptr);
-        }
-        status = 0;
-        goto end;
-    }
-
-    name = cJSON_GetObjectItemCaseSensitive(monitor_json, "name");
-    if (cJSON_IsString(name) && (name->valuestring != NULL))
-    {
-        printf("Checking monitor \"%s\"\n", name->valuestring);
-    }
-
-    resolutions = cJSON_GetObjectItemCaseSensitive(monitor_json, "resolutions");
-    cJSON_ArrayForEach(resolution, resolutions)
-    {
-        cJSON *width = cJSON_GetObjectItemCaseSensitive(resolution, "width");
-        cJSON *height = cJSON_GetObjectItemCaseSensitive(resolution, "height");
-
-        if (!cJSON_IsNumber(width) || !cJSON_IsNumber(height))
-        {
-            status = 0;
-            goto end;
-        }
-
-        printf("%dx%f\n", width->valueint, height->valuedouble);
-    }
-
-end:
-    cJSON_Delete(monitor_json);
-    return status;
-}
-
 int main(int argc, char *argv[])
 {
     int ret;
+    struct config config;
 
     if (param_parser(argc, argv, &app) == -1) {
         print_usage();
@@ -187,16 +141,15 @@ int main(int argc, char *argv[])
 
     app.file_content = file_load(app.param.filename, &app.file_size);
 
-    //ret = supports_full_hd((const char *)app.file_content);
-
-    //info("supports_full_hd return %d\n", ret);
-
-    struct config config;
+    memset(&config, 0, sizeof(struct config));
 
     config_parse(&config, (char *)app.file_content);
 
     info("config dump\n");
     info("version: %f\n", config.version);
+    info("speed_rpm: %d\n", config.ref_speed_rpm);
+    info("speed_rpm_array: %d %d %d\n", config.ref_speed_rpm_array[0],config.ref_speed_rpm_array[1],config.ref_speed_rpm_array[2]);
+    info("interval: %f %f %f\n", config.interval[0],config.interval[1],config.interval[2]);
 
     return 0;
 }

@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifdef _WIN32
 #include <Windows.h>
 #include <time.h>

@@ -1,9 +1,9 @@
 #include <Windows.h>
 
+#define LOG_MODULE LOG_MODULE_UI
+
 #include <zstack/ringbuf.h>
 #include <zstack/log.h>
-
-#define LOG_MODULE LOG_MODULE_UI
 
 static void Draw(HDC hdc, int width, int height, HBRUSH brush, struct ring *desc)
 {
@@ -11,9 +11,7 @@ static void Draw(HDC hdc, int width, int height, HBRUSH brush, struct ring *desc
     //int width;
     //int height;
     struct ring normalize;
-    int position[4];
     float scale;
-    RECT rect;
     
     //GetClientRect(hdc, &rect);
     
@@ -27,9 +25,9 @@ static void Draw(HDC hdc, int width, int height, HBRUSH brush, struct ring *desc
     
     scale = (float)normalize.end / width;
 
-    normalize.wp = normalize.wp / scale;
-    normalize.rp = normalize.rp / scale;
-    normalize.end = normalize.end / scale;
+    normalize.wp = (unsigned int)(normalize.wp / scale);
+    normalize.rp = (unsigned int)(normalize.rp / scale);
+    normalize.end = (unsigned int)(normalize.end / scale);
     
     Rectangle(hdc, 0, 0, normalize.end, height);
     

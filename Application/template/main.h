@@ -17,7 +17,7 @@ struct application {
     } param;
 
     unsigned char *input_file_content;
-    unsigned int   input_file_size;
+    unsigned long long input_file_size;
 
     unsigned char *output_file_content;
     unsigned int   output_file_size;

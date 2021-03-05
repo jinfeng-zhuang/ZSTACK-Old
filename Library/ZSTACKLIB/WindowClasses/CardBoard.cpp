@@ -95,7 +95,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     HDC hdcImg;
     PAINTSTRUCT ps;
     HINSTANCE hInstance;
-    int i;
     static HBITMAP hPngFr;
     static HBITMAP hPngBk;
     unsigned char* data;
