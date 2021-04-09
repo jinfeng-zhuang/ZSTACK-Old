@@ -10,6 +10,11 @@
 #include <stdint.h>
 #include <time.h>
 
+#ifndef _WIN32
+#define _fseeki64 fseek
+#define _ftelli64 ftell
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 
 //#ifdef _WIN32
