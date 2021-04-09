@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     data.hwnd = CreateWindowEx(
         0,
-        classname,//TEXT("FieldMergeWindow"),
+        classname,
         TEXT("test_window_class"),
         WS_OVERLAPPEDWINDOW,
         0, 0, 800, 600,
