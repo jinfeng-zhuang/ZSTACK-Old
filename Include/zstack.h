@@ -28,6 +28,8 @@
 
 #include <zstack/list.h>
 
+#include <stdint.h>
+
 extern int window_class_register(void);
 
 #endif

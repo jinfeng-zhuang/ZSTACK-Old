@@ -1,6 +1,12 @@
 #ifndef ZSTACK_YUV_H
 #define ZSTACK_YUV_H
 
+enum YUVFormat {
+    YUV_I420 = 0,
+    YUV_I422,
+    YUV_I444,
+};
+
 struct YUVWindowStruct {
     unsigned char *buffer;
     int width;

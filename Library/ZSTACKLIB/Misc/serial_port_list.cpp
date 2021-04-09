@@ -1,3 +1,5 @@
+#ifdef _WIN32
+
 #include <Windows.h>
 #include <stdio.h>
 
@@ -32,3 +34,4 @@ void serial_port_list(void)
     
     RegCloseKey(hKey);
 }
+#endif
