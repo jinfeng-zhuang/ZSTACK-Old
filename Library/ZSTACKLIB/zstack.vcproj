@@ -181,31 +181,31 @@
 					Name="Statistics"
 					>
 					<File
-						RelativePath=".\Algo\Statistics\max_f32.c"
+						RelativePath=".\Algo\Statistics\max_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\Statistics\mean_f32.c"
+						RelativePath=".\Algo\Statistics\mean_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\Statistics\min_f32.c"
+						RelativePath=".\Algo\Statistics\min_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\Statistics\power_f32.c"
+						RelativePath=".\Algo\Statistics\power_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\Statistics\rms_f32.c"
+						RelativePath=".\Algo\Statistics\rms_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\Statistics\standard_deviation_f32.c"
+						RelativePath=".\Algo\Statistics\standard_deviation_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\Statistics\variance_f32.c"
+						RelativePath=".\Algo\Statistics\variance_f32.cpp"
 						>
 					</File>
 				</Filter>
@@ -213,31 +213,31 @@
 					Name="BasicMath"
 					>
 					<File
-						RelativePath=".\Algo\BasicMath\add_f32.c"
+						RelativePath=".\Algo\BasicMath\add_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\BasicMath\dot_product_f32.c"
+						RelativePath=".\Algo\BasicMath\dot_product_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\BasicMath\mul_f32.c"
+						RelativePath=".\Algo\BasicMath\mul_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\BasicMath\offset_f32.c"
+						RelativePath=".\Algo\BasicMath\offset_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\BasicMath\scale_f32.c"
+						RelativePath=".\Algo\BasicMath\scale_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\BasicMath\sub_f32.c"
+						RelativePath=".\Algo\BasicMath\sub_f32.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Algo\BasicMath\sum_f32.c"
+						RelativePath=".\Algo\BasicMath\sum_f32.cpp"
 						>
 					</File>
 				</Filter>
@@ -522,7 +522,7 @@
 				Name="3rdparty"
 				>
 				<File
-					RelativePath=".\3rdparty\cJSON.c"
+					RelativePath=".\3rdparty\cJSON.cpp"
 					>
 				</File>
 				<File

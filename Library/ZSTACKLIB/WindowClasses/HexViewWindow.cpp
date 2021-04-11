@@ -2,8 +2,6 @@
 
 #include <zstack.h>
 
-static struct YUVWindowData data;
-
 static char content[512] = "Hello World";
 
 static void Draw(HDC hdc, int width, int height, HBRUSH brush, struct YUVWindowData *data)
@@ -63,12 +61,12 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_PAINT:
         hdcWindow = BeginPaint(hWnd, &ps);
         GetClientRect(hWnd, &rect);
-        Draw(hDeck, rect.right - rect.left, rect.bottom - rect.top, hBrush, &data);
+        //Draw(hDeck, rect.right - rect.left, rect.bottom - rect.top, hBrush, &data);
         BitBlt(hdcWindow, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hDeck, 0, 0, SRCCOPY);
         EndPaint(hWnd, &ps);
         break;
     case WM_USER:
-        memcpy((unsigned char *)&data, (unsigned char *)wParam, sizeof(struct YUVWindowData));
+        //memcpy((unsigned char *)&data, (unsigned char *)wParam, sizeof(struct YUVWindowData));
         InvalidateRect(hWnd, NULL, FALSE);
         break;
     case WM_DESTROY:

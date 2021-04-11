@@ -7,7 +7,6 @@ extern void power_f32(float *src, unsigned int size, float *result);
 
 void rms_f32(float *src, unsigned int size, float *result)
 {
-    unsigned int i;
     float sum = 0.0;
 
     power_f32(src, size, &sum);
