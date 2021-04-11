@@ -7,7 +7,6 @@ struct application app;
 int main(int argc, char *argv[])
 {
     MSG msg;
-    unsigned int data;
 
     if (param_parser(argc, argv, &app) == -1) {
         print_usage();

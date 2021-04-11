@@ -28,7 +28,10 @@ struct config {
     int index;
     int total;
 
+    int source; // 0 - file, 1 - pointer
+
     unsigned char *data;
+    unsigned char *external_data;
 } config_array[INSTANCE_MAX];
 
 static struct config *GetConfig(HWND hwnd)
@@ -62,6 +65,7 @@ static void Draw(HWND hwnd)
     FILE *fp;
     unsigned int width;
     unsigned int height;
+    unsigned char *data;
 
     GetClientRect(hwnd, &rect);
 
@@ -71,6 +75,7 @@ static void Draw(HWND hwnd)
     config = GetConfig(hwnd);
     if (NULL == config)
         return;
+
     if (0 == config->filename[0]) {
         draw_text(config->hDeck, L"Left Click to select a YUV file", &rect, 0x000000, 0xFFFFFF, 18);
     }
@@ -80,18 +85,21 @@ static void Draw(HWND hwnd)
             return;
         }
         
-        if (NULL == config->data) {
-            return;
-        }
+        if ((config->source == 0) && (config->data)) {
+            fseek(fp, config->width * config->height * 3 / 2 * config->index, SEEK_SET);
+            fread(config->data, 1, config->width * config->height, fp);
 
-        fseek(fp, config->width * config->height * 3 / 2 * config->index, SEEK_SET);
-        fread(config->data, 1, config->width * config->height, fp);
+            data = config->data;
+        }
+        else if (config->source == 1) {
+            data = config->external_data;
+        }
 
         fclose(fp);
         
         for (i = 0; i < width; i++) {
             for (j = 0; j < height; j++) {
-                r = g = b = I420_Y(i * (config->width / width), j * (config->height / height), config->stride, config->height, config->data);
+                r = g = b = I420_Y(i * (config->width / width), j * (config->height / height), config->stride, config->height, data);
                 color = r<<0 | g<<8 | b<<16;
                 SetPixel(config->hDeck, i, j, color);
             }
@@ -152,18 +160,30 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             config->width = (lParam >> 16) & 0xFFFF;
             config->stride = (lParam >> 16) & 0xFFFF; // TODO
             config->height = (lParam) & 0xFFFF;
+
+            if (config->data) {
+                free(config->data);
+                config->data = (unsigned char *)malloc(config->width * config->height); // TODO consider YUV format
+            }
         }
         else if (wParam == WIN_YUV_INDEX) {
             config->index = lParam;
         }
+        else if (wParam == WIN_YUV_DATA) {
+            *((unsigned int *)lParam) = (unsigned int)(config->data);
+        }
+        else if (wParam == WIN_YUV_SHOW) {
+            config->source = 1;
+            if (config->external_data) {
+                free(config->external_data);
+                config->external_data = (unsigned char *)malloc(config->width * config->height);
+                if (config->external_data) {
+                    memcpy(config->external_data, (unsigned char *)lParam, config->width * config->height);
+                }
+            }
+        }
         else {
         }
-
-        if (config->data) {
-            free(config->data);
-            config->data = (unsigned char *)malloc(config->width * config->height); // TODO consider YUV format
-        }
-
         InvalidateRect(hWnd, &rect, FALSE);
         break;
     case WM_LBUTTONDOWN:

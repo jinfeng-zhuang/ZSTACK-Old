@@ -10,7 +10,10 @@ extern "C" {
 enum {
     WIN_YUV_RESOLUTION,
     WIN_YUV_FORMAT,
-    WIN_YUV_INDEX
+    WIN_YUV_INDEX,
+    WIN_YUV_DATA,
+    WIN_YUV_SHOW,
+    WIN_YUV_GET_FILENAME,
 };
 
 extern unsigned int yuv_size(int width, int height, int format);

@@ -169,11 +169,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         database.top = atoi(database.content_fieldA);
         database.bottom = atoi(database.content_fieldB);
-        database.match = 0;
-
-        do_update = 1;
-
-        printf("wParam %x lParam %x\n", wParam, lParam);
 
         if ((HWND)lParam == database.button_prev) {
             if (database.bottom > 0)
@@ -192,7 +187,34 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         }
         else if ((HWND)lParam == database.match) {
             // do merge
+            unsigned int value;
+            unsigned char *top;
+            unsigned char *bottom;
+            unsigned char *output;
 
+            SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_DATA, (LPARAM)&value);
+            top = (unsigned char *)value;
+            SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_DATA, (LPARAM)&value);
+            bottom = (unsigned char *)value;
+
+            if ((top == NULL) || (bottom == NULL)) {
+                break;
+            }
+
+            output = (unsigned char *)malloc(database.width * database.height * 2);
+            if (NULL == output) {
+                break;
+            }
+            
+            int i;
+
+            for (i = 0; i < database.height; i++) {
+                memcpy(&output[database.width * i * 2], &top[database.width * i], database.width);
+                memcpy(&output[database.width * i * 2 + database.width], &bottom[database.width * i], database.width);
+            }
+
+            SendMessage(database.hwnd_yuv, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | (database.height * 2));
+            SendMessage(database.hwnd_yuv, WM_USER, WIN_YUV_SHOW, (LPARAM)&output);
         }
         else if ((HWND)lParam == database.hwnd_resolution) {
             if (EN_CHANGE == HIWORD(wParam)) {
@@ -201,6 +223,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
                 if (ret == 2) {
                     SendMessage(database.hwnd_yuv_top, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
                     SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
+                    SendMessage(database.hwnd_yuv, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
                 }
             }
         }
