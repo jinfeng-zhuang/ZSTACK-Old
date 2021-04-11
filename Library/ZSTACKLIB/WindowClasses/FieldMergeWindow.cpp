@@ -191,10 +191,8 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             do_update = 1;
         }
         else if ((HWND)lParam == database.match) {
-            database.top++;
-            _snprintf(database.content_fieldA, sizeof(database.content_fieldA), "%d", database.top);
-            SetWindowTextA(database.edit_fieldA, database.content_fieldA);
-            //database.match = 1;
+            // do merge
+
         }
         else if ((HWND)lParam == database.hwnd_resolution) {
             if (EN_CHANGE == HIWORD(wParam)) {
@@ -202,7 +200,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
                 ret = sscanf(database.content_resolution, "%dx%d", &database.width, &database.height);
                 if (ret == 2) {
                     SendMessage(database.hwnd_yuv_top, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
-                    //SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
+                    SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
                 }
             }
         }

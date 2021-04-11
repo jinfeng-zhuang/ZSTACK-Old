@@ -60,20 +60,21 @@ static void Draw(HWND hwnd)
     struct config *config;
     RECT rect;
     FILE *fp;
+    unsigned int width;
+    unsigned int height;
 
     GetClientRect(hwnd, &rect);
+
+    width = rect.right - rect.left;
+    height = rect.bottom - rect.top;
 
     config = GetConfig(hwnd);
     if (NULL == config)
         return;
-
     if (0 == config->filename[0]) {
         draw_text(config->hDeck, L"Left Click to select a YUV file", &rect, 0x000000, 0xFFFFFF, 18);
     }
     else {
-        memset(config->filename_ansi, 0, MAX_PATH);
-        WideCharToMultiByte(CP_ACP, 0, config->filename, -1, config->filename_ansi, MAX_PATH, NULL, NULL);
-
         fp = fopen(config->filename_ansi, "rb");
         if (NULL == fp) {
             return;
@@ -87,12 +88,10 @@ static void Draw(HWND hwnd)
         fread(config->data, 1, config->width * config->height, fp);
 
         fclose(fp);
-
-        //Rectangle(config->hDeck, 0, 0, config->width, config->height);
         
-        for (i = 0; i < config->width; i++) {
-            for (j=0; j <config->height; j++) {
-                r = g = b = I420_Y(i, j, config->stride, config->height, config->data);
+        for (i = 0; i < width; i++) {
+            for (j = 0; j < height; j++) {
+                r = g = b = I420_Y(i * (config->width / width), j * (config->height / height), config->stride, config->height, config->data);
                 color = r<<0 | g<<8 | b<<16;
                 SetPixel(config->hDeck, i, j, color);
             }
@@ -177,8 +176,11 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         ofn.lpstrInitialDir = NULL;
         ofn.lpstrTitle = TEXT("Select a YUV file");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
-        GetOpenFileName(&ofn);
-        InvalidateRect(hWnd, &rect, FALSE);
+        if (0 != GetOpenFileName(&ofn)) {
+            memset(config->filename_ansi, 0, MAX_PATH);
+            WideCharToMultiByte(CP_ACP, 0, config->filename, -1, config->filename_ansi, MAX_PATH, NULL, NULL);
+            InvalidateRect(hWnd, &rect, FALSE);
+        }
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
