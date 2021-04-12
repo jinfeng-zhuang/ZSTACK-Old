@@ -8,13 +8,20 @@ extern "C" {
 #include <Windows.h>
 
 enum {
-    WIN_YUV_RESOLUTION,
-    WIN_YUV_FORMAT,
-    WIN_YUV_INDEX,
-    WIN_YUV_DATA,
-    WIN_YUV_SHOW,
-    WIN_YUV_GET_FILENAME,
+    YUV_GET_INFO,
+    YUV_GET_FILENAME,
+    YUV_UPDATE,
 };
+
+#define YUV_STYLE_EXTERNAL  0x0001
+
+typedef struct {
+    unsigned char *data;
+    unsigned int width;
+    unsigned int height;
+    unsigned int stride;
+    unsigned int format;
+} YUV_INFO;
 
 extern unsigned int yuv_size(int width, int height, int format);
 extern int draw_text(HDC hdc, const WCHAR *text, RECT *rect, COLORREF bgcolor, COLORREF fgcolor, int fontsize);

@@ -9,38 +9,70 @@
 extern int YUVWindow_Register(HINSTANCE hInstance);
 
 static struct {
-    // window handler
-    HWND edit_fieldA;
-    HWND edit_fieldB;
-    CHAR content_fieldA[32];
-    CHAR content_fieldB[32];
-    HWND button_prev;
-    HWND button_next;
     HWND hwnd_yuv;
     HWND hwnd_yuv_top;
     HWND hwnd_yuv_bottom;
-    HWND match;
-    HWND hwnd_resolution;
-    CHAR content_resolution[32];
 
     // data
-    int top;
-    int bottom;
     int width;
     int height;
-} database;
+    unsigned char *data;
+
+    RECT top;
+    RECT bottom;
+    RECT result;
+} database; // TODO: not in stack
+
+static void layout_set(RECT *client)
+{
+    int width = client->right - client->left;
+    int height = client->bottom - client->top;
+    int margin = 10;
+
+    database.top.left = 0;
+    database.top.top = 0;
+    database.top.right = width / 2;
+    database.top.bottom = height / 2;
+
+    database.bottom.left = 0;
+    database.bottom.top = height / 2;
+    database.bottom.right = width / 2;
+    database.bottom.bottom = height;
+
+    database.result.left = width / 2;
+    database.result.top = 0;
+    database.result.right = width;
+    database.result.bottom = height;
+
+    // Add Padding
+    database.top.left += margin;
+    database.top.top += margin;
+    database.top.right -= margin;
+    database.top.bottom -= margin;
+
+    database.bottom.left += margin;
+    database.bottom.top += margin;
+    database.bottom.right -= margin;
+    database.bottom.bottom -= margin;
+
+    database.result.left += margin;
+    database.result.top += margin;
+    database.result.right -= margin;
+    database.result.bottom -= margin;
+}
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static HBITMAP hPaper;
     static HDC hDeck;
     static HBRUSH hBrush;
-    static struct ring ringbuffer = {0, 0, 0, 0};
-    HDC hdcWindow;
-    PAINTSTRUCT ps;
     HINSTANCE hInstance;
     int do_update = 0;
-    int ret;
+    YUV_INFO info_top;
+    YUV_INFO info_bottom;
+    int i;
+    YUV_INFO info_merge;
+    RECT rect;
 
     hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
 
@@ -53,89 +85,32 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         YUVWindow_Register(hInstance);
 
         //--------------------------------------------------------
-        database.edit_fieldA = CreateWindowEx(
-            0,
-            TEXT("EDIT"),
-            NULL,
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            0, 0, 50, 20,
-            hWnd,
-            NULL,
-            hInstance,
-            NULL);
-
-        database.edit_fieldB = CreateWindowEx(
-            0,
-            TEXT("EDIT"),
-            NULL,
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            50, 0, 50, 20,
-            hWnd,
-            NULL,
-            hInstance,
-            NULL);
-
-        database.button_prev = CreateWindowEx(
-            0,
-            TEXT("Button"),
-            TEXT("<<"),
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            100, 0, 50, 20,
-            hWnd,
-            NULL,
-            hInstance,
-            NULL);
-
-        database.button_next = CreateWindowEx(
-            0,
-            TEXT("Button"),
-            TEXT(">>"),
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            150, 0, 50, 20,
-            hWnd,
-            NULL,
-            hInstance,
-            NULL);
-
-        database.match = CreateWindowEx(
-            0,
-            TEXT("Button"),
-            TEXT("Merge"),
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            250, 0, 50, 20,
-            hWnd,
-            NULL,
-            hInstance,
-            NULL);
-
-        database.hwnd_resolution = CreateWindowEx(
-            0,
-            TEXT("EDIT"),
-            NULL,
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            250 + 60, 0, 100, 20,
-            hWnd,
-            NULL,
-            hInstance,
-            NULL);
+        GetClientRect(hWnd, &rect);
+        layout_set(&rect);
 
         database.hwnd_yuv = CreateWindowEx(
             0,
             TEXT("YUVWindow"),
             NULL,
-            WS_BORDER | WS_VISIBLE | WS_CHILD,
-            400, 30, 720, 576,
+            WS_BORDER | WS_VISIBLE | WS_CHILD | YUV_STYLE_EXTERNAL,
+            database.result.left,
+            database.result.top,
+            database.result.right - database.result.left,
+            database.result.bottom - database.result.top,
             hWnd,
             NULL,
             hInstance,
             NULL);
 
         database.hwnd_yuv_top = CreateWindowEx(
-            0,
+            WS_EX_TOOLWINDOW,
             TEXT("YUVWindow"),
             NULL,
             WS_BORDER | WS_VISIBLE | WS_CHILD,
-            0, 30, 720/2, 576/2,
+            database.top.left,
+            database.top.top,
+            database.top.right - database.top.left,
+            database.top.bottom - database.top.top,
             hWnd,
             NULL,
             hInstance,
@@ -146,94 +121,75 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             TEXT("YUVWindow"),
             NULL,
             WS_BORDER | WS_VISIBLE | WS_CHILD,
-            0, 30 + 576/2 + 10, 720/2, 576/2,
+            database.bottom.left,
+            database.bottom.top,
+            database.bottom.right - database.bottom.left,
+            database.bottom.bottom - database.bottom.top,
             hWnd,
             NULL,
             hInstance,
             NULL);
         break;
     case WM_SIZE:
-        //GetClientRect(hWnd, &rect);
+        GetClientRect(hWnd, &rect);
+        layout_set(&rect);
 
+        MoveWindow(database.hwnd_yuv_top,
+            database.top.left,
+            database.top.top,
+            database.top.right - database.top.left,
+            database.top.bottom - database.top.top,
+            TRUE);
+
+        MoveWindow(database.hwnd_yuv_bottom,
+            database.bottom.left,
+            database.bottom.top,
+            database.bottom.right - database.bottom.left,
+            database.bottom.bottom - database.bottom.top,
+            TRUE);
+
+        MoveWindow(database.hwnd_yuv,
+            database.result.left,
+            database.result.top,
+            database.result.right - database.result.left,
+            database.result.bottom - database.result.top,
+            TRUE);
         break;
-
-    case WM_PAINT:
-        hdcWindow = BeginPaint(hWnd, &ps);
-
-        EndPaint(hWnd, &ps);
-        break;
-
     case WM_COMMAND:
-        GetWindowTextA(database.edit_fieldA, database.content_fieldA, sizeof(database.content_fieldA));
-        GetWindowTextA(database.edit_fieldB, database.content_fieldB, sizeof(database.content_fieldB));
-
-        database.top = atoi(database.content_fieldA);
-        database.bottom = atoi(database.content_fieldB);
-
-        if ((HWND)lParam == database.button_prev) {
-            if (database.bottom > 0)
-                database.bottom--;
-            _snprintf(database.content_fieldB, sizeof(database.content_fieldB), "%d", database.bottom);
-            SetWindowTextA(database.edit_fieldB, database.content_fieldB);
-
-            do_update = 1;
-        }
-        else if ((HWND)lParam == database.button_next) {
-            database.bottom++;
-            _snprintf(database.content_fieldB, sizeof(database.content_fieldB), "%d", database.bottom);
-            SetWindowTextA(database.edit_fieldB, database.content_fieldB);
-
-            do_update = 1;
-        }
-        else if ((HWND)lParam == database.match) {
-            // do merge
-            unsigned int value;
-            unsigned char *top;
-            unsigned char *bottom;
-            unsigned char *output;
-
-            SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_DATA, (LPARAM)&value);
-            top = (unsigned char *)value;
-            SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_DATA, (LPARAM)&value);
-            bottom = (unsigned char *)value;
-
-            if ((top == NULL) || (bottom == NULL)) {
-                break;
-            }
-
-            output = (unsigned char *)malloc(database.width * database.height * 2);
-            if (NULL == output) {
-                break;
-            }
-            
-            int i;
-
-            for (i = 0; i < database.height; i++) {
-                memcpy(&output[database.width * i * 2], &top[database.width * i], database.width);
-                memcpy(&output[database.width * i * 2 + database.width], &bottom[database.width * i], database.width);
-            }
-
-            SendMessage(database.hwnd_yuv, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | (database.height * 2));
-            SendMessage(database.hwnd_yuv, WM_USER, WIN_YUV_SHOW, (LPARAM)&output);
-        }
-        else if ((HWND)lParam == database.hwnd_resolution) {
-            if (EN_CHANGE == HIWORD(wParam)) {
-                GetWindowTextA(database.hwnd_resolution, database.content_resolution, sizeof(database.content_resolution));
-                ret = sscanf(database.content_resolution, "%dx%d", &database.width, &database.height);
-                if (ret == 2) {
-                    SendMessage(database.hwnd_yuv_top, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
-                    SendMessage(database.hwnd_yuv_bottom, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
-                    SendMessage(database.hwnd_yuv, WM_USER, WIN_YUV_RESOLUTION, database.width << 16 | database.height);
-                }
-            }
-        }
-        else {
-            printf("wParam = %x lParam = %x\n", wParam, lParam);
-        }
-
         break;
-
     case WM_USER:
+        SendMessage(database.hwnd_yuv_top, WM_USER, YUV_GET_INFO, (LPARAM)&info_top);
+        SendMessage(database.hwnd_yuv_bottom, WM_USER, YUV_GET_INFO, (LPARAM)&info_bottom);
+
+        database.width = info_top.width > info_bottom.width ? info_top.width : info_bottom.width;
+        database.height = info_top.height > info_bottom.height ? info_top.height : info_bottom.height;
+        database.height *= 2;
+
+        if (database.data)
+            free(database.data);
+
+        database.data = (unsigned char *)malloc(database.width * database.height); //TODO
+        if (NULL == database.data) {
+            break;
+        }
+
+        for (i = 0; i < database.height / 2; i++) {
+            if (info_top.data) {
+                memcpy(&database.data[database.width * (i * 2 + 0)], &info_top.data[info_top.width * i], info_top.width);
+                //memset(&database.data[database.width * (i * 2 + 0)], 0xFF, info_top.width);
+            }
+            if (info_bottom.data) {
+                memcpy(&database.data[database.width * (i * 2 + 1)], &info_bottom.data[info_bottom.width * i], info_bottom.width);
+                //memset(&database.data[database.width * (i * 2 + 1)], 0x00, info_bottom.width);
+            }
+        }
+
+        info_merge.width = database.width;
+        info_merge.height = database.height;
+        info_merge.data = database.data;
+
+        SendMessage(database.hwnd_yuv, WM_USER, YUV_UPDATE, (LPARAM)&info_merge);
+
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
