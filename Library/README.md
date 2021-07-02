@@ -1,5 +1,7 @@
 # README
 
+Arch: x64
+
 * ffmpeg
 * libjpeg
 * getopt

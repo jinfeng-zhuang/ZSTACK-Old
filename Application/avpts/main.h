@@ -16,6 +16,8 @@ struct application {
         char output_filename[FILENAME_MAX];
         char ip[16];
         int dump_flag;
+        int dump_count;
+        int analyze_flag;
         unsigned int channel;
     } param;
 

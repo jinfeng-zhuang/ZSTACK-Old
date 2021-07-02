@@ -1,28 +1,31 @@
+//
+// if buffer is NULL, just update wp, rp
+//
+
 #ifndef ZSTACK_RINGBUF_H
 #define ZSTACK_RINGBUF_H
 
-struct ring {
-    unsigned int start;
-	unsigned int end;
-	unsigned int wp;
-	unsigned int rp;
-};
+#include "types.h"
 
-struct ringbuffer_t {
+struct ringbuffer {
 	unsigned char *buffer;
+	unsigned int length;
     
     unsigned int start;
 	unsigned int end;
 	unsigned int wp;
 	unsigned int rp;
+
+	u32 datalen;
+	u32 remain;
 };
 
-void ringbuf_init(struct ringbuffer_t *ringbuf, unsigned char *buffer, unsigned int length);
-unsigned int ringbuf_put(struct ringbuffer_t *ringbuf, unsigned char *buffer, unsigned int length);
-unsigned int ringbuf_get(struct ringbuffer_t *ringbuf, unsigned char *buffer, unsigned int length);
-//unsigned int ringbuf_get_datalen(struct ringbuffer_t *ringbuf);
+extern int ringbuf_init(struct ringbuffer *r, unsigned char *buffer, unsigned int length);
 
-extern unsigned int ringbuf_get_datalen(struct ring *r);
-extern unsigned int ringbuf_measure(struct ring *r, unsigned int request);
+extern unsigned int ringbuf_put(struct ringbuffer *r, unsigned char *buffer, unsigned int length);
+extern unsigned int ringbuf_get(struct ringbuffer *r, unsigned char *buffer, unsigned int length);
+
+extern unsigned int ringbuf_datalen(struct ringbuffer *r);
+extern unsigned int ringbuf_empty(struct ringbuffer *r);
 
 #endif

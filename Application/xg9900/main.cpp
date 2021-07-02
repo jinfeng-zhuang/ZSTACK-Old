@@ -528,9 +528,9 @@ int main(int argc, char *argv[])
     app.acc_Overall = app.acc_Overall / 1000 / 1000 / 9.81;  // µ¥Î»×ª»»
     app.acc_Overall_gs = digit2micron(app.acc_Overall);
 
-    log_info("DSP PkPk Total\t%f Micons\n", app.dsp_Overall_um);
-    log_info("VEL Peak Total\t%f mm/Sec\n", app.vel_Overall_mmps);
-    log_info("ACC Peak Total\t%f G-s\n", app.acc_Overall_gs);
+    log_info("DSP PkPk Total\t%f = %f Micons\n", app.dsp_Overall, app.dsp_Overall_um);
+    log_info("VEL Peak Total\t%f = %f mm/Sec\n", app.vel_Overall, app.vel_Overall_mmps);
+    log_info("ACC Peak Total\t%f = %f G-s\n", app.acc_Overall, app.acc_Overall_gs);
 
     log_info("-------------------------------------------------------------------------------------------------------\n");
     log_info("Power Spectrum (%d lines)\n\n", app.lines);

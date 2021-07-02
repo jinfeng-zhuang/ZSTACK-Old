@@ -18,6 +18,7 @@ enum {
     OPTION_LOG,
     OPTION_CHANNEL,
     OPTION_DUMP,
+    OPTION_ANALYZE,
 };
 
 static struct option opts[] = {
@@ -26,6 +27,7 @@ static struct option opts[] = {
     {"log", required_argument, 0, OPTION_LOG},
     {"channel", required_argument, 0, OPTION_CHANNEL},
     {"dump", required_argument, 0, OPTION_DUMP},
+    {"analyze", required_argument, 0, OPTION_ANALYZE},
     {0, 0, 0, 0}
 };
 
@@ -49,7 +51,6 @@ int param_parser(int argc, char *argv[], struct application *app)
             log_info("Version: %s\n", version);
             return -1;
         case OPTION_HELP:
-            log_info(usage);
             return -1;
         case OPTION_LOG:
             if (strlen(optarg) >= LOG_CONFIG_LENGTH) {
@@ -62,7 +63,12 @@ int param_parser(int argc, char *argv[], struct application *app)
             app->param.channel = atoi(optarg);
             break;
         case OPTION_DUMP:
-            app->param.dump_flag = atoi(optarg);
+            app->param.dump_flag = 1;
+            app->param.dump_count = atoi(optarg);
+            break;
+        case OPTION_ANALYZE:
+            app->param.analyze_flag = 1;
+            strcpy(app->param.input_filename, optarg);
             break;
         default:
             return -1;

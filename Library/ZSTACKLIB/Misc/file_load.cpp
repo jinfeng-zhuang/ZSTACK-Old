@@ -4,7 +4,7 @@
 
 #define __func__ __FUNCTION__
 
-unsigned char *file_load(const char* filename, unsigned int *size)
+unsigned char *file_load(const char* filename, uint64_t *size)
 {
     int ret = 0;
     FILE* fp = NULL;
@@ -29,7 +29,7 @@ unsigned char *file_load(const char* filename, unsigned int *size)
 
     buffer = (unsigned char*)malloc((unsigned int)file_size);
     if (NULL == buffer) {
-        printf("%s: malloc failed %d\n", __func__, file_size);
+        printf("%s: malloc failed %lld\n", __func__, file_size);
         goto END;
     }
 
@@ -45,7 +45,7 @@ END:
     if (fp)
         fclose(fp);
 
-    *size = (unsigned int)file_size;
+    *size = file_size;
 
     return buffer;
 }

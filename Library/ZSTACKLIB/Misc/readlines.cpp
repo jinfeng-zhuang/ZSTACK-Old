@@ -1,4 +1,4 @@
-#include <zstack.h>
+#include <zstack/zstack.h>
 
 int readlines(const char *filename, struct index_buffer *ib)
 {
@@ -7,7 +7,7 @@ int readlines(const char *filename, struct index_buffer *ib)
     unsigned int line_count;
     unsigned int i, j;
 
-    file_content = (char *)file_load(filename, &file_size);
+    file_content = (char *)file_load(filename, (uint64_t *)&file_size);
     if (NULL == file_content) {
         log_info("'%s' open failed\n", filename);
         return 0;

@@ -19,12 +19,6 @@ int main(int argc, char *argv[])
     struct ring pts;
     unsigned int rp;
 
-    unsigned int i;
-    
-    struct ring pts_local;
-    unsigned int size;
-    unsigned int response;
-
     unsigned char *buffer;
 
     if (param_parser(argc, argv, &app) == -1) {
@@ -39,13 +33,33 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    avmips_get_version();
+
+    if (app.param.analyze_flag) {
+        app.input_file_content = file_load(app.param.input_filename, (uint64_t *)&app.input_file_size);
+        if (NULL == app.input_file_content)
+            goto END;
+
+        int i;
+        struct VideoPTSQueue_t* PTS = (struct VideoPTSQueue_t*)app.input_file_content;
+        info("WP %x RP %x SIZE %x\n", PTS->wrIdx, PTS->rdIdx, PTS->sz);
+        unsigned long long PTSPrev = 0;
+        for (i = 0; i < VPTS_QUEUE_SIZE; i++) {
+            info("PTS %08llx delta %lld, WP %x %x, delta %#x\n",
+                PTS->input_pts_map[i], PTS->input_pts_map[i] - PTSPrev,
+                PTS->start_wp[i][0], PTS->start_wp[i][1], PTS->start_wp[i][1] - PTS->start_wp[i][0]);
+
+            PTSPrev = PTS->input_pts_map[i];
+        }
+
+        goto END;
+    }
+
     do {
         ret = avmips_get_pts_desc(&pts, app.param.channel);
     } while (ret != 0);
 
-    size = pts.end - pts.start;
-
-    log_info("PTS (%x %x), size %dM\n", pts.start, pts.end, size>>20);
+    log_info("PTS (%#x %#x), size %dKB\n", pts.start, pts.end);
 
     ret = vs_pman_enable((sx_chip)vs_chip_id_get(), PMAN_SECURITY_GROUP_ARM, pts.start);
     if (0 != ret) {
@@ -55,62 +69,36 @@ int main(int argc, char *argv[])
     rp = pts.start;
 
     while (1) {
-        ret = avmips_get_pts_desc(&pts, app.param.channel);
-        if (0 != ret) {
-            return -1;
-        }
+        do {
+            ret = avmips_get_pts_desc(&pts, app.param.channel);
+        } while (ret != 0);
 
-        memcpy(&pts_local, &pts, sizeof(struct ring));
-        pts_local.rp = (rp - pts_local.start) % size + pts_local.start;
-
-        if (app.param.dump_flag) {
-
-            /*
-            // print remaining data
-            log_info("Decoder: %dM %4dK %4dB, Dump: %dM %4dK %4dB\n",
-                (ringbuf_get_datalen(&pts) >> 20) & 0x3FF,
-                (ringbuf_get_datalen(&pts) >> 10) & 0x3FF,
-                ringbuf_get_datalen(&pts) & 0x3FF,
-
-                (ringbuf_get_datalen(&pts_local) >> 20) & 0x3FF,
-                (ringbuf_get_datalen(&pts_local) >> 10) & 0x3FF,
-                ringbuf_get_datalen(&pts_local) & 0x3FF
-                );
-
-            // get start address and size for current ringbuf
-            response = ringbuf_measure(&pts_local, DUMP_SIZE);
-            if (0 == response) {
-                Sleep(100);
-                continue;
-            }
-
-            ret = dbg_host_read8(pts_local.rp, buffer, response);
-            if (0 != ret) {
-                return -1;
-            }
-            */
-
+        if ((pts.wp >= app.param.dump_count) && (app.param.dump_flag)) {
             buffer = avmips_dump_pts_queue(app.param.channel);
-            if (buffer) {
-                ret = file_append(app.param.output_filename, buffer, response);
-                if (0 != ret) {
-                    return -1;
+                if (NULL == buffer) {
+                    TRACE;
+                        goto END;
                 }
-            }
 
-            rp += response;
+            ret = file_append(app.param.output_filename, buffer, sizeof(struct VideoPTSQueue_t));
+                if (0 != ret) {
+                    goto END;
+                }
+
+            info("%s\n", app.param.output_filename);
+
+            goto END;
         }
-        else {
-            log_info("Decoder: %dM %4dK %4dB\n",
-                (ringbuf_get_datalen(&pts) >> 20) & 0x3FF,
-                (ringbuf_get_datalen(&pts) >> 10) & 0x3FF,
-                ringbuf_get_datalen(&pts) & 0x3FF);
-        }
+
+        log_info("Decoder: %dM %4dK %4dB, %f\n",
+            (ringbuf_get_datalen(&pts) >> 20) & 0x3FF,
+            (ringbuf_get_datalen(&pts) >> 10) & 0x3FF,
+            ringbuf_get_datalen(&pts) & 0x3FF,
+            (float)pts.wp / (float)pts.end);
 
         Sleep(10);
     }
 
 END:
-
     return 0;
 }

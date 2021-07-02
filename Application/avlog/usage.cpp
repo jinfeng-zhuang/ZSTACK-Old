@@ -1,15 +1,18 @@
 const char *usage =
 "\
-Usage: template [OPTION]... [FILE]...\n\
+Usage: avlog [OPTION]... [FILE]...\n\
 \n\
-This is a template project to generate a new one.\n\
+[DESCRIPTION]\n\
 \n\
   --version     version info\n\
   --help        this message\n\
   --log         log config\n\
 \n\
 Examples:\n\
-  template --log \"app:5\"\n\
+    avlog 10.86.40.70 --setting=\"device:2,video_decode:2[core]\"\n\
+\n\
+Attention:\n\
+    no space in setting string\n\
 \n\
 Copyright @ 2020, Jinfeng Zhuang\n\
 ";

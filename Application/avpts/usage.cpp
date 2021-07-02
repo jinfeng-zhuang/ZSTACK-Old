@@ -1,6 +1,6 @@
 const char *usage =
 "\
-Usage: template [OPTION]... [FILE]...\n\
+Usage: avpts [OPTION]... [FILE]...\n\
 \n\
 [DESCRIPTION]\n\
 \n\
@@ -9,7 +9,9 @@ Usage: template [OPTION]... [FILE]...\n\
   --log         log config\n\
 \n\
 Examples:\n\
-  template --log \"app:5\"\n\
+  avpts 10.86.40.70\n\
+  avpts 10.86.40.70 --dump 100\n\
+  avpts 10.86.40.70 --analyze xxx.log\n\
 \n\
 Copyright @ 2020, Jinfeng Zhuang\n\
 ";

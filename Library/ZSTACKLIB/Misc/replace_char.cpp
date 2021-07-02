@@ -1,4 +1,4 @@
-#include <zstack.h>
+#include <zstack/zstack.h>
 
 unsigned int replace_char(unsigned char *buffer, unsigned int length, unsigned char origin, unsigned char target)
 {

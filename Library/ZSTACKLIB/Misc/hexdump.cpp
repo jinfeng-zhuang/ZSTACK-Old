@@ -61,6 +61,32 @@ int hexdump(void *start, unsigned int length)
     return 0;
 }
 
+int is_printable(unsigned char c)
+{
+    //if (((c >= 0x20) && (c < 0x7F)) || (c == '\n'))
+    if ((c >= 0x20) && (c < 0x7F))
+        return 1;
+    else
+        return 0;
+}
+
+int ascii_dump(void* start, unsigned int length)
+{
+    unsigned int i;
+    char* buffer = (char*)start;
+
+    for (i = 0; i < length; i++) {
+        if (is_printable(buffer[i]))
+            printf("%c", buffer[i]);
+        else
+            printf("[%x]", buffer[i]);
+    }
+
+    printf("\n");
+
+    return 0;
+}
+
 int hexdump_ascii(void *start, unsigned int length)
 {
     uint32_t i, j;

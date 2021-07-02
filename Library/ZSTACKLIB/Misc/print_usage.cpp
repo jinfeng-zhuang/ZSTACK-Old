@@ -1,4 +1,4 @@
-#include <zstack.h>
+#include <zstack/zstack.h>
 
 void print_usage(void)
 {

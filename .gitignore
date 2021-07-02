@@ -3,6 +3,7 @@ Release/
 .vs/
 Objects/
 Listings/
+x64/
 
 *.filters
 *.user
@@ -10,6 +11,7 @@ Listings/
 *.ncb
 *.yuv
 *.jinfengz
+*.log
 
 zstacklib.lib
 zstack.lib

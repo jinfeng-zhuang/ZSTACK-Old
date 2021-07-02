@@ -96,6 +96,12 @@
     <None Include="README.md" />
     <None Include="TODO" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\ZSTACKLIB\zstack.vcxproj">
+      <Project>{8a45a6da-907c-45ce-92b6-acc0ea43266c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -85,7 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="param_parser.cpp" />
     <ClCompile Include="usage.cpp" />
     <ClCompile Include="version.cpp" />
