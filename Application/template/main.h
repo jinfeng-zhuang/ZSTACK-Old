@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include <zstack/types.h>
 
 #define LOG_CONFIG_LENGTH   (256)
 
@@ -16,11 +17,11 @@ struct application {
         char output_filename[FILENAME_MAX];
     } param;
 
-    unsigned char *input_file_content;
-    unsigned long long input_file_size;
+    u8* input_file_content;
+    u64 input_file_size;
 
-    unsigned char *output_file_content;
-    unsigned int   output_file_size;
+    u8* output_file_content;
+    u64   output_file_size;
 };
 
 #ifdef __cplusplus
