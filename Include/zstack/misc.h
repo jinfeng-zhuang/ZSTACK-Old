@@ -15,8 +15,6 @@
 #define _ftelli64 ftell
 #endif
 
-#define OFFSET(T, f) (((unsigned int)(&(((T*)0)->f))))
-
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 #define BITGET(RegValue, StartBit, Bits) (((RegValue) >> (StartBit)) & ((0x1 << (Bits)) - 1))
@@ -28,12 +26,16 @@
 #define PI (3.141592653589793)
 #endif
 
+#ifndef _WIN32
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
 
 #ifndef min
 #define min(a,b)            (((a) > (b)) ? (b) : (a))
+#endif
+#else
+#include <stdlib.h>
 #endif
 
 #ifndef TRUE
@@ -43,6 +45,10 @@
 #ifndef FALSE
 #define FALSE   0
 #endif
+
+enum YUVFormat {
+	YUV_FORMAT_NV12
+};
 
 /**************************************************************************************************
  *                                              Structures

@@ -13,4 +13,8 @@
 #define f32 float
 #define f64 double
 
+#ifndef NULL
+#define NULL	((void *)0)
+#endif
+
 #endif

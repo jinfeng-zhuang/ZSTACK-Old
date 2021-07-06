@@ -17,6 +17,10 @@
 #define DEBUG(argv, ...) _log(__FUNCTION__, 1, argv, ##__VA_ARGS__)
 #endif
 
+#ifndef PRINT
+#define PRINT printf
+#endif
+
 #define TRACE info("%s %d\n", __FUNCTION__, __LINE__)
 
 extern void log_init(const char *config);

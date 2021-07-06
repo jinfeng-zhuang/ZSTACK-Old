@@ -26,7 +26,7 @@ static struct log_module {
 } log_modules[LOG_MOODULE_MAX];
 
 // if match, return 0, otherwise return the empty slot index
-static int module_match(char* name)
+static int module_match(const char* name)
 {
     int i;
 
@@ -92,7 +92,7 @@ void log_init(const char *config)
     int i;
     int j;
     char module_name[LOG_MODULE_NAME_MAX + 1] = {'\0'};
-    int config_len;
+    size_t config_len;
 
     if (config == NULL)
         config = (char *)"default";

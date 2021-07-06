@@ -22,6 +22,9 @@
 #include "ringbuf.h"
 #include "string.h"
 
+// graphic
+#include "graphic.h"
+
 // misc
 #include "misc.h"
 
