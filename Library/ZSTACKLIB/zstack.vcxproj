@@ -151,7 +151,13 @@
     <ClCompile Include="3rdparty\getopt.c" />
     <ClCompile Include="3rdparty\tinyxml2.cpp" />
     <ClCompile Include="Algo\crc16.c" />
-    <ClCompile Include="Graphic\fill_rectangle_mono.c" />
+    <ClCompile Include="Graphic\check_canvas.c" />
+    <ClCompile Include="Graphic\correct_rect_on_canvas.c" />
+    <ClCompile Include="Graphic\fill_canvas.c" />
+    <ClCompile Include="Graphic\fill_rectangle.c" />
+    <ClCompile Include="Graphic\rgba2yuv.c" />
+    <ClCompile Include="Graphic\yuv2rgb.c" />
+    <ClCompile Include="Misc\file_append.c" />
     <ClCompile Include="Misc\log.c" />
     <ClCompile Include="Misc\net.c" />
     <ClCompile Include="Misc\print_usage.c" />
