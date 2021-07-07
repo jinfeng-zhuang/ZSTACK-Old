@@ -19,6 +19,7 @@ static char tmp_buffer[1 << 10];
 
 static FILE* logfile = NULL;
 static int flag_time = 0;
+static int flag_prefix = 0;
 
 static struct log_module {
     char name[LOG_MODULE_NAME_MAX + 1];
@@ -81,6 +82,10 @@ static int add_to_log_mask(char *name)
     // check if it is 'time'
     if (0 == strcmp(name, "time")) {
         flag_time = 1;
+    }
+
+    if (0 == strcmp(name, "prefix")) {
+        flag_prefix = 1;
     }
 
     return 0;
@@ -157,7 +162,8 @@ int _log(const char * name, int level, const char *fmt, ...)
         snprintf(tmp_buffer, sizeof(tmp_buffer), "[%02d:%02d:%02d] ", t.hour, t.min, t.sec);
     }
 
-    snprintf(&tmp_buffer[strlen(tmp_buffer)], sizeof(tmp_buffer) - strlen(tmp_buffer), "[%s] ", name);
+    if (flag_prefix)
+        snprintf(&tmp_buffer[strlen(tmp_buffer)], sizeof(tmp_buffer) - strlen(tmp_buffer), "[%s] ", name);
 
     // format the string buffer
     va_list args;
