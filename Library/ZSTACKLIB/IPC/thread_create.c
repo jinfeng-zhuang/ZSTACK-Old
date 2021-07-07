@@ -1,9 +1,9 @@
-#include <zstack/thread.h>
+#include <zstack/ipc.h>
 
 #include <Windows.h>
 #include <process.h>
 
-int thread_create(thread_entry_t entry, unsigned int stacksize, void *args)
+int thread_create(thread_entry entry, unsigned int stacksize, void *args)
 {
 	HANDLE hThread;
 

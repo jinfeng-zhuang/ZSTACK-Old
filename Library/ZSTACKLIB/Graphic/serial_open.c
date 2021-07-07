@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <zstack/types.h>
+#include <zstack/log.h>
 
 // ref https://blog.csdn.net/u014628654/article/details/45666749
 
@@ -12,11 +13,11 @@ u32 serial_open(char* port)
 		0, // don't share
 		NULL, // security
 		OPEN_EXISTING,
-		0, // 0 - sync, 1 - async
+		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // 0 - sync, 1 - async
 		NULL);
 
 	if (hCom == (HANDLE)-1) {
-		printf("open com failed\n");
+		DEBUG("open %s failed\n", port);
 		return NULL;
 	}
 

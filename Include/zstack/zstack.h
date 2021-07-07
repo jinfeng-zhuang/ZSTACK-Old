@@ -28,4 +28,6 @@
 // misc
 #include "misc.h"
 
+#include "ipc.h"
+
 #endif

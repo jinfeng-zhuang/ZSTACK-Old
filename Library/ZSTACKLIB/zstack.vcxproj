@@ -160,8 +160,10 @@
     <ClCompile Include="Graphic\serail_read.c" />
     <ClCompile Include="Graphic\serail_write.c" />
     <ClCompile Include="Graphic\yuv2rgb.c" />
+    <ClCompile Include="IPC\thread_create.c" />
     <ClCompile Include="Misc\file_append.c" />
     <ClCompile Include="Misc\log.c" />
+    <ClCompile Include="Misc\msleep.c" />
     <ClCompile Include="Misc\net.c" />
     <ClCompile Include="Misc\print_usage.c" />
     <ClCompile Include="Misc\serial_port_list.c" />
