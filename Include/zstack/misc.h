@@ -76,5 +76,13 @@ extern int param_parser(int argc, char *argv[], struct application *app);
 extern long png_to_bgra(const char* path, int* w, int* h, unsigned char** bgra);
 
 extern void serial_port_list(void);
+extern u32 serial_open(char* port);
+
+/*
+ * Block API
+ * if return -1, means device read failed, if less then length, means timeout
+ */
+extern u32 serial_read(u32 fd, u8* buffer, u32 length);
+extern u32 serial_write(u32 fd, u8* buffer, u32 length);
 
 #endif

@@ -156,6 +156,9 @@
     <ClCompile Include="Graphic\fill_canvas.c" />
     <ClCompile Include="Graphic\fill_rectangle.c" />
     <ClCompile Include="Graphic\rgba2yuv.c" />
+    <ClCompile Include="Graphic\serail_open.c" />
+    <ClCompile Include="Graphic\serail_read.c" />
+    <ClCompile Include="Graphic\serail_write.c" />
     <ClCompile Include="Graphic\yuv2rgb.c" />
     <ClCompile Include="Misc\file_append.c" />
     <ClCompile Include="Misc\log.c" />
