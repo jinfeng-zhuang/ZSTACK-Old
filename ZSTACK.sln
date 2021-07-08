@@ -22,6 +22,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YUVGen", "Application\YUVGe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "template", "Application\template\template.vcxproj", "{CF59371F-8AFF-4958-BE7B-05A6CC54149B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{12AA4D75-E213-4F9E-A8CB-C02C6044F8E6}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		TODO = TODO
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
