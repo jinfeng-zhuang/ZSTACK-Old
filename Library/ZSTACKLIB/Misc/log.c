@@ -15,7 +15,7 @@
 
 static int log_inited = 0;
 
-static char tmp_buffer[1 << 10];
+static char tmp_buffer[10 << 20];
 
 static FILE* logfile = NULL;
 static int flag_time = 0;
