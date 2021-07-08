@@ -1,11 +1,13 @@
 #include <zstack/zstack.h>
+#include "main.h"
 #include <stdio.h>
-#include <conio.h>
 
 enum {
 	STATUS_FREE = 0,
 	STATUS_BUSY
 };
+
+struct application app;
 
 static int serial_fd = -1;
 static int status = 0;
@@ -36,7 +38,6 @@ int thread_tx(void* arg)
 {
 	u32 ret;
 	u8 buffer[1024];
-	char c;
 
 	while (1) {
 		if (-1 == serial_fd) {
@@ -46,7 +47,7 @@ int thread_tx(void* arg)
 
 		memset(buffer, 0, 1024);
 		fgets(buffer, 1024 - 1, stdin);
-		ret = serial_write(serial_fd, buffer, strlen(buffer));
+		ret = serial_write(serial_fd, buffer, (u32)strlen(buffer));
 		if (ret == -1) {
 			//serial_fd = -1;
 		}
@@ -55,6 +56,13 @@ int thread_tx(void* arg)
 
 int main(int argc, char* argv[])
 {
+    if (param_parser(argc, argv, &app) == -1) {
+        print_usage();
+        return -1;
+    }
+	
+	log_init(app.param.log_config);
+	
 	if (argc == 1) {
 		serial_port_list();
 	}
@@ -71,4 +79,6 @@ int main(int argc, char* argv[])
 			msleep(100);
 		}
 	}
+	
+	return 0;
 }
