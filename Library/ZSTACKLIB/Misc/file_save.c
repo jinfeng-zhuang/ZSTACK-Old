@@ -4,7 +4,7 @@
 #include <zstack/log.h>
 #include <zstack/types.h>
 
-u32 file_append(const char* filename, unsigned char* buffer, unsigned int length)
+u32 file_save(const char* filename, unsigned char* buffer, unsigned int length)
 {
     FILE* fp;
     u32 ret;
@@ -14,13 +14,13 @@ u32 file_append(const char* filename, unsigned char* buffer, unsigned int length
         return -1;
     }
 
-    fp = fopen(filename, "ab");
+    fp = fopen(filename, "wb");
     if (NULL == fp) {
         warn("fopen %s failed\n", filename);
         return -1;
     }
 
-    ret = (u32)fwrite(buffer, sizeof(unsigned char), length, fp);
+    ret = (u32)fwrite(buffer, (u32)sizeof(unsigned char), length, fp);
 
     fflush(fp);
 
@@ -31,7 +31,7 @@ u32 file_append(const char* filename, unsigned char* buffer, unsigned int length
 
     fclose(fp);
 
-    DEBUG("%s done\n", filename);
+    DEBUG("Save to '%s' done\n", filename);
 
     return length;
 }
