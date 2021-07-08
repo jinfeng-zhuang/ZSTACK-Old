@@ -9,17 +9,18 @@ u32 serial_write(u32 fd, u8* buffer, u32 length)
 	DWORD dwErrorFlags;
 	BOOL bWriteStat;
 	OVERLAPPED overlap;
+	HANDLE handle = (HANDLE)(u64)fd; // remove warning C4312
 
 	memset(&overlap, 0, sizeof(OVERLAPPED));
 
-	PurgeComm((HANDLE)fd, PURGE_RXABORT);
+	PurgeComm(handle, PURGE_RXABORT);
 
-	ClearCommError((HANDLE)fd, &dwErrorFlags, &ComStat);
+	ClearCommError(handle, &dwErrorFlags, &ComStat);
 
-	bWriteStat = WriteFile((HANDLE)fd, buffer, length, &dwBytesWrite, &overlap);
+	bWriteStat = WriteFile(handle, buffer, length, &dwBytesWrite, &overlap);
 	if (!bWriteStat) {
 		if (GetLastError() == ERROR_IO_PENDING) {
-			GetOverlappedResult((HANDLE)fd, &overlap, &dwBytesWrite, TRUE);
+			GetOverlappedResult(handle, &overlap, &dwBytesWrite, TRUE);
 		}
 		else {
 			DEBUG("error write: %d\n", GetLastError());

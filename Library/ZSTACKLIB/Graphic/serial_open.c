@@ -2,12 +2,11 @@
 #include <zstack/types.h>
 #include <zstack/log.h>
 
-// ref https://blog.csdn.net/u014628654/article/details/45666749
-
 u32 serial_open(char* port)
 {
 	HANDLE hCom;
 	DCB dcb;
+	int fd;
 
 	hCom = CreateFileA(port, GENERIC_READ | GENERIC_WRITE,
 		0, // don't share
@@ -18,7 +17,7 @@ u32 serial_open(char* port)
 
 	if (hCom == (HANDLE)-1) {
 		DEBUG("open %s failed\n", port);
-		return NULL;
+		return -1;
 	}
 
 	// 2. configure
@@ -42,5 +41,7 @@ u32 serial_open(char* port)
 	SetCommState(hCom, &dcb);
 	PurgeComm(hCom, PURGE_TXCLEAR | PURGE_RXCLEAR);
 
-	return (u32)hCom;
+	fd = ((u64)hCom) & 0xFFFFFFFF; // remove warning C4311
+
+	return fd;
 }

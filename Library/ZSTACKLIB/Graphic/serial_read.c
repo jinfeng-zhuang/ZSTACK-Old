@@ -7,13 +7,14 @@ u32 serial_read(u32 fd, u8* buffer, u32 length)
 	DWORD wCount;
 	BOOL bReadStat;
 	OVERLAPPED overlap;
+	HANDLE handle = (HANDLE)(u64)fd; // remove warning C4312
 
 	memset(&overlap, 0, sizeof(OVERLAPPED));
 
-	bReadStat = ReadFile((HANDLE)fd, buffer, length, &wCount, &overlap);
+	bReadStat = ReadFile(handle, buffer, length, &wCount, &overlap);
 	if (!bReadStat) {
 		if (GetLastError() == ERROR_IO_PENDING) {
-			GetOverlappedResult((HANDLE)fd, &overlap, &wCount, TRUE);
+			GetOverlappedResult(handle, &overlap, &wCount, TRUE);
 		}
 		else {
 			DEBUG("error read\n");

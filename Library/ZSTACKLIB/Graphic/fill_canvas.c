@@ -5,12 +5,9 @@
 
 int fill_canvas(struct canvas* canvas, u32 rgba)
 {
-	u32 i, j;
-	struct rect rect;
-	u32 offset;
+	u32 i;
 	u8 Y, U, V;
 	u32 Y_size;
-	u16 UV;
 
 	// 1. check param first
 	if (FALSE == check_canvas(canvas)) {
