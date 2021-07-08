@@ -156,9 +156,6 @@
     <ClCompile Include="Graphic\fill_canvas.c" />
     <ClCompile Include="Graphic\fill_rectangle.c" />
     <ClCompile Include="Graphic\rgba2yuv.c" />
-    <ClCompile Include="Graphic\serial_open.c" />
-    <ClCompile Include="Graphic\serial_read.c" />
-    <ClCompile Include="Graphic\serial_write.c" />
     <ClCompile Include="Graphic\yuv2rgb.c" />
     <ClCompile Include="IPC\thread_create.c" />
     <ClCompile Include="Misc\file_append.c" />
@@ -170,7 +167,10 @@
     <ClCompile Include="Misc\msleep.c" />
     <ClCompile Include="Misc\net.c" />
     <ClCompile Include="Misc\print_usage.c" />
+    <ClCompile Include="Misc\serial_open.c" />
     <ClCompile Include="Misc\serial_port_list.c" />
+    <ClCompile Include="Misc\serial_read.c" />
+    <ClCompile Include="Misc\serial_write.c" />
     <ClCompile Include="Misc\time.c" />
     <ClCompile Include="String\readlines.c" />
     <ClCompile Include="UI\RingBufferWindow.cpp" />
