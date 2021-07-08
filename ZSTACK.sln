@@ -11,6 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple", "Application\simpl
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "serial", "Application\serial\serial.vcxproj", "{3B229055-BE05-487F-92A7-F6C8DB2244DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A047FA3-C997-4CE1-BFAA-967073326412} = {5A047FA3-C997-4CE1-BFAA-967073326412}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YUVGen", "Application\YUVGen\YUVGen.vcxproj", "{05A8CEEB-1B70-40A0-BB1C-999B186C7377}"
 	ProjectSection(ProjectDependencies) = postProject
