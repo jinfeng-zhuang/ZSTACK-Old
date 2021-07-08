@@ -68,7 +68,13 @@ extern const char *usage;
  *                                              Functions
  *************************************************************************************************/
 
-extern int hexdump(void* buffer, unsigned int length);
+enum {
+	HEXDUMP_RAW = 0,
+	HEXDUMP_ADDR = 1<<0,
+	HEXDUMP_ASCII = 1<<1,
+};
+
+extern int hexdump(void* buffer, unsigned int length, u32 flags);
 
 extern void print_usage(void);
 extern int param_parser(int argc, char *argv[], struct application *app);
