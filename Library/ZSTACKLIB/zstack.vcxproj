@@ -162,12 +162,17 @@
     <ClCompile Include="Graphic\yuv2rgb.c" />
     <ClCompile Include="IPC\thread_create.c" />
     <ClCompile Include="Misc\file_append.c" />
+    <ClCompile Include="Misc\file_load.c" />
+    <ClCompile Include="Misc\file_save.c" />
+    <ClCompile Include="Misc\fsize.c" />
+    <ClCompile Include="Misc\hexdump.c" />
     <ClCompile Include="Misc\log.c" />
     <ClCompile Include="Misc\msleep.c" />
     <ClCompile Include="Misc\net.c" />
     <ClCompile Include="Misc\print_usage.c" />
     <ClCompile Include="Misc\serial_port_list.c" />
     <ClCompile Include="Misc\time.c" />
+    <ClCompile Include="String\readlines.c" />
     <ClCompile Include="UI\RingBufferWindow.cpp" />
     <ClCompile Include="V-Silicon\avmips_get_log_desc.c" />
     <ClCompile Include="V-Silicon\avmips_get_malone_desc.c" />
