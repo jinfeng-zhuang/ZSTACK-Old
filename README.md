@@ -27,6 +27,6 @@
 
   python newproj.py template <proj_name>
 
-*版本管理
+* 版本管理
 
   <架构>.<功能>.<BUG修复>
