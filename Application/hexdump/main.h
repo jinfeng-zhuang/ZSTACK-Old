@@ -1,7 +1,12 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
+#include <zstack/types.h>
 
 #define LOG_CONFIG_LENGTH   (256)
 
@@ -10,14 +15,21 @@ struct application {
         char log_config[LOG_CONFIG_LENGTH];
         char input_filename[FILENAME_MAX];
         char output_filename[FILENAME_MAX];
-        int count;
+        u8 ascii_flag;
+        u8 addr_flag;
+        u8 clipboard_flag;
+        u32 page_size;
     } param;
 
-    unsigned char *input_file_content;
-    unsigned int   input_file_size;
+    u8* input_file_content;
+    u64 input_file_size;
 
-    unsigned char *output_file_content;
-    unsigned int   output_file_size;
+    u8* output_file_content;
+    u64   output_file_size;
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
