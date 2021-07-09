@@ -1,5 +1,5 @@
 const char* usage =
-"Usage: template [OPTION]...[FILE]...\n"
+"Usage: template [OPTION]... [FILE]...\n"
 "\n"
 "OPTIONS:\n"
 "\n"
