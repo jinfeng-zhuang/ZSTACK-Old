@@ -34,7 +34,6 @@ int hexdump(void *start, unsigned int length, u32 flags)
     char *hexdump_buffer;
     u32 hexdump_buffer_size;
     unsigned char *buffer = (unsigned char *)start;
-    char c;
 
     // step 1.
     line_num = length / 16;
@@ -132,7 +131,7 @@ int hexdump(void *start, unsigned int length, u32 flags)
                 sprintf(&hexdump_buffer[strlen(hexdump_buffer)], "%c", printable(buffer[i * 16 + j]));
             }
             for (j = 0; j < 16 - last_bytes; j++) {
-                sprintf(&hexdump_buffer[strlen(hexdump_buffer)], "X");
+                sprintf(&hexdump_buffer[strlen(hexdump_buffer)], " ");
             }
         }
     }
