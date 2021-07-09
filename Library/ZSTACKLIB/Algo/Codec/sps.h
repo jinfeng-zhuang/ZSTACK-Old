@@ -3,6 +3,19 @@
 
 #define Extended_SAR (255)
 
+struct hrd_parameters {
+	unsigned int cpb_cnt_minus1;
+	unsigned int bit_rate_scale;
+	unsigned int cpb_size_scale;
+	unsigned int bit_rate_value_minus1[5];
+	unsigned int cpb_size_value_minus1[5];
+	unsigned int cbr_flag[5];
+	unsigned int initial_cpb_removal_delay_length_minus1;
+	unsigned int cpb_removal_delay_length_minus1;
+	unsigned int dpb_output_delay_length_minus1;
+	unsigned int time_offset_length;
+};
+
 struct vui_parameters {
 	unsigned int aspect_ratio_info_present_flag;
 	unsigned int aspect_ratio_idc;
@@ -25,9 +38,9 @@ struct vui_parameters {
 	unsigned int time_scale;
 	unsigned int fixed_frame_rate_flag;
 	unsigned int nal_hrd_parameters_present_flag;
-	// hrd_parameters
+	struct hrd_parameters nal_hrd_parameters;
 	unsigned int vcl_hrd_parameters_present_flag;
-	// hrd_parameters
+	struct hrd_parameters vlc_hrd_parameters;
 	unsigned int low_delay_hrd_flag;
 	unsigned int pic_struct_present_flag;
 	unsigned int bitstream_restriction_flag;
@@ -40,7 +53,18 @@ struct vui_parameters {
 	unsigned int max_dec_frame_buffering;
 };
 
-struct sps {
+struct rbsp_trailing_bits {
+	unsigned int rsvd;
+};
+
+struct sps_tmp {
+	unsigned int ScalingList4x4[6][16];
+	unsigned int ScalingList8x8[6][64];
+	unsigned int UseDefaultScalingMatrix4x4Flag[6];
+	unsigned int UseDefaultScalingMatrix8x8Flag[6];
+};
+
+struct seq_parameter_set_data {
 	unsigned int profile_idc;
 	unsigned int constraint_set0_flag;
 	unsigned int constraint_set1_flag;
@@ -58,7 +82,7 @@ struct sps {
 	unsigned int qpprime_y_zero_transform_bypass_flag;
 	unsigned int seq_scaling_matrix_present_flag;
 	unsigned int seq_scaling_list_present_flag[12];
-	// scaling_list?
+	unsigned int delta_scale[64];
 	unsigned int log2_max_frame_num_minus4;
 	unsigned int pic_order_cnt_type;
 	unsigned int log2_max_pic_order_cnt_lsb_minus4;
@@ -66,7 +90,7 @@ struct sps {
 	unsigned int offset_for_non_ref_pic;
 	unsigned int offset_for_top_to_bottom_field;
 	unsigned int num_ref_frames_in_pic_order_cnt_cycle;
-	unsigned int offset_for_ref_frame; // ?
+	unsigned int offset_for_ref_frame[256]; // refer to JM
 	unsigned int max_num_ref_frames;
 	unsigned int gaps_in_frame_num_value_allowed_flag;
 	unsigned int pic_width_in_mbs_minus1;
@@ -83,6 +107,10 @@ struct sps {
 	struct vui_parameters vui;
 };
 
-extern struct sps sps;
+struct seq_parameter_set_rbsp {
+	struct seq_parameter_set_data data;
+	struct rbsp_trailing_bits trail;
+	struct sps_tmp tmp;
+};
 
 #endif

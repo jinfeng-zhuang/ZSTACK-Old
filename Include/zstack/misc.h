@@ -46,6 +46,10 @@
 #define FALSE   0
 #endif
 
+#define SIZE_1KB	(1<<10)
+#define SIZE_1MB	(1<<20)
+#define SIZE_1GB	(1<<30)
+
 enum YUVFormat {
 	YUV_FORMAT_NV12, // YUV420: YYYY YYYY UV UV, Intel define, DirectX accelerate
 	YUV_FORMAT_YV12, // YUV420: YYYY YYYY UU VV

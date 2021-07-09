@@ -7,6 +7,7 @@ struct bitstream {
 	unsigned int size;
 };
 
-extern int bitstream_init(struct bitstream *bitstream, unsigned char *buffer, unsigned int length);
+extern struct bitstream* bitstream_malloc(unsigned char* buffer, unsigned int length);
+extern int bitstream_free(struct bitstream* bs);
 
 #endif

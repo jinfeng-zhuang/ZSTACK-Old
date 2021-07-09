@@ -2,5 +2,24 @@
 #define ZSTACK_CODEC_H
 
 #include "types.h"
+#include "bitstream.h"
+
+struct sequence_header {
+	u32 width;
+	u32 height;
+};
+
+struct picture_header {
+	u32 id;
+	u8* luma;
+	u8* chroma;
+};
+
+// Syntax Element
+extern int se_read_se(struct bitstream* bs);
+extern unsigned int se_read_u(struct bitstream* bs, unsigned int num);
+extern unsigned int se_read_ue(struct bitstream* bs);
+
+extern int decode_one_frame(u8* buffer, u32 length);
 
 #endif

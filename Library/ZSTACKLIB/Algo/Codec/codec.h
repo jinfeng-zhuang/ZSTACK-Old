@@ -2,13 +2,14 @@
 #define _ZSTACK_CODEC_
 
 #include <zstack/bitstream.h>
+#include <zstack/types.h>
 
-extern unsigned int u(struct bitstream* bitstream, unsigned int num);
-extern unsigned int ue(struct bitstream* bitstream);
-extern int se(struct bitstream* bitstream);
-extern int more_rbsp_data(struct bitstream* bitstream);
-extern int rbsp_trailing_bits(struct bitstream* bitstream);
-extern int bitstream_error(struct bitstream* bitstream);
-extern int is_byte_aligned(struct bitstream* bitstream);
+extern int nalu_get(u8* buffer, u32 length, u32* offset, u32* size);
+extern u8* h264_nalu_parse(u8* buffer, u32 length, u32* size, u8* type);
+
+extern int sps_parse(struct seq_parameter_set_rbsp* sps, unsigned char* buffer, unsigned int length);
+extern struct seq_parameter_set_rbsp* sps_get(unsigned int id);
+
+extern void scaling_list(struct bitstream* bs, unsigned int* scalingList, unsigned int sizeOfScalingList, unsigned int* useDefaultScalingMatrixFlag);
 
 #endif

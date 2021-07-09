@@ -3,11 +3,14 @@
 #include <zstack/bitstream.h>
 #include <zstack/types.h>
 
-int bitstream_init(struct bitstream* bitstream, unsigned char *buffer, unsigned int length)
+struct bitstream* bitstream_malloc(unsigned char *buffer, unsigned int length)
 {
 	unsigned char *bits;
 	unsigned int i;
 	u32 total;
+	struct bitstream* bitstream;
+
+	bitstream = (struct bitstream* )malloc(sizeof(struct bitstream));
 
 	if ((NULL == bitstream) || (NULL == buffer) || (0 == length))
 		return -1;
@@ -29,5 +32,16 @@ int bitstream_init(struct bitstream* bitstream, unsigned char *buffer, unsigned 
 	bitstream->bits = bits;
 	bitstream->size = total;
 
-	return 0;
+	return bitstream;
+}
+
+int bitstream_free(struct bitstream* bs)
+{
+	if ((NULL != bs) && (NULL != bs->bits)) {
+		free(bs->bits);
+		free(bs);
+		return 0;
+	}
+
+	return -1;
 }
