@@ -27,6 +27,7 @@
 
 // misc
 #include "misc.h"
+#include "bitstream.h"
 
 #include "ipc.h"
 

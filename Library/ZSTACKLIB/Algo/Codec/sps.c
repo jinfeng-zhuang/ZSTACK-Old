@@ -4,6 +4,7 @@
 
 #include <zstack/codec.h>
 #include <zstack/log.h>
+#include "sps.h"
 
 #define INDENT1_FORMAT    "  %-30s %d\n"
 #define INDENT2_FORMAT    "    %-30s %d\n"
