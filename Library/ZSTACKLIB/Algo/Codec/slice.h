@@ -1,22 +1,29 @@
-#ifndef _ZSTACK_H264_H_
-#define _ZSTACK_H264_H_
+#ifndef _ZSTACK_H264_SLICE_H_
+#define _ZSTACK_H264_SLICE_H_
 
-#include "pic_parameter_set_rbsp.h"
-#include "sps.h"
+//=============================================================================
+// Slice Header
+//=============================================================================
 
-enum slice_type {
-	SLICE_P,
-	SLICE_B,
-	SLICE_I,
-	SLICE_SP,
-	SLICE_SI
+enum {
+	SLICE_TYPE_P,
+	SLICE_TYPE_B,
+	SLICE_TYPE_I,
+	SLICE_TYPE_SP,
+	SLICE_TYPE_SI,
+};
+
+struct ref_pic_list_mvc_modification {
+	unsigned int rsvd;
 };
 
 struct ref_pic_list_modification {
 	unsigned int ref_pic_list_modification_flag_l0;
-	unsigned int modification_of_pic_nums_idc;
-	unsigned int abs_diff_pic_num_minus1;
-	unsigned int long_term_pic_num;
+
+	// defined as int *x[2] in JM, reference picture number <= 16
+	unsigned int modification_of_pic_nums_idc[2][16];
+	unsigned int abs_diff_pic_num_minus1[2][16];
+	unsigned int long_term_pic_num[2][16];
 
 	unsigned int ref_pic_list_modification_flag_l1;
 };
@@ -26,36 +33,36 @@ struct pred_weight_table {
 	unsigned int chroma_log2_weight_denom;
 
 	unsigned int luma_weight_l0_flag;
-	unsigned int luma_weight_l0[1]; // ?
-	unsigned int luma_offset_l0[1]; // ?
+	unsigned int luma_weight_l0[16];
+	unsigned int luma_offset_l0[16];
 	unsigned int chroma_weight_l0_flag;
-	unsigned int chroma_weight_l0[1][2];
-	unsigned int chroma_offset_l0[1][2];
+	unsigned int chroma_weight_l0[16][2];
+	unsigned int chroma_offset_l0[16][2];
 
 	unsigned int luma_weight_l1_flag;
-	unsigned int luma_weight_l1[1]; // ?
-	unsigned int luma_offset_l1[1]; // ?
+	unsigned int luma_weight_l1[16];
+	unsigned int luma_offset_l1[16];
 	unsigned int chroma_weight_l1_flag;
-	unsigned int chroma_weight_l1[1][2];
-	unsigned int chroma_offset_l1[1][2];
+	unsigned int chroma_weight_l1[16][2];
+	unsigned int chroma_offset_l1[16][2];
 };
 
 struct dec_ref_pic_marking {
 	unsigned int no_output_of_prior_pics_flag;
 	unsigned int long_term_reference_flag;
 	unsigned int adaptive_ref_pic_marking_mode_flag;
-	unsigned int memory_management_control_operation;
-	unsigned int difference_of_pic_nums_minus1;
-	unsigned int long_term_pic_num;
-	unsigned int long_term_frame_idx;
-	unsigned int max_long_term_frame_idx_plus1;
+	unsigned int memory_management_control_operation[16];
+	unsigned int difference_of_pic_nums_minus1[16];
+	unsigned int long_term_pic_num[16];
+	unsigned int long_term_frame_idx[16];
+	unsigned int max_long_term_frame_idx_plus1[16];
 };
 
 struct slice_header {
 	unsigned int first_mb_in_slice;
 	unsigned int slice_type;
 	unsigned int pic_parameter_set_id;
-    unsigned int colour_plane_id;
+	unsigned int colour_plane_id;
 	unsigned int frame_num;
 	unsigned int field_pic_flag;
 	unsigned int bottom_field_flag;
@@ -66,11 +73,12 @@ struct slice_header {
 	unsigned int redundant_pic_cnt;
 	unsigned int direct_spatial_mv_pred_flag;
 	unsigned int num_ref_idx_active_override_flag;
-	unsigned int num_ref_idx_10_active_minus1;
-	unsigned int num_ref_idx_11_active_minus1;
-	// ref_pic_list_reordering
-	// pred_weight_table
-    struct dec_ref_pic_marking dec_ref_pic_marking;
+	unsigned int num_ref_idx_l0_active_minus1;
+	unsigned int num_ref_idx_l1_active_minus1;
+	struct ref_pic_list_mvc_modification ref_pic_list_mvc_modification;
+	struct ref_pic_list_modification ref_pic_list_modification;
+	struct pred_weight_table pred_weight_table;
+	struct dec_ref_pic_marking dec_ref_pic_marking;
 	unsigned int cabac_init_idc;
 	unsigned int slice_qp_delta;
 	unsigned int sp_for_switch_flag;
@@ -80,6 +88,10 @@ struct slice_header {
 	unsigned int slice_beta_offset_div2;
 	unsigned int slice_group_change_cycle;
 };
+
+//=============================================================================
+// Slice Data
+//=============================================================================
 
 struct mb_pred {
 	unsigned int prev_intra4x4_pred_mode_flag[16];
@@ -102,11 +114,11 @@ struct sub_mb_pred {
 };
 
 struct residual {
-    int x;
+	int x;
 };
 
 struct residual_luma {
-    int x;
+	int x;
 };
 
 struct residual_block_cavlc {
@@ -143,36 +155,17 @@ struct slice_data {
 	unsigned int mb_field_decoding_flag;
 	unsigned int end_of_slice_flag;
 
-    struct macroblock_layer mb;
+	struct macroblock_layer mb;
+};
+
+struct rbsp_slice_trailing_bits {
+	unsigned int rvsd;
 };
 
 struct slice_layer_without_partitioning_rbsp {
 	struct slice_header header;
 	struct slice_data data;
+	struct rbsp_slice_trailing_bits trail;
 };
-
-enum {
-    I_NxN = 0,
-    I_PCM = 25,
-};
-
-typedef void (*nalu_callback)(unsigned char *buffer, unsigned int length);
-
-extern nalu_callback g_nalu_callback[];
-
-extern struct bitstream_s bitstream;
-
-extern int IdrPicFlag;
-
-extern int nalu_parse_all(unsigned char *content, unsigned int file_size);
-
-extern int nalu_next(enum nal_unit_type *type, unsigned char **buffer, unsigned int *length);
-
-extern struct nalu * nalu_get(int *index);
-
-
-extern struct sps *sps_proc(unsigned char *buffer, unsigned int length);
-extern int pic_pararmeter_set_rbsp_parse(unsigned char* buffer, unsigned int length);
-extern struct slice_layer_without_partitioning_rbsp *slice_layer_without_partitioning_rbsp_parse(unsigned char* buffer, unsigned int length);
 
 #endif

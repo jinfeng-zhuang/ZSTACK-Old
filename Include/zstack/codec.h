@@ -15,11 +15,6 @@ struct picture_header {
 	u8* chroma;
 };
 
-// Syntax Element
-extern int se_read_se(struct bitstream* bs);
-extern unsigned int se_read_u(struct bitstream* bs, unsigned int num);
-extern unsigned int se_read_ue(struct bitstream* bs);
-
 extern int decode_one_frame(u8* buffer, u32 length);
 
 #endif

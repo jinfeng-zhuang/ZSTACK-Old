@@ -158,8 +158,11 @@
     <ClCompile Include="Algo\Codec\nalu_get.c" />
     <ClCompile Include="Algo\Codec\h264_nalu_parse.c" />
     <ClCompile Include="Algo\Codec\nalu_type.c" />
+    <ClCompile Include="Algo\Codec\pps_dump.c" />
     <ClCompile Include="Algo\Codec\pps_parse.c" />
+    <ClCompile Include="Algo\Codec\rbsp_trailing_bits.c" />
     <ClCompile Include="Algo\Codec\scaling_list.c" />
+    <ClCompile Include="Algo\Codec\slice_layer_without_partitioning_rbsp.c" />
     <ClCompile Include="Algo\Codec\sps_dump.c" />
     <ClCompile Include="Algo\Codec\sps_parse.c" />
     <ClCompile Include="Algo\Codec\syntax_element.c" />
@@ -204,8 +207,10 @@
     <ClCompile Include="V-Silicon\vs_get_Ready2DispQ_value.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Include\zstack\zstack.h" />
     <ClInclude Include="3rdparty\getopt.h" />
     <ClInclude Include="3rdparty\tailor.h" />
+    <ClInclude Include="Algo\Codec\slice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

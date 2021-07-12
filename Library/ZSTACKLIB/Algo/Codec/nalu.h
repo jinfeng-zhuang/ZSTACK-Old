@@ -12,4 +12,10 @@
 #define NALU_TYPE_SPS		(7)
 #define NALU_TYPE_PPS		(8)
 
+struct nalu {
+	unsigned int type;
+	unsigned int IdrPicFlag;
+	unsigned int nal_ref_idc;
+};
+
 #endif

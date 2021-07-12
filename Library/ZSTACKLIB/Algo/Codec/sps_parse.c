@@ -128,6 +128,13 @@ int sps_parse(struct seq_parameter_set_rbsp *sps, unsigned char* buffer, unsigne
 		if (3 == sps->data.chroma_format_idc)
 			sps->data.separate_colour_plane_flag = se_read_u(bs, 1);
 
+		if (0 == sps->data.separate_colour_plane_flag) {
+			sps->ChromaArrayType = sps->data.chroma_format_idc;
+		}
+		else {
+			sps->ChromaArrayType = 0;
+		}
+
 		DEBUG("chroma format: %d\n", sps->data.chroma_format_idc);
 
 		sps->data.bit_depth_luma_minus8 = se_read_ue(bs);

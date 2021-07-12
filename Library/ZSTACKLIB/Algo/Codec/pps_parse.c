@@ -63,7 +63,7 @@ int pps_parse(struct pic_parameter_set_rbsp* pps, unsigned char* buffer, unsigne
 	pps->constrained_intra_pred_flag = se_read_u(bs, 1);
 	pps->redundant_pic_cnt_present_flag = se_read_u(bs, 1);
 
-	if (more_rbsp_data()) {
+	if (more_rbsp_data(bs)) {
 		pps->transform_8x8_mode_flag = se_read_u(bs, 1);
 		pps->pic_scaling_matrix_present_flag = se_read_u(bs, 1);
 		if (pps->pic_scaling_matrix_present_flag) {
@@ -79,7 +79,7 @@ int pps_parse(struct pic_parameter_set_rbsp* pps, unsigned char* buffer, unsigne
 			pps->second_chroma_qp_index_offset = se_read_se(bs);
 		}
 	}
-	rbsp_trailing_bits();
+	rbsp_trailing_bits(bs);
 
 	bitstream_free(bs);
 

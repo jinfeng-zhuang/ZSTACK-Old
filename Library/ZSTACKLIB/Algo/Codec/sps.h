@@ -111,6 +111,8 @@ struct seq_parameter_set_rbsp {
 	struct seq_parameter_set_data data;
 	struct rbsp_trailing_bits trail;
 	struct sps_tmp tmp;
+
+	unsigned int ChromaArrayType;
 };
 
 #endif
