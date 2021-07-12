@@ -7,9 +7,10 @@
 #include "pps.h"
 #include "nalu.h"
 
-struct seq_parameter_set_rbsp sps;
-struct pic_parameter_set_rbsp pps;
-struct nalu nalu;
+static struct seq_parameter_set_rbsp sps;
+static struct pic_parameter_set_rbsp pps;
+static struct nalu nalu;
+static struct h264_context h264_context;
 
 struct seq_parameter_set_rbsp* sps_get(unsigned int id)
 {
@@ -24,6 +25,11 @@ struct pic_parameter_set_rbsp* pps_get(unsigned int id)
 struct nalu* nalu_get_info(void)
 {
 	return &nalu;
+}
+
+struct h264_context* h264_context_get(void)
+{
+	return &h264_context;
 }
 
 int decode_one_frame(unsigned char* buffer, unsigned int length)

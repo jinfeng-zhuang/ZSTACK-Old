@@ -5,7 +5,16 @@
 #include <zstack/types.h>
 #include "sps.h"
 #include "pps.h"
+#include "slice.h"
 #include "nalu.h"
+
+struct h264_context {
+	struct bitstream* bs;
+	struct nalu* nalu;
+	struct seq_parameter_set_rbsp* sps;
+	struct pic_parameter_set_rbsp* pps;
+	struct slice_layer_without_partitioning_rbsp* slice;
+};
 
 extern int se_read_se(struct bitstream* bs);
 extern unsigned int se_read_u(struct bitstream* bs, unsigned int num);
@@ -28,5 +37,7 @@ extern int more_rbsp_data(struct bitstream* bs);
 extern int rbsp_trailing_bits(struct bitstream* bs);
 
 extern struct nalu* nalu_get_info(void);
+
+extern struct h264_context* h264_context_get(void);
 
 #endif

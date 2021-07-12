@@ -143,6 +143,9 @@ static int slice_header(struct bitstream* bs, struct slice_header* header)
     struct seq_parameter_set_rbsp* sps;
     struct pic_parameter_set_rbsp* pps;
     struct nalu* nalu;
+    struct h264_context* ctx;
+
+    ctx = h264_context_get();
 
     header->first_mb_in_slice = se_read_ue(bs);
     header->slice_type = se_read_ue(bs);
@@ -160,9 +163,13 @@ static int slice_header(struct bitstream* bs, struct slice_header* header)
     if (NULL == pps)
         return -1;
 
+    ctx->pps = pps;
+
     sps = sps_get(pps->seq_parameter_set_id);
     if (NULL == sps)
         return -1;
+
+    ctx->sps = sps;
 
     if (1 == sps->data.separate_colour_plane_flag) {
         header->colour_plane_id = se_read_u(bs, 2);
@@ -172,6 +179,9 @@ static int slice_header(struct bitstream* bs, struct slice_header* header)
 
     if (!sps->data.frame_mbs_only_flag) {
         header->field_pic_flag = se_read_u(bs, 1);
+
+        ctx->slice->MbaffFrameFlag = sps->data.mb_adaptive_frame_field_flag && (!header->field_pic_flag);
+
         if (header->field_pic_flag) {
             header->bottom_field_flag = se_read_u(bs, 1);
         }
@@ -253,22 +263,103 @@ static int slice_header(struct bitstream* bs, struct slice_header* header)
     }
 }
 
-static int slice_data(struct bitstream* bs, struct slice_data* data)
+static int slice_data(void)
 {
+    struct h264_context *ctx;
+    struct seq_parameter_set_rbsp* sps;
+    struct pic_parameter_set_rbsp* pps;
+    struct slice_layer_without_partitioning_rbsp* slice;
+    struct slice_data* data;
+    struct slice_header* header;
+    struct bitstream* bs;
 
+    unsigned int CurrMbAddr;
+    unsigned int moreDataFlag = 1;
+    unsigned int prevMbSkipped = 0;
+    unsigned int i;
+
+    ctx = h264_context_get();
+    sps = ctx->sps;
+    pps = ctx->pps;
+    slice = ctx->slice;
+    data = &slice->data;
+    header = &slice->header;
+    bs = ctx->bs;
+
+    if (pps->entropy_coding_mode_flag) {
+        while (!byte_aligned(bs))
+            data->cabac_alignment_one_bit = se_read_f(bs, 1);
+    }
+
+    CurrMbAddr = slice->header.first_mb_in_slice * (1 + slice->MbaffFrameFlag);
+
+    do {
+        if ((SLICE_TYPE_I != header->slice_type) && (SLICE_TYPE_SI != header->slice_type)) {
+            if (!pps->entropy_coding_mode_flag) {
+                data->mb_skip_run = se_read_ue(bs);
+                prevMbSkipped = data->mb_skip_run > 0 ? 1 : 0;
+
+                for (i = 0; i < data->mb_skip_run; i++) {
+                    CurrMbAddr = NextMbAddress(CurrMbAddr);
+                }
+
+                if (data->mb_skip_run > 0) {
+                    moreDataFlag = more_rbsp_data(bs);
+                }
+            }
+            else {
+                data->mb_skip_flag = se_read_ae(bs);
+                moreDataFlag = !data->mb_skip_flag;
+            }
+        }
+
+        if (moreDataFlag) {
+            if (slice->MbaffFrameFlag && ((CurrMbAddr % 2 == 0) || ((CurrMbAddr % 2 == 1) && (prevMbSkipped)))) {
+                data->mb_field_decoding_flag = se_read_ae(bs); // TBD
+            }
+
+            macroblock_layer();
+        }
+
+        if (!pps->entropy_coding_mode_flag) {
+            moreDataFlag = more_rbsp_data(bs);
+        }
+        else {
+            if ((SLICE_TYPE_I != header->slice_type) && (SLICE_TYPE_SI != header->slice_type)) {
+                prevMbSkipped = data->mb_skip_flag;
+            }
+
+            if (slice->MbaffFrameFlag && (CurrMbAddr % 2 == 0)) {
+                moreDataFlag = 1;
+            }
+            else {
+                data->end_of_slice_flag = se_read_ae(bs);
+                moreDataFlag = !data->end_of_slice_flag;
+            }
+        }
+
+        CurrMbAddr = NextMbAddress(CurrMbAddr);
+
+    } while (moreDataFlag)
 }
 
 // just process I frame, to make it clear, then add more
 int slice_layer_without_partitioning_rbsp_parse(struct slice_layer_without_partitioning_rbsp *slice, unsigned char* buffer, unsigned int length)
 {
     struct bitstream* bs;
+    struct h264_context* ctx;
+
+    ctx = h264_context_get();
 
 	bs = bitstream_malloc(buffer, length);
     if (NULL == bs)
         return -1;
 
+    ctx->bs = bs;
+    ctx->slice = slice;
+
     slice_header(bs, &slice->header);
-    slice_data(bs, &slice->data);
+    slice_data();
 
     bitstream_free(bs);
 

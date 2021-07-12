@@ -166,6 +166,8 @@ struct slice_layer_without_partitioning_rbsp {
 	struct slice_header header;
 	struct slice_data data;
 	struct rbsp_slice_trailing_bits trail;
+
+	unsigned int MbaffFrameFlag;
 };
 
 #endif
