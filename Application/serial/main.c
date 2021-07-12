@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 		thread_create(thread_rx, 0, 0);
 		thread_create(thread_tx, 0, 0);
 
-		serial_fd = serial_open(argv[1]);
+		serial_fd = serial_open(atoi(argv[1]));
 		if (-1 == serial_fd) {
 			DEBUG("Port %s has been taken\n", argv[1]);
 		}
