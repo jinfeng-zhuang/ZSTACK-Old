@@ -86,7 +86,7 @@ extern int param_parser(int argc, char *argv[], struct application *app);
 extern long png_to_bgra(const char* path, int* w, int* h, unsigned char** bgra);
 
 extern void serial_port_list(void);
-extern u32 serial_open(char* port);
+extern u32 serial_open(u8 id);
 
 /*
  * Block API

@@ -1,12 +1,26 @@
+#include <string.h>
+#include <stdio.h>
 #include <Windows.h>
 #include <zstack/types.h>
 #include <zstack/log.h>
 
-u32 serial_open(char* port)
+#define PORTNAME_SIZE	(16)
+
+u32 serial_open(u8 id)
 {
 	HANDLE hCom;
 	DCB dcb;
 	int fd;
+	COMMTIMEOUTS TimeOuts;
+	char port[PORTNAME_SIZE];
+
+	memset(port, 0, PORTNAME_SIZE);
+	if (id <= 10) {
+		snprintf(port, PORTNAME_SIZE, "COM%d", id);
+	}
+	else {
+		snprintf(port, PORTNAME_SIZE, "\\\\.\\COM%d", id);
+	}
 
 	hCom = CreateFileA(port, GENERIC_READ | GENERIC_WRITE,
 		0, // don't share
@@ -23,15 +37,12 @@ u32 serial_open(char* port)
 	// 2. configure
 	SetupComm(hCom, 1024, 1024);
 
-#if 0
-	COMMTIMEOUTS TimeOuts;
 	TimeOuts.ReadIntervalTimeout = 1000;
 	TimeOuts.ReadTotalTimeoutMultiplier = 500;
 	TimeOuts.ReadTotalTimeoutConstant = 5000;
 	TimeOuts.WriteTotalTimeoutMultiplier = 500;
 	TimeOuts.WriteTotalTimeoutConstant = 2000;
 	SetCommTimeouts(hCom, &TimeOuts);
-#endif
 
 	GetCommState(hCom, &dcb);
 	dcb.BaudRate = 115200;
