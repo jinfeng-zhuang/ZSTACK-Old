@@ -13,13 +13,13 @@ struct bitstream* bitstream_malloc(unsigned char *buffer, unsigned int length)
 	bitstream = (struct bitstream* )malloc(sizeof(struct bitstream));
 
 	if ((NULL == bitstream) || (NULL == buffer) || (0 == length))
-		return -1;
+		return NULL;
 
 	total = length << 3;
 
 	bits = (unsigned char *)malloc(total);
 	if (NULL == bits)
-		return -1;
+		return NULL;
 
 	memset(bits, 0, total);
 
