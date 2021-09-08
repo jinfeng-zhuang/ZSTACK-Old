@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     frame_num = app.param.duration * app.param.framerate;
 
     frame_size = 0;
-    if (app.param.format == YUV_FORMAT_NV12)
+    if (app.param.format == NV12)
         frame_size = app.param.stride * app.param.height * 3 / 2;
     else
         goto END;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     canvas.w = app.param.width;
     canvas.h = app.param.height;
     canvas.stride = app.param.stride;
-    canvas.type = YUV_FORMAT_NV12;
+    canvas.type = NV12;
 
     rect.x = 0;
     rect.y = 0;

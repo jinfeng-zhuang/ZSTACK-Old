@@ -1,4 +1,0 @@
-# video_path
-
-
-

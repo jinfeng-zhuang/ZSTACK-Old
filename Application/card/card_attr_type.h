@@ -1,0 +1,11 @@
+#ifndef CARD_ATTR_TYPE_H
+#define CARD_ATTR_TYPE_H
+
+enum {
+    CARD_ATTR_TYPE_RETINUE,
+    CARD_ATTR_TYPE_MAGIC,
+    CARD_ATTR_TYPE_HERO,
+    CARD_ATTR_TYPE_CRYSTAL,
+};
+
+#endif

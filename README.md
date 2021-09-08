@@ -13,20 +13,22 @@
 ** ZSTACK 不是一个库，而是很多库的集合，放在一个地方
 * Include 目录：根据 ZSTACKLIB 的功能划分为几个头文件，配合 ZSTACK.LIB 发布
 ** 分为外部和内部头文件
+** 公共函数的申明不用 u32 这种自定义类型
 
 ## 构建
 
 * VS 2008 和 Win7 发布时间接近，编译出来的 Release 版 exe 可以直接在 Win7 上运行
 ** 但是后来选择 VS 2019 新版本，因为更好用。
 * GCC
+* 将 ZSTACKLIB 和 Application 完全分开，都独立起来，减少依赖
 
 ### 注意
 
 * 在需要的时候，在头文件中加入 extern "C" 之前没注意
-* 创建新工程的方法：进入 Application 目录，执行
-
-  python newproj.py template <proj_name>
+* 创建新工程的方法：进入 Application 目录，点击 newproj.py 输入项目名
 
 * 版本管理
 
   <架构>.<功能>.<BUG修复>
+
+以上三个版本号独立更新。

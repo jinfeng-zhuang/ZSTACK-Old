@@ -15,6 +15,8 @@ struct application {
         char log_config[LOG_CONFIG_LENGTH];
         char input_filename[FILENAME_MAX];
         char output_filename[FILENAME_MAX];
+        int  list_flag;
+        int  port;
     } param;
 
     u8* input_file_content;

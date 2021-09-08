@@ -72,7 +72,7 @@ int param_parser(int argc, char *argv[], struct application *app)
             break;
         case OPTION_ADDR:
             if ((strlen(optarg) > 2) && ('x' == optarg[1]))
-                app->param.address = strtol(optarg, NULL, 16);
+                app->param.address = strtoul(optarg, NULL, 16);
             else
                 return -1;
             break;

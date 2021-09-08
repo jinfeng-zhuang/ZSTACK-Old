@@ -1,0 +1,17 @@
+const char* usage =
+"Usage: YUVViewer [OPTION]... [FILE]...\n"
+"\n"
+"OPTIONS:\n"
+"\n"
+"  --version     version info\n"
+"  --help        this message\n"
+"  --log         log config\n"
+"  --resolution  resolution\n"
+"  --format      YU12/YV12/NV12/NV21/...\n"
+"\n"
+"Examples:\n"
+"\n"
+"  YUVViewer --resolution=1920x1080 --format=YU12 test.yuv\n"
+"\n"
+"Source located at https://github.com/jinfeng-zhuang/zstack\n"
+"Copyright @ 2021, Jinfeng Zhuang\n";

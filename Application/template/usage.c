@@ -8,7 +8,8 @@ const char* usage =
 "  --log         log config\n"
 "\n"
 "Examples:\n"
-"  template --log \"app:5\"\n"
+"\n"
+"  template\n"
 "\n"
 "Source located at https://github.com/jinfeng-zhuang/zstack\n"
 "Copyright @ 2021, Jinfeng Zhuang\n";

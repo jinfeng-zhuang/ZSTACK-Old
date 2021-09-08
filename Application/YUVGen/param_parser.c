@@ -69,7 +69,7 @@ int param_parser(int argc, char *argv[], struct application *app)
             break;
         case OPTION_FORMAT:
             if (0 == strcmp(optarg, "NV12")) {
-                app->param.format = YUV_FORMAT_NV12;
+                app->param.format = NV12;
             }
             else {
                 PRINT("format %s not support\n", optarg);

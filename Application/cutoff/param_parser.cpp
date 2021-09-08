@@ -49,7 +49,7 @@ int param_parser(int argc, char *argv[], struct application *app)
             break;
         case OPTION_START:
             if (optarg && (strlen(optarg) > 2) && (optarg[1] == 'x')) {
-                app->param.start = strtol(optarg, NULL, 16);
+                app->param.start = strtoul(optarg, NULL, 16);
             }
             else {
                 app->param.start = atoi(optarg);
@@ -57,7 +57,7 @@ int param_parser(int argc, char *argv[], struct application *app)
             break;
         case OPTION_END:
             if (optarg && (strlen(optarg) > 2) && (optarg[1] == 'x')) {
-                app->param.end = strtol(optarg, NULL, 16);
+                app->param.end = strtoul(optarg, NULL, 16);
             }
             else {
                 app->param.end = atoi(optarg);
@@ -65,7 +65,7 @@ int param_parser(int argc, char *argv[], struct application *app)
             break;
         case OPTION_SIZE:
             if (optarg && (strlen(optarg) > 2) && (optarg[1] == 'x')) {
-                app->param.size = strtol(optarg, NULL, 16);
+                app->param.size = strtul(optarg, NULL, 16);
             }
             else {
                 app->param.size = atoi(optarg);

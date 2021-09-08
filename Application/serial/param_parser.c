@@ -10,12 +10,16 @@ enum {
     OPTION_VERSION = 1,
     OPTION_HELP,
     OPTION_LOG,
+    OPTION_LIST,
+    OPTION_PORT,
 };
 
 static struct option opts[] = {
     {"version", no_argument, 0, OPTION_VERSION},
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
+    {"list", no_argument, 0, OPTION_LIST},
+    {"port", required_argument, 0, OPTION_PORT},
     {0, 0, 0, 0}
 };
 
@@ -40,6 +44,12 @@ int param_parser(int argc, char *argv[], struct application *app)
                 return -1;
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
+            break;
+        case OPTION_LIST:
+            app->param.list_flag = 1;
+            break;
+        case OPTION_PORT:
+            app->param.port = atoi(optarg);
             break;
         default:
             return -1;

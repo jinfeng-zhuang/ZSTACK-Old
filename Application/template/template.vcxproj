@@ -34,7 +34,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{CF59371F-8AFF-4958-BE7B-05A6CC54149B}</ProjectGuid>
+    <ProjectGuid>{9C7A4467-A6EC-4C0E-AA49-68585DB9C6BF}</ProjectGuid>
     <RootNamespace>template</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -85,23 +85,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Library;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Install\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Install\Library;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Library;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Install\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Install\Library;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Library;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Install\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Install\Library;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Library;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Install\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Install\Library;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -162,6 +162,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>zstack.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)\x64\Release\$(ProjectName).exe C:\Install\Runtime</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

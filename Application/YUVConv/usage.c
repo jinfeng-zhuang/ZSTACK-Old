@@ -1,0 +1,18 @@
+const char* usage =
+"Usage: YUVConv [OPTION]... [FILE]...\n"
+"\n"
+"OPTIONS:\n"
+"\n"
+"  --version     version info\n"
+"  --help        this message\n"
+"  --log         log config\n"
+"  --resolution  width or stride (if exist)\n"
+"  --iformat     YU12/YV12/NV12/NV21/YU16/YV16/NV16/NV61\n"
+"\n"
+"Examples:\n"
+"  YUVConv --log \"app:5\"\n"
+"  YUVConv --resolution=256x144 --iformat=420SP --oformat=422SP input.yuv output.yuv"
+"\n"
+"\n"
+"Source located at https://github.com/jinfeng-zhuang/zstack\n"
+"Copyright @ 2021, Jinfeng Zhuang\n";

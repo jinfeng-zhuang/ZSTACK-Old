@@ -1,6 +1,7 @@
 #include <zstack/zstack.h>
 #include "main.h"
 #include <stdio.h>
+#include <Windows.h>
 
 enum {
 	STATUS_FREE = 0,
@@ -38,6 +39,7 @@ int thread_tx(void* arg)
 {
 	u32 ret;
 	u8 buffer[1024];
+    char c;
 
 	while (1) {
 		if (-1 == serial_fd) {
@@ -45,9 +47,8 @@ int thread_tx(void* arg)
 			continue;
 		}
 
-		memset(buffer, 0, 1024);
-		fgets(buffer, 1024 - 1, stdin);
-		ret = serial_write(serial_fd, buffer, (u32)strlen(buffer));
+		c = getch();
+		ret = serial_write(serial_fd, &c, 1);
 		if (ret == -1) {
 			//serial_fd = -1;
 		}
@@ -63,14 +64,14 @@ int main(int argc, char* argv[])
 	
 	log_init(app.param.log_config);
 	
-	if (argc == 1) {
+	if (app.param.list_flag) {
 		serial_port_list();
 	}
 	else {
 		thread_create(thread_rx, 0, 0);
 		thread_create(thread_tx, 0, 0);
 
-		serial_fd = serial_open(atoi(argv[1]));
+		serial_fd = serial_open(app.param.port);
 		if (-1 == serial_fd) {
 			DEBUG("Port %s has been taken\n", argv[1]);
 		}
