@@ -11,6 +11,8 @@ extern struct YUV_Wrapper yuv_wrapper_yv16;
 extern struct YUV_Wrapper yuv_wrapper_nv16;
 extern struct YUV_Wrapper yuv_wrapper_nv61;
 
+extern struct YUV_Wrapper yuv_wrapper_yuv444;
+
 struct YUV_Wrapper* YUV_Wrapper_Init(enum YUVFormat format)
 {
 	if (YU12 == format) {
@@ -29,13 +31,16 @@ struct YUV_Wrapper* YUV_Wrapper_Init(enum YUVFormat format)
 		return &yuv_wrapper_yu16;
 	}
 	else if (YV16 == format) {
-		return NULL;
+		return &yuv_wrapper_yv16;
 	}
 	else if (NV16 == format) {
-		return NULL;
+		return &yuv_wrapper_nv16;
 	}
 	else if (NV61 == format) {
-		return NULL;
+		return &yuv_wrapper_nv61;
+	}
+	else if (YUV444 == format) {
+		return &yuv_wrapper_yuv444;
 	}
 	else {
 		return NULL;
