@@ -76,10 +76,10 @@
     <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Install\Include;C:\Install\Include\ffmpeg;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Install\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Install\Include;C:\Install\Include\ffmpeg;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -170,6 +170,8 @@
     <ClCompile Include="Algo\Codec\sps_parse.c" />
     <ClCompile Include="Algo\Codec\syntax_element.c" />
     <ClCompile Include="Algo\crc16.c" />
+    <ClCompile Include="FFMPEG\decodec_parse_one_frame.c" />
+    <ClCompile Include="FFMPEG\guess_video_codec.c" />
     <ClCompile Include="Graphic\canvas_create.c" />
     <ClCompile Include="Graphic\check_canvas.c" />
     <ClCompile Include="Graphic\correct_rect_on_canvas.c" />
@@ -188,32 +190,55 @@
     <ClCompile Include="Misc\flash.c" />
     <ClCompile Include="Misc\fsize.c" />
     <ClCompile Include="Misc\hexdump.c" />
+    <ClCompile Include="Misc\layout_create.c" />
+    <ClCompile Include="Misc\layout_find_hwnd.c" />
+    <ClCompile Include="Misc\layout_find_name.c" />
+    <ClCompile Include="Misc\layout_resize.c" />
+    <ClCompile Include="Misc\list.c" />
+    <ClCompile Include="Misc\load_png.c" />
     <ClCompile Include="Misc\log.c" />
+    <ClCompile Include="Misc\log2buffer.c" />
     <ClCompile Include="Misc\log2file.c" />
+    <ClCompile Include="Misc\mem_format_parser.c" />
     <ClCompile Include="Misc\msleep.c" />
     <ClCompile Include="Misc\print_usage.c" />
+    <ClCompile Include="Misc\readlines.c" />
+    <ClCompile Include="Misc\replace_char.c" />
     <ClCompile Include="Misc\ringbuf.c" />
     <ClCompile Include="Misc\serial_open.c" />
     <ClCompile Include="Misc\serial_port_list.c" />
     <ClCompile Include="Misc\serial_read.c" />
     <ClCompile Include="Misc\serial_write.c" />
+    <ClCompile Include="Misc\split.c" />
     <ClCompile Include="Misc\tcp.c" />
     <ClCompile Include="Misc\time.c" />
+    <ClCompile Include="Misc\trim.c" />
+    <ClCompile Include="Misc\yuv.c" />
     <ClCompile Include="Misc\YUVFormat_Value.c" />
+    <ClCompile Include="Misc\YUV_444.c" />
     <ClCompile Include="Misc\YUV_NV12.c" />
+    <ClCompile Include="Misc\YUV_NV16.c" />
+    <ClCompile Include="Misc\YUV_NV21.c" />
+    <ClCompile Include="Misc\YUV_NV61.c" />
     <ClCompile Include="Misc\YUV_Wrapper_Init.c" />
     <ClCompile Include="Misc\YUV_YU12.c" />
     <ClCompile Include="Misc\YUV_YU16.c" />
+    <ClCompile Include="Misc\YUV_YV12.c" />
+    <ClCompile Include="Misc\YUV_YV16.c" />
     <ClCompile Include="Misc\zfs.c" />
     <ClCompile Include="String\readlines.c" />
     <ClCompile Include="UI\AVMIPSVideo.c" />
+    <ClCompile Include="UI\AVMIPSVideo_AVSync.c" />
     <ClCompile Include="UI\AVMIPSVideo_Decoder.c" />
+    <ClCompile Include="UI\AVMIPSVideo_ES.c" />
+    <ClCompile Include="UI\AVMIPSVideo_FrameBuffer.c" />
     <ClCompile Include="UI\AVMIPSVideo_MpegFormat.c" />
     <ClCompile Include="UI\EmptyBoard.c" />
     <ClCompile Include="UI\layout_percent_to_real.c" />
     <ClCompile Include="UI\ListBoard.c" />
     <ClCompile Include="UI\MenuBoard.c" />
     <ClCompile Include="UI\DataStructure.c" />
+    <ClCompile Include="UI\RingBuffer.c" />
     <ClCompile Include="UI\YUV.c" />
     <ClCompile Include="Win32Ctrl\Animation.c" />
     <ClCompile Include="Win32Ctrl\Button.c" />
