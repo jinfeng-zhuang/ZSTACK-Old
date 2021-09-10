@@ -10,12 +10,14 @@ enum {
     OPTION_VERSION = 1,
     OPTION_HELP,
     OPTION_LOG,
+    OPTION_TIMEOUT,
 };
 
 static struct option opts[] = {
     {"version", no_argument, 0, OPTION_VERSION},
     {"help", no_argument, 0, OPTION_HELP},
     {"log", required_argument, 0, OPTION_LOG},
+    {"timeout", required_argument, 0, OPTION_TIMEOUT},
     {0, 0, 0, 0}
 };
 
@@ -38,15 +40,18 @@ int param_parser(int argc, char *argv[], struct application *app)
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);
             break;
+        case OPTION_TIMEOUT:
+            app->param.timeout = atoi(optarg);
+            break;
         default:
             return -1;
         }
     }
 
     if (optind < argc) {
-        if (strlen(argv[optind]) >= FILENAME_MAX)
+        if (strlen(argv[optind]) >= IP_LENGTH)
             return -1;
-        memcpy(app->param.input_filename, argv[optind], strlen(argv[optind]));
+        memcpy(app->param.ip, argv[optind], strlen(argv[optind]));
     }
 
     /*************************************************************************

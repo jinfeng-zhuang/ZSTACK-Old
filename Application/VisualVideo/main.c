@@ -1,9 +1,7 @@
 #include <Windows.h>
 #include <commctrl.h>
-
 #include <zstack/zstack.h>
 #include <v-silicon/v-silicon.h>
-
 #include "main.h"
 
 struct application app;
@@ -15,47 +13,42 @@ static int thread_entry(void* arg)
     unsigned int es_desc_base = 0;
     unsigned int frameq_base = 0;
     unsigned int rdy2dispQ_count = 0;
-    char tmpbuf[100];
-    struct ringbuffer r;
+    struct ringbuffer *es;
+    int channel = 0;
     float es_percent = 0.0;
+    char *version;
+    struct VideoFrameInfo* frameinfo;
+    triVideoSharedInfo_t* shareinfo;
+    int step_flag;
+    unsigned int luma_addr[4];
+    
+    version = avmips_get_version();
+    SendMessage(hwnd, WM_USER, "Version", version);
 
     while (1) {
-        if (0 == hwnd)
-            goto SLEEP;
+        es = avmips_get_ves_desc(channel);
+        shareinfo = avmips_get_shareinfo(channel);
+        frameinfo = avmips_get_frameinfo(channel);
+        luma_addr[0] = mpegdisp_luma_addr(channel, 0);
+        luma_addr[1] = mpegdisp_luma_addr(channel, 1);
+        luma_addr[2] = mpegdisp_luma_addr(channel, 2);
+        luma_addr[3] = mpegdisp_luma_addr(channel, 3);
 
-#if 0
-        if (0 == es_desc_base) {
-            es_desc_base = avmips_get_ves_desc_addr(0);
-            es_percent = 0.0;
+        SendMessage(hwnd, WM_USER, "ESRING", es);
+        SendMessage(hwnd, WM_USER, "ShareInfo", shareinfo);
+
+        SendMessage(hwnd, WM_USER, "DECODER", shareinfo);
+        SendMessage(hwnd, WM_USER, "AVSYNC", shareinfo);
+
+        SendMessage(hwnd, WM_USER, "FrameBuffer", luma_addr);
+        SendMessage(hwnd, WM_USER, "MPEGFormat", frameinfo);
+
+        step_flag = avmips_get_step_flag();
+        if (-1 != step_flag) {
+            avmips_step(step_flag);
         }
-        else {
-            avmips_get_ves_desc(&r, es_desc_base);
-            es_percent = ringbuf_datalen_percent(&r);
-        }
-        
-        if (0 == frameq_base) {
-            frameq_base = avmips_frameq_get_base(0);
-            rdy2dispQ_count = 0;
-        }
-        else {
-            avmips_get_ves_desc(&r, frameq_base);
-            rdy2dispQ_count = avmips_frameq_get_rdy2dispQ_count(&r);
-        }
-#else
-        es_percent += 0.1;
-#endif
 
-        snprintf(tmpbuf, sizeof(tmpbuf), "ES:\n\t%f", es_percent);
-        SendMessage(hwnd, WM_USER, 0, tmpbuf);
-
-        SendMessage(hwnd, WM_USER, 1, "SigmaIP");
-
-        snprintf(tmpbuf, sizeof(tmpbuf), "%d", rdy2dispQ_count);
-        SendMessage(hwnd, WM_USER, 2, tmpbuf);
-
-        SendMessage(hwnd, WM_USER, 3, "frameinfo:");
-SLEEP:
-        msleep(1000);
+        msleep(100);
     }
 
     return 0;
@@ -64,6 +57,7 @@ SLEEP:
 int main(int argc, char *argv[])
 {
     MSG msg;
+    int ret;
 
     if (param_parser(argc, argv, &app) == -1) {
         print_usage();
@@ -72,17 +66,21 @@ int main(int argc, char *argv[])
 
     log_init(app.param.log_config);
 
-    // Load common control DLL
     InitCommonControls();
 
     Class_AVMIPSVideo_Register(NULL);
     Class_AVMIPSVideo_MpegFormat_Register(NULL);
     Class_AVMIPSVideo_Decoder_Register(NULL);
+    Class_AVMIPSVideo_Input_Register(NULL);
+    Class_AVMIPSVideo_AVSync_Register(NULL);
+    Class_AVMIPSVideo_FrameBuffer_Register(NULL);
     Class_YUV_Register(NULL);
+    Class_RingBufferRegister(NULL);
 
-    //dbg_init("10.86.79.148");
-
-    //thread_create(thread_entry, 0);
+    ret = dbg_init(app.param.ip, app.param.timeout);
+    if (0 != ret) {
+        return -1;
+    }
 
     hwnd = CreateWindowEx(
         0,
@@ -97,6 +95,8 @@ int main(int argc, char *argv[])
 
     ShowWindow(hwnd, 1);
     UpdateWindow(hwnd);
+
+    thread_create(thread_entry, 0);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
