@@ -9,7 +9,7 @@ static HWND ctrl;
 static triVideoSharedInfo_t shareinfo;
 
 static const char* items[] = {
-	"DecodedBytes", "DecodedFrames", "Skipped", "rdy2dispQ",
+	"Codec", "Profile", "Level",
 };
 
 static void insert_item(HWND ctrl, int row, char* id, char* value)
@@ -74,17 +74,14 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 		memcpy(&shareinfo, lParam, sizeof(triVideoSharedInfo_t));
 
-		snprintf(tmp, sizeof(tmp), "%lld", shareinfo.DecodedBytes);
+		snprintf(tmp, sizeof(tmp), "%d", shareinfo.VideoStandard);
 		ListView_SetItemText(ctrl, 0, 1, tmp);
 
-		snprintf(tmp, sizeof(tmp), "%d", shareinfo.DecodedFrames);
+		snprintf(tmp, sizeof(tmp), "%d", shareinfo.VideoProfile);
 		ListView_SetItemText(ctrl, 1, 1, tmp);
 
-		snprintf(tmp, sizeof(tmp), "%d", shareinfo.SkippedFrams);
+		snprintf(tmp, sizeof(tmp), "%d", shareinfo.VideoLevel);
 		ListView_SetItemText(ctrl, 2, 1, tmp);
-
-		snprintf(tmp, sizeof(tmp), "%d", shareinfo.FrmsInRDY2DispQ);
-		ListView_SetItemText(ctrl, 3, 1, tmp);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -96,7 +93,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return 0;
 }
 
-int Class_AVMIPSVideo_Decoder_Register(HINSTANCE hInstance)
+int Class_AVMIPSVideo_Input_Register(HINSTANCE hInstance)
 {
 	WNDCLASSEX wce = { 0 };
 
@@ -106,7 +103,7 @@ int Class_AVMIPSVideo_Decoder_Register(HINSTANCE hInstance)
 	wce.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wce.hInstance = hInstance;
 	wce.lpfnWndProc = WindowProc;
-	wce.lpszClassName = TEXT("AVMIPSVideo_Decoder");
+	wce.lpszClassName = TEXT("AVMIPSVideo_Input");
 	wce.style = CS_HREDRAW | CS_VREDRAW;
 	if (!RegisterClassEx(&wce)) {
 		return 1;

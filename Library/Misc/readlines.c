@@ -1,5 +1,6 @@
 #include <zstack/zstack.h>
 
+#if 0
 int readlines(const char *filename, struct index_buffer *ib)
 {
     unsigned int file_size;
@@ -37,3 +38,4 @@ int readlines(const char *filename, struct index_buffer *ib)
 
     return line_count;
 }
+#endif

@@ -1,17 +1,9 @@
 #include <Windows.h>
-#include <zstack.h>
+#include <zstack/zstack.h>
 
-#define RBM_INIT        (WM_USER + 0)
-#define RBM_UPDATE      (WM_USER + 1)
-
-static int progress;
-static unsigned int start;
-static unsigned int end;
-static unsigned int wp;
-static unsigned int rp;
 static unsigned int progress_wp;
 static unsigned int progress_rp;
-static unsigned int start_new, end_new, wp_new, rp_new;
+static struct ringbuffer ring;
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -46,7 +38,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         hbrush = CreateSolidBrush(RGB(0, 0, 255));
         hbrush_origin = (HBRUSH)SelectObject(hdc, hbrush);
 
-        if (progress_wp > progress_rp)
+        if (progress_wp >= progress_rp)
             Rectangle(hdc, progress_rp, 0, progress_wp, client_rect.bottom);
         else {
             Rectangle(hdc, progress_rp, 0, client_rect.right, client_rect.bottom);
@@ -59,36 +51,24 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-    case RBM_UPDATE:
-        // wParam = read, lParam = write
-        rp = LOWORD(wParam);
-        wp = LOWORD(lParam);
+    case WM_USER:
+		if (NULL == lParam)
+			break;
 
-        if ((wp < start) || (wp > end))
-            break;
+        memcpy(&ring, lParam, sizeof(struct ringbuffer));
 
-        if ((rp < start) || (rp > end))
-            break;
+		if ((ring.wp >= ring.length) || (ring.rp >= ring.length))
+			break;
 
-        start_new = 0;
-        end_new = end - start;
-        wp_new = wp - start;
-        rp_new = rp - start;
-        
         GetClientRect(hWnd, &client_rect);
 
-        progress_wp = (unsigned int)wp_new * 100 / end_new;
-        progress_rp = (unsigned int)rp_new * 100 / end_new;
+        progress_wp = (float)ring.wp * 100 / ring.length;
+        progress_rp = (float)ring.rp * 100 / ring.length;
 
-        progress_wp = (unsigned int)progress_wp * (client_rect.right - client_rect.left) / 100;
-        progress_rp = (unsigned int)progress_rp * (client_rect.right - client_rect.left) / 100;
+        progress_wp = (float)progress_wp * (client_rect.right - client_rect.left) / 100;
+        progress_rp = (float)progress_rp * (client_rect.right - client_rect.left) / 100;
         
         InvalidateRect(hWnd, &client_rect, TRUE);
-        break;
-    case RBM_INIT:
-        // wParam = start, lParam = end
-        start = LOWORD(wParam);
-        end = LOWORD(lParam);
         break;
 	default:
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -97,7 +77,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return 0;
 }
 
-int RingBufferBoardRegister(HINSTANCE hInstance)
+int Class_RingBufferRegister(HINSTANCE hInstance)
 {
 	WNDCLASSEX wce = { 0 };
 
@@ -107,7 +87,7 @@ int RingBufferBoardRegister(HINSTANCE hInstance)
 	wce.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wce.hInstance = hInstance;
 	wce.lpfnWndProc = WindowProc;
-	wce.lpszClassName = TEXT("RingBufferBoard");
+	wce.lpszClassName = TEXT("RingBuffer");
 	wce.style = CS_HREDRAW | CS_VREDRAW;
 	if (!RegisterClassEx(&wce)) {
 		return 1;

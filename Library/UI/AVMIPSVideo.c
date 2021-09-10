@@ -1,92 +1,105 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <Windows.h>
+#include <commctrl.h>
 #include <zstack/zstack.h>
 
-#if 0
-struct UI layout[] = {
-	{"ES BUFFER",	"AVMIPSVideo_MpegFormat",	NULL, {0, 0, 30, 50}},
-	{"DECODER",		"AVMIPSVideo_Decoder",		NULL, {50, 0, 30, 50}},
-	{"AVSYNC",		"AVMIPSVideo_MpegFormat",	NULL, {0, 50, 30, 50}},
-	{"DISPLAY",		"YUV",	NULL, {50, 50, 30, 50}},
+#define WIDTH	20
+#define TOP		10
+
+static struct layout layout[] = {
+	// Toolbar
+	{"Toolbar", "ToolbarWindow32", {0, TOP, WIDTH, 5}, TBSTYLE_TOOLTIPS},
+
+	// Input
+	{"Version", "Static", {0, TOP, WIDTH, 5}},
+	{"ESRING", "RingBuffer", {0, TOP+10, WIDTH, 5}},
+	{"ESDUMP", "BUTTON", {0, TOP+20, WIDTH, 5}, BS_AUTOCHECKBOX},
+	{"Metadata", "BUTTON", {0, TOP+25, WIDTH, 5}, BS_AUTOCHECKBOX},
+	{"ShareInfo",	"AVMIPSVideo_Input", {0, TOP+35, WIDTH, 40}},
+
+	// Decoder
+	{"DECODER", "AVMIPSVideo_Decoder", {25, TOP, WIDTH, 50}},
+
+	// AVSync
+	{"AVSYNC_OnOff", "BUTTON", {50, TOP, WIDTH, 10}, BS_AUTOCHECKBOX},
+	{"AVSYNC", "AVMIPSVideo_AVSync", {50, TOP+15, WIDTH, 50}},
+
+	// Output
+	{"FrameBuffer",	"AVMIPSVideo_FrameBuffer", {75, TOP, WIDTH, 20}},
+	{"YUVWindow",	"YUV", {75, TOP+25, WIDTH, 20}},
+	{"MPEGFormat",	"AVMIPSVideo_MpegFormat", {75, TOP+50, WIDTH, 40}},
+	
+	{NULL}
 };
-#endif
-struct UI layout[] = {
-	{"DISPLAY",		"YUV",	NULL, {10, 10, 80, 80}},
-};
 
-static void Init(HWND hWnd, HINSTANCE hInstance)
+int toolbar_init_standard(HWND hwnd)
 {
-	HWND hwnd;
-	RECT rc;
-	struct layout_rect lr = { 0 };
-	int i;
-	HWND group;
-	unsigned char* buffer = malloc(1920 * 1080 * 3 / 2);
-	struct YUV yuv;
+	TBBUTTON tbBtn;
+	TBADDBITMAP tbBitmap;
 
-	GetClientRect(hWnd, &rc);
+	memset(&tbBtn, 0, sizeof(TBBUTTON));
+	tbBtn.iBitmap = STD_FILENEW;
+	tbBtn.fsState = TBSTATE_ENABLED;
+	tbBtn.fsStyle = TBSTYLE_BUTTON;
+	tbBtn.iString = TEXT("Open");
 
-	for (i = 0; i < ARRAY_SIZE(layout); i++) {
-		layout_percent_to_real(&rc, &layout[i].rect, &lr);
+	tbBitmap.hInst = HINST_COMMCTRL;
+	tbBitmap.nID = IDB_STD_SMALL_COLOR;
 
-		layout[i].hwnd = CreateWindowEx(
-			0,
-			layout[i].classname,
-			NULL,
-			WS_CHILD | WS_VISIBLE,
-			lr.x, lr.y, lr.w, lr.h,
-			hWnd,
-			NULL,
-			NULL,
-			NULL);
-	}
+	SendMessage(hwnd, TB_ADDBITMAP, 0, (LPARAM)&tbBitmap);
+	SendMessage(hwnd, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
+	SendMessage(hwnd, TB_ADDBUTTONS, (WPARAM)1, (LPARAM)&tbBtn);
 
-	file_load("C:\\Users\\jinfengz\\test.yuv", 0, buffer, 1920 * 1080 * 3 / 2);
-
-	yuv.format = YU12;
-	yuv.width = 1920;
-	yuv.height = 1080;
-	yuv.buffer = buffer;
-
-	SendMessage(layout[0].hwnd, WM_USER, 0, (LPARAM)&yuv);
-}
-
-static void Update(HWND hWnd)
-{
-	HWND hwnd;
-	RECT rc;
-	struct layout_rect lr = { 0 };
-	int i;
-
-	GetClientRect(hWnd, &rc);
-
-	for (i = 0; i < ARRAY_SIZE(layout); i++) {
-		layout_percent_to_real(&rc, &layout[i].rect, &lr);
-
-		MoveWindow(layout[i].hwnd, lr.x, lr.y, lr.w, lr.h, TRUE);
-	}
+	return 0;
 }
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HINSTANCE hInstance;
 	RECT rc;
+	HWND hwndTmp;
+	const char* name;
 
 	switch (uMsg)
 	{
 	case WM_CREATE:
-		hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
-		Init(hWnd, hInstance);
+		layout_create(hWnd, layout);
+		
+		hwndTmp = layout_find_hwnd(layout, "Toolbar");
+		if (hwndTmp) {
+			toolbar_init_standard(hwndTmp);
+		}
 		break;
 	case WM_SIZE:
-		Update(hWnd);
+		layout_resize(hWnd, layout);
 		break;
 	case WM_KEYDOWN:
 		break;
 	case WM_COMMAND:
+		name = layout_find_name(layout, lParam);
+		if (0 == strcmp(name, "Step")) {
+			avmips_set_step_flag(TRUE);
+			
+		}
+		else if (0 == strcmp(name, "Play")) {
+			avmips_set_step_flag(FALSE);
+		}
 		break;
 	case WM_USER:
+		if (NULL == wParam)
+			break;
+
+		hwndTmp = layout_find_hwnd(layout, wParam);
+		if (NULL == hwndTmp)
+			break;
+
+		if (0 == strcmp(wParam, "Version")) {
+			SendMessage(hwndTmp, WM_SETTEXT, 0, lParam);
+		}
+		else {
+			SendMessage(hwndTmp, WM_USER, 0, lParam);
+		}
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

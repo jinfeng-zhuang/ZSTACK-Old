@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <3rdparty/png.h>
+#include <libpng/png.h>
 #include <stdio.h>
 #include <stdlib.h>
 

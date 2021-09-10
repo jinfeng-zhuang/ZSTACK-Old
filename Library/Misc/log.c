@@ -145,7 +145,6 @@ FAILED:
 int _log(const char * name, int force, const char *fmt, ...)
 {
     int index;
-    char _prefix[128] = {0};
 
     // Check if module inited
     if (! log_inited) {

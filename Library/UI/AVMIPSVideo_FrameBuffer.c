@@ -6,10 +6,11 @@
 #include <v-silicon/v-silicon.h>
 
 static HWND ctrl;
-static triVideoSharedInfo_t shareinfo;
+static HWND group;
+static unsigned int luma[4];
 
 static const char* items[] = {
-	"DecodedBytes", "DecodedFrames", "Skipped", "rdy2dispQ",
+	"CUR", "P1", "P2", "P3",
 };
 
 static void insert_item(HWND ctrl, int row, char* id, char* value)
@@ -32,10 +33,17 @@ static void Init(HWND hWnd, HINSTANCE hInstance)
 
 	GetClientRect(hWnd, &rc);
 
+	group = CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("BUTTON"), TEXT("MpegFormat"),
+		WS_CHILD | WS_VISIBLE | WS_GROUP | BS_GROUPBOX,
+		rc.left, rc.top, rc.right, rc.bottom,
+		hWnd, NULL, NULL, NULL);
+
+	GetClientRect(group, &rc);
+
 	ctrl = CreateWindowEx(WS_EX_CLIENTEDGE, TEXT("SysListView32"), NULL,
 		WS_CHILD | WS_VISIBLE | LVS_REPORT,
 		rc.left, rc.top, rc.right, rc.bottom,
-		hWnd, NULL, NULL, NULL);
+		group, NULL, NULL, NULL);
 
 	col.mask = LVCF_TEXT | LVCF_WIDTH;
 	col.pszText = TEXT("Name");
@@ -66,24 +74,26 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 		break;
 	case WM_SIZE:
 		GetClientRect(hWnd, &rc);
+		MoveWindow(group, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, TRUE);
+		GetClientRect(group, &rc);
 		MoveWindow(ctrl, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, TRUE);
 		break;
 	case WM_USER:
 		if (NULL == lParam)
 			break;
 
-		memcpy(&shareinfo, lParam, sizeof(triVideoSharedInfo_t));
+		memcpy(luma, lParam, sizeof(unsigned int) * 4);
 
-		snprintf(tmp, sizeof(tmp), "%lld", shareinfo.DecodedBytes);
+		snprintf(tmp, sizeof(tmp), "%#x", luma[0]);
 		ListView_SetItemText(ctrl, 0, 1, tmp);
 
-		snprintf(tmp, sizeof(tmp), "%d", shareinfo.DecodedFrames);
+		snprintf(tmp, sizeof(tmp), "%#x", luma[1]);
 		ListView_SetItemText(ctrl, 1, 1, tmp);
 
-		snprintf(tmp, sizeof(tmp), "%d", shareinfo.SkippedFrams);
+		snprintf(tmp, sizeof(tmp), "%#x", luma[2]);
 		ListView_SetItemText(ctrl, 2, 1, tmp);
 
-		snprintf(tmp, sizeof(tmp), "%d", shareinfo.FrmsInRDY2DispQ);
+		snprintf(tmp, sizeof(tmp), "%#x", luma[3]);
 		ListView_SetItemText(ctrl, 3, 1, tmp);
 		break;
 	case WM_DESTROY:
@@ -96,7 +106,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return 0;
 }
 
-int Class_AVMIPSVideo_Decoder_Register(HINSTANCE hInstance)
+int Class_AVMIPSVideo_FrameBuffer_Register(HINSTANCE hInstance)
 {
 	WNDCLASSEX wce = { 0 };
 
@@ -106,7 +116,7 @@ int Class_AVMIPSVideo_Decoder_Register(HINSTANCE hInstance)
 	wce.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wce.hInstance = hInstance;
 	wce.lpfnWndProc = WindowProc;
-	wce.lpszClassName = TEXT("AVMIPSVideo_Decoder");
+	wce.lpszClassName = TEXT("AVMIPSVideo_FrameBuffer");
 	wce.style = CS_HREDRAW | CS_VREDRAW;
 	if (!RegisterClassEx(&wce)) {
 		return 1;

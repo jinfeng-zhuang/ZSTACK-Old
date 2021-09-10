@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <zstack.h>
+#include <zstack/zstack.h>
 
 #include <assert.h>
 
@@ -95,5 +95,5 @@ void mem_format_parser_test(void)
 
 	mem_format_parser_simple("   4:1 0x20 0x300 4  , 2  :  1    65535 0x22   ,    1 4: 5 56", output);
 
-	hexdump(output, 64);
+	hexdump(output, 64, 0);
 }

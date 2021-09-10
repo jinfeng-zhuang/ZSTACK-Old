@@ -3,9 +3,15 @@
 #include <Windows.h>
 #include <commctrl.h>
 #include <zstack/zstack.h>
+#include <v-silicon/v-silicon.h>
 
 static HWND ctrl;
 static HWND group;
+static struct VideoFrameInfo frameinfo;
+
+static const char* items[] = {
+	"Width", "Height", "PTS", "Codec", "Profile", "Level"
+};
 
 static void insert_item(HWND ctrl, int row, char* id, char* value)
 {
@@ -23,6 +29,7 @@ static void Init(HWND hWnd, HINSTANCE hInstance)
 {
 	LV_COLUMN col;
 	RECT rc;
+	int i;
 
 	GetClientRect(hWnd, &rc);
 
@@ -48,17 +55,16 @@ static void Init(HWND hWnd, HINSTANCE hInstance)
 	col.cx = 60;
 	SendMessage(ctrl, LVM_INSERTCOLUMN, 1, (LPARAM)&col);
 
-	insert_item(ctrl, 0, "HDR Mode", "N/A");
-	insert_item(ctrl, 1, "ES Buffer", "N/A");
-	insert_item(ctrl, 1, "Stream", "N/A");
-	insert_item(ctrl, 1, "Profile", "N/A");
-	insert_item(ctrl, 1, "Level", "N/A");
+	for (i = 0; i < ARRAY_SIZE(items); i++) {
+		insert_item(ctrl, i, items[i], "N/A");
+	}
 }
 
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HINSTANCE hInstance;
 	RECT rc;
+	char tmp[64];
 
 	switch (uMsg)
 	{
@@ -73,8 +79,28 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 		MoveWindow(ctrl, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, TRUE);
 		break;
 	case WM_USER:
-		// set column 1 always
-		ListView_SetItemText(ctrl, wParam, 1, lParam);
+		if (NULL == lParam)
+			break;
+
+		memcpy(&frameinfo, lParam, sizeof(struct VideoFrameInfo));
+
+		snprintf(tmp, sizeof(tmp), "%d", frameinfo.format.wHsize);
+		ListView_SetItemText(ctrl, 0, 1, tmp);
+
+		snprintf(tmp, sizeof(tmp), "%d", frameinfo.format.wVsize);
+		ListView_SetItemText(ctrl, 1, 1, tmp);
+
+		snprintf(tmp, sizeof(tmp), "%d", frameinfo.tPrivData.PTS);
+		ListView_SetItemText(ctrl, 2, 1, tmp);
+
+		snprintf(tmp, sizeof(tmp), "%d", frameinfo.tProfileLvl.VideoStandard);
+		ListView_SetItemText(ctrl, 3, 1, tmp);
+
+		snprintf(tmp, sizeof(tmp), "%d", frameinfo.tProfileLvl.VideoProfile);
+		ListView_SetItemText(ctrl, 4, 1, tmp);
+
+		snprintf(tmp, sizeof(tmp), "%d", frameinfo.tProfileLvl.VideoLevel);
+		ListView_SetItemText(ctrl, 5, 1, tmp);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
