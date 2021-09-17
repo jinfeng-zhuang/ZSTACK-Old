@@ -38,13 +38,13 @@ int param_parser(int argc, char *argv[], struct application *app)
     while((c=getopt_long(argc, argv, "", opts, NULL))!=-1){
         switch (c) {
         case OPTION_VERSION:
-            PRINT("Version: %s\n", version);
+            warn("Version: %s\n", version);
             return -1;
         case OPTION_HELP:
             return -1;
         case OPTION_LOG:
             if (strlen(optarg) >= LOG_CONFIG_LENGTH) {
-                PRINT("log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
+                warn("log config out of range (0, %d)\n", LOG_CONFIG_LENGTH);
                 return -1;
             }
             strncpy(app->param.log_config, optarg, LOG_CONFIG_LENGTH);

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     while (1) {
         bytes_read = file_load(app.param.input_filename, offset, buffer, app.param.page_size);
         if (-1 == bytes_read) {
-            DEBUG("file %s load failed\n", app.param.input_filename);
+            warn("file %s load failed\n", app.param.input_filename);
             break;
         }
         else if (bytes_read < app.param.page_size) {

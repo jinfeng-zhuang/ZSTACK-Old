@@ -106,7 +106,7 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\x64\Debug\zstack.lib $(SolutionDir)\Library</Command>
+      <Command>copy $(SolutionDir)\x64\Debug\zstack.lib C:\Install\Library</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -202,7 +202,6 @@
     <ClCompile Include="Misc\mem_format_parser.c" />
     <ClCompile Include="Misc\msleep.c" />
     <ClCompile Include="Misc\print_usage.c" />
-    <ClCompile Include="Misc\readlines.c" />
     <ClCompile Include="Misc\replace_char.c" />
     <ClCompile Include="Misc\ringbuf.c" />
     <ClCompile Include="Misc\serial_open.c" />
@@ -213,7 +212,6 @@
     <ClCompile Include="Misc\tcp.c" />
     <ClCompile Include="Misc\time.c" />
     <ClCompile Include="Misc\trim.c" />
-    <ClCompile Include="Misc\yuv.c" />
     <ClCompile Include="Misc\YUVFormat_Value.c" />
     <ClCompile Include="Misc\YUV_444.c" />
     <ClCompile Include="Misc\YUV_NV12.c" />
@@ -226,6 +224,7 @@
     <ClCompile Include="Misc\YUV_YV12.c" />
     <ClCompile Include="Misc\YUV_YV16.c" />
     <ClCompile Include="Misc\zfs.c" />
+    <ClCompile Include="MP4\mp4_box_parse.c" />
     <ClCompile Include="String\readlines.c" />
     <ClCompile Include="UI\AVMIPSVideo.c" />
     <ClCompile Include="UI\AVMIPSVideo_AVSync.c" />
