@@ -19,12 +19,12 @@ static int thread_entry(void* arg)
     char *version;
     struct VideoFrameInfo* frameinfo;
     triVideoSharedInfo_t* shareinfo;
-    int step_flag;
+    int step_cmd;
     unsigned int luma_addr[4];
     
     version = avmips_get_version();
     SendMessage(hwnd, WM_USER, "Version", version);
-
+    
     while (1) {
         es = avmips_get_ves_desc(channel);
         shareinfo = avmips_get_shareinfo(channel);
@@ -33,19 +33,19 @@ static int thread_entry(void* arg)
         luma_addr[1] = mpegdisp_luma_addr(channel, 1);
         luma_addr[2] = mpegdisp_luma_addr(channel, 2);
         luma_addr[3] = mpegdisp_luma_addr(channel, 3);
-
+        
         SendMessage(hwnd, WM_USER, "ESRING", es);
         SendMessage(hwnd, WM_USER, "ShareInfo", shareinfo);
 
         SendMessage(hwnd, WM_USER, "DECODER", shareinfo);
         SendMessage(hwnd, WM_USER, "AVSYNC", shareinfo);
-
+        
         SendMessage(hwnd, WM_USER, "FrameBuffer", luma_addr);
         SendMessage(hwnd, WM_USER, "MPEGFormat", frameinfo);
-
-        step_flag = avmips_get_step_flag();
-        if (-1 != step_flag) {
-            avmips_step(step_flag);
+    
+        step_cmd = avmips_get_step_flag();
+        if (-1 != step_cmd) {
+            avmips_step(step_cmd);
         }
 
         msleep(100);
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     if (0 != ret) {
         return -1;
     }
-
+    
     hwnd = CreateWindowEx(
         0,
         TEXT("AVMIPSVideo"),

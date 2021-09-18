@@ -180,6 +180,7 @@
     <ClCompile Include="Graphic\rgba2yuv.c" />
     <ClCompile Include="Graphic\yuv2rgb.c" />
     <ClCompile Include="IPC\mutex.c" />
+    <ClCompile Include="IPC\queue.c" />
     <ClCompile Include="IPC\thread_create.c" />
     <ClCompile Include="Misc\bmp_save.c" />
     <ClCompile Include="Misc\char_match.c" />

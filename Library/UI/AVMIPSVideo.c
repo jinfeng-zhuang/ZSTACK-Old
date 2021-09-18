@@ -9,7 +9,9 @@
 
 static struct layout layout[] = {
 	// Toolbar
-	{"Toolbar", "ToolbarWindow32", {0, TOP, WIDTH, 5}, TBSTYLE_TOOLTIPS},
+	{"StepStart", "Button", {0, 0, 10, 5}},
+	{"StepStop", "Button", {15, 0, 10, 5}},
+	{"DumpYUV", "Button", {30, 0, 10, 5}},
 
 	// Input
 	{"Version", "Static", {0, TOP, WIDTH, 5}},
@@ -33,7 +35,7 @@ static struct layout layout[] = {
 	{NULL}
 };
 
-int toolbar_init_standard(HWND hwnd)
+static int toolbar_init_standard(HWND hwnd)
 {
 	TBBUTTON tbBtn;
 	TBADDBITMAP tbBitmap;
@@ -42,7 +44,7 @@ int toolbar_init_standard(HWND hwnd)
 	tbBtn.iBitmap = STD_FILENEW;
 	tbBtn.fsState = TBSTATE_ENABLED;
 	tbBtn.fsStyle = TBSTYLE_BUTTON;
-	tbBtn.iString = TEXT("Open");
+	tbBtn.iString = TEXT("STEP");
 
 	tbBitmap.hInst = HINST_COMMCTRL;
 	tbBitmap.nID = IDB_STD_SMALL_COLOR;
@@ -65,11 +67,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	{
 	case WM_CREATE:
 		layout_create(hWnd, layout);
-		
-		hwndTmp = layout_find_hwnd(layout, "Toolbar");
-		if (hwndTmp) {
-			toolbar_init_standard(hwndTmp);
-		}
 		break;
 	case WM_SIZE:
 		layout_resize(hWnd, layout);
@@ -78,12 +75,17 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 		break;
 	case WM_COMMAND:
 		name = layout_find_name(layout, lParam);
-		if (0 == strcmp(name, "Step")) {
+		if (0 == strcmp(name, "StepStart")) {
 			avmips_set_step_flag(TRUE);
-			
+			//avmips_step(TRUE);
 		}
-		else if (0 == strcmp(name, "Play")) {
+		else if (0 == strcmp(name, "StepStop")) {
+			//avmips_step(FALSE);
 			avmips_set_step_flag(FALSE);
+		}
+		else if (0 == strcmp(name, "DumpYUV")) {
+			warn("DumpYUV\n");
+			//avmips_set_step_flag(FALSE);
 		}
 		break;
 	case WM_USER:
