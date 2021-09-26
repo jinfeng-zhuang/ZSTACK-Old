@@ -8,15 +8,13 @@ int mp4box_parser_stsz(u8* buffer, u32 total, void* arg) {
 	u32 default_sample_size;
 	u32 sample_count;
 	u32 entry_size;
-	u32 fullbox_info;
-	u32* data = (u32*)&buffer[12];
+	u32* data = (u32*)&buffer[20];
+	int sum = 0;
 
 	info("\n");
 
-	fullbox_info = *(u32*)buffer;
-
-	default_sample_size = BE_read_u32(&buffer[4]);
-	sample_count = BE_read_u32(&buffer[8]);
+	default_sample_size = BE_read_u32(&buffer[12]);
+	sample_count = BE_read_u32(&buffer[16]);
 
 	info("Sample Size Box\n");
 
@@ -34,9 +32,15 @@ int mp4box_parser_stsz(u8* buffer, u32 total, void* arg) {
 		//}
 
 		info("[%d] SampleSize = %d\n", i, entry_size);
+
+		sum += entry_size;
+
+		if (734 == sample_count) {
+			warn("[%d] sum = %d\n", i, sum);
+		}
 	}
 
 	info("\n");
 
-	return 0;
+	return total;
 }

@@ -13,7 +13,7 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 
 	memset(&config, 0, sizeof(struct AVCDecoderConfigurationRecord));
 
-	hexdump(buffer, total, HEXDUMP_ASCII);
+	//hexdump(buffer, total, HEXDUMP_ASCII);
 
 	offset = 0;
 	config.configurationVersion = BE_read_u8(&data[0]);
@@ -44,14 +44,14 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 	mp4info->sps_len = config.sequenceParameterSetLength;
 	mp4info->sps = config.sequenceParameterSetNALUnit;
 
-	warn("SPS count = %d\n", config.numOfSequenceParameterSets);
+	info("SPS count = %d\n", config.numOfSequenceParameterSets);
 	
 	offset = 6;
 	for (i = 0; i < config.numOfSequenceParameterSets; i++) {
 		config.sequenceParameterSetLength[i] = BE_read_u16(&data[offset]);
 		offset += sizeof(u16);
 
-		warn("SPS len = %d\n", config.sequenceParameterSetLength[i]);
+		info("SPS len = %d\n", config.sequenceParameterSetLength[i]);
 
 		config.sequenceParameterSetNALUnit[i] = malloc(config.sequenceParameterSetLength[i]);
 		if (NULL == config.sequenceParameterSetNALUnit[i]) {
@@ -62,7 +62,7 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 		memcpy(config.sequenceParameterSetNALUnit[i], &data[offset], config.sequenceParameterSetLength[i]);
 		offset += config.sequenceParameterSetLength[i];
 
-		hexdump(config.sequenceParameterSetNALUnit[i], config.sequenceParameterSetLength[i], 0);
+		//hexdump(config.sequenceParameterSetNALUnit[i], config.sequenceParameterSetLength[i], 0);
 
 		//file_append("output.264", prefix, 4);
 		//file_append("output.264", config.sequenceParameterSetNALUnit[i], config.sequenceParameterSetLength[i]);
@@ -88,14 +88,14 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 	mp4info->pps_len = config.pictureParameterSetLength;
 	mp4info->pps = config.pictureParameterSetNALUnit;
 
-	warn("PPS count = %d\n", config.numOfPictureParameterSets);
+	info("PPS count = %d\n", config.numOfPictureParameterSets);
 
 	offset += 1;
 	for (i = 0; i < config.numOfPictureParameterSets; i++) {
 		config.pictureParameterSetLength[i] = BE_read_u16(&data[offset]);
 		offset += sizeof(u16);
 
-		warn("PPS len = %d\n", config.pictureParameterSetLength[i]);
+		info("PPS len = %d\n", config.pictureParameterSetLength[i]);
 
 		config.pictureParameterSetNALUnit[i] = malloc(config.pictureParameterSetLength[i]);
 		if (NULL == config.pictureParameterSetNALUnit[i]) {
@@ -106,7 +106,7 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 		memcpy(config.pictureParameterSetNALUnit[i], &data[offset], config.pictureParameterSetLength[i]);
 		offset += config.pictureParameterSetLength[i];
 
-		hexdump(config.pictureParameterSetNALUnit[i], config.pictureParameterSetLength[i], 0);
+		//hexdump(config.pictureParameterSetNALUnit[i], config.pictureParameterSetLength[i], 0);
 
 		//file_append("output.264", prefix, 4);
 		//file_append("output.264", config.pictureParameterSetNALUnit[i], config.pictureParameterSetLength[i]);
@@ -120,9 +120,9 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 	config.bit_depth_chroma_minus8 = data[offset++] & 0x7;
 	config.numOfSequenceParameterSetExt = data[offset++];
 
-	warn("ChromaFormat = %d\n", config.chroma_format);
+	info("ChromaFormat = %d\n", config.chroma_format);
 
-	warn("numOfSequenceParameterSetExt = %d\n", config.numOfSequenceParameterSetExt);
+	info("numOfSequenceParameterSetExt = %d\n", config.numOfSequenceParameterSetExt);
 
 END:
 	return sizeof(struct Box);

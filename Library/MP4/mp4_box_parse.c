@@ -25,7 +25,7 @@ static struct mp4box_parser parser[] = {
 	//{"stss", mp4box_parser_stss}, // sync sample
 	//{"stsc", mp4box_parser_stsc}, // sample 2 chunk
 	//{"stco", mp4box_parser_stco}, // chunk offset
-	//{"stsz", mp4box_parser_stsz}, // sample size
+	{"stsz", mp4box_parser_stsz}, // sample size
 	{"avc1", mp4box_parser_avc1}, // sample size
 	{"avcC", mp4box_parser_avcC}, // sample size
 	{"meta", mp4box_parser_meta}, // sample size
@@ -90,7 +90,7 @@ RESULT mp4_box_scan(int depth, u8* buffer, u32 len)
 	u8 prefix2[] = { 0,0,1 };
 
 	if ((NULL == buffer) || (len < 8)) {
-		//warn("param not valid\n");
+		warn("param not valid\n");
 		return -1;
 	}
 
@@ -101,7 +101,8 @@ RESULT mp4_box_scan(int depth, u8* buffer, u32 len)
 
 		if (1 == size) {
 			//print_depth(depth);
-			//warn("large size not support: %x\n", size);
+			//warn("large size not support: %x @ %d, %d\n", size, i, len - i);
+			//hexdump(&buffer[i], 64, HEXDUMP_ASCII);
 			return -1;
 		}
 		else if (!mp4_is_type_valid(type)) {
