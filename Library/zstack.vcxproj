@@ -150,9 +150,7 @@
     <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3rdparty\cJSON.cpp" />
     <ClCompile Include="3rdparty\getopt.c" />
-    <ClCompile Include="3rdparty\tinyxml2.cpp" />
     <ClCompile Include="Algo\Codec\bitstream_init.c" />
     <ClCompile Include="Algo\Codec\decoder_one_frame.c" />
     <ClCompile Include="Algo\Codec\h265_nalu_parse.c" />
