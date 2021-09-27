@@ -1,5 +1,6 @@
 ﻿#include <zstack/zstack.h>
 #include <zstack/mp4.h>
+#include <zstack/adts.h>
 
 static struct MP4Info mp4info;
 
@@ -108,6 +109,41 @@ static int find_offset(struct MP4Track* track, int sample, u32 *start)
 	return -1;
 }
 
+struct putbitctx {
+	u8* buffer;
+	u32 len;
+	u32 pos;
+};
+
+void putbit_init(struct putbitctx *pc, u8* buffer, u32 len)
+{
+	pc->buffer = buffer;
+	pc->len = len;
+	pc->pos = 0;
+}
+
+void put_bits(struct putbitctx* pc, u32 count, u32 data)
+{
+	u32 bytepos;
+	u32 bitpos;
+	u32 i;
+	u8 bit;
+
+	for (i = 0; i < count; i++) {
+		bytepos = pc->pos / 8;
+		bitpos = pc->pos % 8;
+
+		bit = data >> (count - 1 - i) & 0x1;
+
+		pc->buffer[bytepos] = pc->buffer[bytepos] | (bit ? (1 << (7 - bitpos)) : 0);
+
+		pc->pos++;
+	}
+}
+
+static char filename[FILENAME_MAX];
+static u8 frame[1 << 20];
+
 static void track_dump(struct MP4Track* track)
 {
 	struct mp4sample sample;
@@ -116,11 +152,10 @@ static void track_dump(struct MP4Track* track)
 	u32 chunk;
 	u32 start;
 	u32 sum;
-	char filename[FILENAME_MAX];
+	
 	u8 prefix[] = { 0,0,0,1 };
 	u8 prefix2[] = { 0,0,1 };
 	u32 frame_size_max = 0;
-	u8* frame = NULL;
 
 	sample.count = track->stsz.sample_count;
 	sample.offset = malloc(sizeof(u32) * sample.count);
@@ -146,17 +181,20 @@ static void track_dump(struct MP4Track* track)
 			frame_size_max = sample.size[i];
 	}
 
-	frame = malloc(frame_size_max);
-
 	for (i = 0; i < 13; i++) {
 		//warn("dump: offset = %d size = %d\n", sample.offset[i], sample.size[i]);
 	}
 
+	memset(filename, 0, FILENAME_MAX);
+
+	snprintf(filename, FILENAME_MAX, "track-%d.bin", track->id);
+	const char* input = "test.mp4";
+
+	warn("DUMP track %d\n", track->id);
+
 	// TODO: HintTrack
 	if (0 == track->volumn) {
-		snprintf(filename, FILENAME_MAX, "track-%d.bin", track->id);
-
-		const char* input = "test.mp4";
+		
 
 		file_save(filename, prefix, sizeof(prefix));
 		file_append(filename, track->stsd.sps[0], track->stsd.sps_len[0]);
@@ -172,6 +210,39 @@ static void track_dump(struct MP4Track* track)
 	}
 	else {
 		// volumn
+		u8 tmpbuf[7];
+
+		struct putbitctx pb;
+
+		for (i = 0; i < sample.count; i++) {
+
+			memset(tmpbuf, 0, 7);
+
+			putbit_init(&pb, tmpbuf, 7);
+
+			/* adts_fixed_header */
+			put_bits(&pb, 12, 0xfff);   /* syncword */
+			put_bits(&pb, 1, 0);        /* ID */
+			put_bits(&pb, 2, 0);        /* layer */
+			put_bits(&pb, 1, 1);        /* protection_absent */
+			put_bits(&pb, 2, 1); /* profile_objecttype */
+			put_bits(&pb, 4, 4);
+			put_bits(&pb, 1, 0);        /* private_bit */
+			put_bits(&pb, 3, 1); /* channel_configuration */
+			put_bits(&pb, 1, 0);        /* original_copy */
+			put_bits(&pb, 1, 0);        /* home */
+
+			/* adts_variable_header */
+			put_bits(&pb, 1, 0);        /* copyright_identification_bit */
+			put_bits(&pb, 1, 0);        /* copyright_identification_start */
+			put_bits(&pb, 13, 7 + sample.size[i]); /* aac_frame_length */
+			put_bits(&pb, 11, 0x7ff);   /* adts_buffer_fullness */
+			put_bits(&pb, 2, 0);        /* number_of_raw_data_blocks_in_frame */
+
+			file_append(filename, tmpbuf, 7);
+			file_load(input, sample.offset[i], frame, sample.size[i]);
+			file_append(filename, frame, sample.size[i]);
+		}
 	}
 }
 
@@ -243,7 +314,8 @@ RESULT mp4_box_scan(int depth, u8* buffer, u32 len)
 	}
 
 #if 1
-	if (0 == depth) {
+	warn("depth = %d\n", depth);
+	if (1 == depth) {
 		if (gTrack.id != 0) {
 			track_dump(&gTrack);
 		}
