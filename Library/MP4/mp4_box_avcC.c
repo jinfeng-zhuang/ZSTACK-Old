@@ -9,7 +9,12 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 	int i;
 	int offset;
 	u8 prefix[] = { 0, 0, 0, 1 };
-	struct MP4Info* mp4info = arg;
+	struct mp4_box_stsd* stsd;
+
+	if (NULL == arg)
+		goto END;
+
+	stsd = &((struct MP4Track*)arg)->stsd;
 
 	memset(&config, 0, sizeof(struct AVCDecoderConfigurationRecord));
 
@@ -40,9 +45,9 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 		goto END;
 	}
 
-	mp4info->sps_count = config.numOfSequenceParameterSets;
-	mp4info->sps_len = config.sequenceParameterSetLength;
-	mp4info->sps = config.sequenceParameterSetNALUnit;
+	stsd->sps_count = config.numOfSequenceParameterSets;
+	stsd->sps_len = config.sequenceParameterSetLength;
+	stsd->sps = config.sequenceParameterSetNALUnit;
 
 	info("SPS count = %d\n", config.numOfSequenceParameterSets);
 	
@@ -84,9 +89,9 @@ int mp4box_parser_avcC(u8* buffer, u32 total, void* arg) {
 		goto END;
 	}
 
-	mp4info->pps_count = config.numOfPictureParameterSets;
-	mp4info->pps_len = config.pictureParameterSetLength;
-	mp4info->pps = config.pictureParameterSetNALUnit;
+	stsd->pps_count = config.numOfPictureParameterSets;
+	stsd->pps_len = config.pictureParameterSetLength;
+	stsd->pps = config.pictureParameterSetNALUnit;
 
 	info("PPS count = %d\n", config.numOfPictureParameterSets);
 
